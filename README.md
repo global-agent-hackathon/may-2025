@@ -72,13 +72,14 @@ Watch the Demo Video *https://vimeo.com/1076698785?share=copy#t=0*
 
 ## Visuals
 https://drive.google.com/file/d/1kVZ1R5oOqDegvw-QgHDLF-2ToxMFd1Yj/view?usp=sharing
+User Flow DIagram: https://drive.google.com/file/d/17SEgnxu7maWrthKX9-ijAScVvYa10IfY/view?usp=sharing
 
 
 ## Team Information
 
 - **Team Lead**: Sukin Shetty (GitHub: SukinShetty) - Developer and Creator
 - **Team Members**: Solo project
-- **Background**: As a non-coder turned AI Buider. I am also an AI Educator. I built VibeProto to make software creation as intuitive as a conversation. Using tools like Codex and Agno, I'm passionate about bringing coding to everyone.I have been using AI to build AI Tech products since a year now.
+- **Background**: Non-coder turned AI Buider. I am also an AI Educator. I built VibeProto to make software creation as intuitive as a conversation. Using tools like Codex and Agno, I'm passionate about bringing coding to everyone.I have been using AI to build AI Tech products since a year now.
 
 ## Future Plans
 VibeProto is just the beginning! Planned enhancements include:
