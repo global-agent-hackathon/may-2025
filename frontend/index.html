@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibeProto - Build Prototypes with Natural Language</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>VibeProto</h1>
+            <p>Build prototypes with natural language</p>
+        </div>
+    </header>
+
+    <main>
+        <div class="container split-layout">
+            <!-- Left side: Input section -->
+            <section class="input-section">
+                <h2>What do you want to build?</h2>
+                <form id="prototype-form">
+                    <div class="form-group">
+                        <label for="prompt">Describe your prototype in plain English:</label>
+                        <textarea id="prompt" name="prompt" required placeholder="Ex: A script that downloads images from a website and organizes them into folders by date"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="prototype-type">Prototype Type:</label>
+                        <select id="prototype-type" name="type" required>
+                            <option value="script">Automation Script</option>
+                            <option value="webapp">Web Application</option>
+                            <option value="utility">Command-line Utility</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Generate Prototype</button>
+                </form>
+            </section>
+
+            <!-- Right side: Output section -->
+            <div class="output-container">
+                <!-- Loading Indicator will appear here -->
+                <section id="loading" class="hidden">
+                    <div class="loader"></div>
+                    <p>Generating your prototype... This may take a minute.</p>
+                </section>
+
+                <!-- Results Section will appear here -->
+                <section id="result-section" class="hidden">
+                    <div class="output-header">
+                        <h2 id="code-title">Python Script</h2>
+                        <div class="output-actions">
+                            <button id="copy-btn" class="btn btn-small" title="Copy to clipboard">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                Copy
+                            </button>
+                            <button id="download-btn" class="btn btn-small" title="Download file">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="code">Code</button>
+                        <button class="tab-btn" data-tab="analysis">Analysis</button>
+                    </div>
+                    
+                    <div id="code-tab" class="tab-content active">
+                        <pre><code id="code-display" class="language-python"></code></pre>
+                        <div id="file-info"></div>
+                    </div>
+                    
+                    <div id="analysis-tab" class="tab-content">
+                        <h3>Code Analysis</h3>
+                        <div id="analysis-content"></div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 VibeProto - Powered by OpenAI</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 
