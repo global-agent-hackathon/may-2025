@@ -1,8 +1,52 @@
-<!-- Example structure - find your actual input and button -->
-<div class="input-area">
-  <textarea id="prompt-input" placeholder="Enter your prototype idea..."></textarea>
-  <!-- ... existing code ... -->
-  <button id="enhance-button" style="background-color: #4CAF50; color: white; margin-left: 5px;">Enhance Prompt</button>
-  <button id="send-button">Generate</button> 
-  <!-- ... existing code ... -->
-</div> 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VibeProto</title>
+    <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Left Sidebar: Code Display -->
+        <div class="sidebar left-sidebar">
+            <h2>Generated Code</h2>
+            <div id="code-output" class="code-display">
+                <pre>Generated code will appear here...</pre>
+            </div>
+            <div class="code-actions">
+                <button id="copy-code">Copy Code</button>
+                <button id="download-code">Download</button>
+                <button id="analyze-code">Analyze</button>
+            </div>
+        </div>
+
+        <!-- Main Chat Area -->
+        <div class="chat-area">
+            <h1>VibeProto</h1>
+            <p>Build prototypes with natural language</p>
+            <h2>What do you want to build?</h2>
+            <div id="chat-messages" class="chat-messages">
+                <!-- Messages will be dynamically added here -->
+            </div>
+            <div class="chat-input">
+                <textarea id="prompt" rows="3" placeholder="Describe your prototype in plain English..."></textarea>
+                <select id="prototype-type">
+                    <option value="automation_script">Automation Script</option>
+                    <option value="web_app">Web App</option>
+                </select>
+                <button id="generate">Generate Prototype</button>
+            </div>
+            <p id="status">Enter a prompt to start...</p>
+        </div>
+
+        <!-- Right Sidebar: Saved Sessions -->
+        <div class="sidebar right-sidebar">
+            <h2>Saved Sessions</h2>
+            <div id="session-list" class="session-list">
+                <!-- Sessions will be dynamically added here -->
+            </div>
+            <button id="new-session">New Session</button>
+        </div>
+    </div>
+    <script src="../script.js"></script>
+</body>
+</html> 
