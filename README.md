@@ -8,63 +8,123 @@ VibeProto is an innovative tool designed to empower non-coders to create web app
 
 - **Web App Prototyping**: Generate functional HTML, CSS, and JavaScript prototypes from prompts like "Create a to-do list app."
 - **Python Script Creation**: Produce Python scripts for automation or logic-based tasks with ease.
-- **AI-Powered**: Utilizes OpenAI Codex for code generation and Agno for enhanced reasoning, prompt refinement and memory to store user preferneces.
+- **AI-Powered**: Utilizes OpenAI's GPT-4 for code generation and Agno for enhanced reasoning and prompt refinement.
+- **Session Management**: Save and manage your generated prototypes with an easy-to-use interface.
+- **Prompt Enhancement**: AI-powered prompt refinement to get better results.
+- **Detailed Instructions**: Step-by-step guides for using generated code, tailored for non-technical users.
 
-## How It Works
+## Setup Requirements
 
-VibeProto simplifies the coding process into a few intuitive steps:
+Before you begin, ensure you have:
+- Python 3.8 or higher
+- Node.js and npm (for frontend)
+- OpenAI API key
 
-1. **Input Your Idea**: Type a natural language prompt into the chat-like interface (e.g., "Build a calculator web app").
-2. **Prompt Enhancement**: Refine and enhances your prompt with Agno for clearer, more specific results.
-3. **Code Generation**: OpenAI Codex translates your prompt into functional code.
-4. **Output**: View, run, or tweak the generated prototype or script directly.
-
-The magic lies in the synergy of Codex's code-writing prowess and Agno's ability to understand and optimize user intent.
-
-## Tools Used
-
-- **OpenAI Codex**: Powers the generation of accurate and functional code.
-- **Agno**: Enhances prompts and ensures outputs align with user expectations.
-- *(Additional tools like Cursor or specific libraries can be added here based on your setup.)*
-
-## Setup Instructions
-
-Get VibeProto running on your machine with these beginner-friendly steps:
+## Installation & Setup
 
 1. **Clone the Repository**:
    ```bash
    git clone https://github.com/SukinShetty/VibeProto.git
-   ```
-
-2. **Navigate to the Project Folder**:
-   ```bash
    cd VibeProto
    ```
 
-3. **Install Dependencies**:
-   - For the frontend (if applicable): `npm install`
-   - For the backend (if applicable): `pip install -r requirements.txt`
+2. **Backend Setup**:
+   ```bash
+   # Create and activate a virtual environment (recommended)
+   python -m venv venv
+   # On Windows:
+   .\venv\Scripts\activate
+   # On macOS/Linux:
+   source venv/bin/activate
 
-4. **Set Up API Keys**:
-   - Obtain an OpenAI API key and add it to a `.env` file as `OPENAI_API_KEY=your-key-here`.
+   # Install dependencies
+   pip install -r requirements.txt
 
-5. **Run the Application**:
-   - Start the frontend: `npm start` (runs on http://localhost:3000 by default).
-   - Start the backend (if separate): `python app.py`.
+   # Create .env file and add your OpenAI API key
+   echo "OPENAI_API_KEY=your-key-here" > .env
+   ```
 
-## Usage
+3. **Frontend Setup**:
+   ```bash
+   cd frontend
+   npm install
+   ```
 
-Once set up, using VibeProto is a breeze:
+## Running the Application
 
-1. Open the app in your browser (e.g., http://localhost:3000).
-2. Type a prompt in the chat interface (e.g., "Make a simple portfolio website").
-3. (Optional) Click "Enhance" to refine your prompt with Agno.
-4. Hit "Generate" to create your prototype or script.
-5. Check the `prototypes/` folder for your generated code.
-   - For web apps, open `index.html` in a browser.
-   - For Python scripts, run them with `python script.py`.
+1. **Start the Backend Server**:
+   ```bash
+   # Make sure you're in the project root and virtual environment is activated
+   python prototype_agent.py
+   ```
+   The backend will start on `http://localhost:5000`
 
-**Tip for Non-Coders**: No coding knowledge? No problem! Just describe what you want, and VibeProto does the rest.
+2. **Start the Frontend**:
+   ```bash
+   # In a new terminal, navigate to the frontend directory
+   cd frontend
+   # Start the development server
+   npm start
+   ```
+   The frontend will be available at `http://localhost:3000`
+
+## Using VibeProto
+
+1. **Create a New Session**:
+   - Click "New Session" to start a fresh prototype.
+   - Your sessions are automatically saved and can be accessed later.
+
+2. **Generate Code**:
+   - Choose the type (Web App or Python Script).
+   - Type your idea in plain English.
+   - (Optional) Click "Enhance Prompt" for better results.
+   - Click "Generate Prototype".
+
+3. **View and Use Generated Code**:
+   - The generated code appears in the right panel.
+   - Detailed instructions for using the code are provided below it.
+   - Use the "Copy Code" or "Download" buttons to save your work.
+
+4. **Managing Sessions**:
+   - Your sessions are listed in the left sidebar.
+   - Click on a session name to load it.
+   - Use the "..." menu to rename or delete sessions.
+
+## Example Prompts
+
+For Web Apps:
+- "Create a weather app that shows temperature and conditions for a city"
+- "Build a todo list with add and delete functions"
+
+For Python Scripts:
+- "Write a script to rename files in a directory"
+- "Create a data scraper for a website"
+
+## Troubleshooting
+
+If you encounter issues:
+
+1. **Backend won't start**:
+   - Check if Python virtual environment is activated
+   - Verify OpenAI API key in `.env` file
+   - Ensure port 5000 is not in use
+
+2. **Frontend won't start**:
+   - Check if Node.js is installed
+   - Run `npm install` again
+   - Ensure port 3000 is not in use
+
+3. **Generation fails**:
+   - Verify your OpenAI API key is valid
+   - Check backend console for error messages
+
+## Tools Used
+
+- **OpenAI GPT-4**: Powers the generation of accurate and functional code
+- **Flask**: Backend server framework
+- **React**: Frontend framework
+- **SQLite**: Session storage
+- **Agno**: Enhanced reasoning and prompt refinement
 
 ## Demo Video
 
