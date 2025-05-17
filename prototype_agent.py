@@ -1,513 +1,625 @@
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request, jsonify
 from flask_cors import CORS
-from openai import OpenAI
+from agno.agent import Agent
+from agno.models.openai import OpenAIChat
+from agno.models.anthropic import Claude
+from agno.storage.sqlite import SqliteStorage
+from agno.memory.v2.memory import Memory
+from agno.memory.v2.db.sqlite import SqliteMemoryDb
+from agno.tools.reasoning import ReasoningTools
 import os
-import json
 import uuid
-from functools import wraps
+from datetime import datetime
+import dotenv
 from pathlib import Path
-import re # Import regex module
+from openai import OpenAI
+from agno_agent import agent
+from remote_agent import remote_agent_pool
+
+# Load environment variables from .env file if it exists
+dotenv.load_dotenv()
 
 app = Flask(__name__)
-# Use a simpler, more permissive CORS configuration
-CORS(app, origins=["*"], allow_headers=["Content-Type", "Authorization"], methods=["GET", "POST", "OPTIONS"])
+# Configure CORS to handle preflight requests correctly
+CORS(app, resources={r"/*": {
+    "origins": ["http://localhost:3000", "http://localhost:5000", "*"],
+    "supports_credentials": True,
+    "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    "allow_headers": ["Content-Type", "X-Requested-With", "Authorization", "Access-Control-Allow-Origin"],
+    "expose_headers": ["Content-Type", "X-CSRFToken"]
+}})
 
-# Add a decorator to ensure CORS headers
-def add_cors_headers(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        resp = make_response(f(*args, **kwargs))
-        resp.headers.add('Access-Control-Allow-Origin', '*')
-        resp.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-        resp.headers.add('Access-Control-Allow-Methods', 'GET,POST,OPTIONS')
-        return resp
-    return decorated_function
+# -----------------------------------------------------------------------------
+# API Keys and Environment Setup
+# -----------------------------------------------------------------------------
+def load_api_keys():
+    """Load API keys from environment"""
+    return {
+        "openai_key": os.environ.get("OPENAI_API_KEY"),
+        "anthropic_key": os.environ.get("ANTHROPIC_API_KEY")
+    }
 
-# Setup OpenAI client
-api_key = os.environ.get("OPENAI_API_KEY", "")
-if not api_key or api_key == "your-key-here":
-    print("WARNING: No valid OpenAI API key found. Using mock responses.")
-    USE_MOCK = True
-else:
-    USE_MOCK = False
+def save_api_keys(openai_key=None, anthropic_key=None):
+    """Save API keys to .env file"""
+    env_path = Path('.env')
     
-client = OpenAI(api_key=api_key)
+    # Read existing contents
+    if env_path.exists():
+        with open(env_path, 'r') as f:
+            lines = f.readlines()
+    else:
+        lines = []
+    
+    # Update or add keys
+    env_dict = {}
+    for line in lines:
+        if '=' in line:
+            key, value = line.strip().split('=', 1)
+            env_dict[key] = value
+    
+    if openai_key is not None:
+        env_dict['OPENAI_API_KEY'] = openai_key
+    if anthropic_key is not None:
+        env_dict['ANTHROPIC_API_KEY'] = anthropic_key
+    
+    # Write back to file
+    with open(env_path, 'w') as f:
+        for key, value in env_dict.items():
+            f.write(f"{key}={value}\n")
+    
+    # Update environment variables
+    if openai_key is not None:
+        os.environ['OPENAI_API_KEY'] = openai_key
+    if anthropic_key is not None:
+        os.environ['ANTHROPIC_API_KEY'] = anthropic_key
+    
+    # Reload dotenv
+    dotenv.load_dotenv(override=True)
 
-# Initialize sessions directory
-SESSIONS_DIR = Path("sessions")
-SESSIONS_DIR.mkdir(exist_ok=True)
+@app.route("/get_api_keys", methods=["GET"])
+def get_api_keys():
+    """Get API key status"""
+    keys = load_api_keys()
+    return jsonify({
+        "openai_key": bool(keys["openai_key"]),
+        "anthropic_key": bool(keys["anthropic_key"])
+    })
 
-# Session management functions
-def get_session_path(session_id):
-    return SESSIONS_DIR / f"{session_id}.json"
+@app.route("/save_api_keys", methods=["POST"])
+def save_api_keys_route():
+    """Save API keys"""
+    try:
+        data = request.get_json()
+        openai_key = data.get("openai_key")
+        anthropic_key = data.get("anthropic_key")
+        
+        # Only update keys that are provided
+        save_api_keys(
+            openai_key=openai_key if openai_key else None,
+            anthropic_key=anthropic_key if anthropic_key else None
+        )
+        
+        # Reinitialize clients with new keys
+        global direct_openai_client
+        direct_openai_client = init_openai_client()
+        memory, reasoning_agent, code_agent = init_agents()
+        
+        return jsonify({"message": "API keys saved successfully"})
+    except Exception as e:
+        print(f"Error saving API keys: {e}")
+        return jsonify({"error": str(e)}), 500
 
-def save_session(session_id, data):
-    with open(get_session_path(session_id), 'w') as f:
-        json.dump(data, f)
+# -----------------------------------------------------------------------------
+# System prompts for different prototype types
+# -----------------------------------------------------------------------------
+WEB_APP_SYSTEM_PROMPT = """
+You are a coding assistant designed to help non-tech founders create functional
+web apps using HTML, CSS, and JavaScript. Follow these rules:
+- Generate clean, simple, and beginner-friendly code that works out of the box.
+- Use modern, widely-supported web technologies (e.g., vanilla JavaScript).
+- Include inline CSS in the HTML file for simplicity, unless the user requests
+  a separate file.
+- Avoid adding comments unless requested, to keep the code concise.
+- Ensure the code is responsive and visually appealing with a minimalistic
+  design.
+- After generating the code, append a short instruction block explaining:
+  (1) how to run the code, (2) what the code does, and (3) how to modify it.
+- If the prompt is vague, infer reasonable defaults.
+- Do NOT generate malicious or harmful code.
+"""
 
-def load_session(session_id):
-    path = get_session_path(session_id)
-    if not path.exists():
-        return None
-    with open(path, 'r') as f:
-        return json.load(f)
+PYTHON_AUTOMATION_SYSTEM_PROMPT = """
+You are a coding assistant designed to help non-tech founders create Python
+scripts for automation tasks. Follow these rules:
+- Generate clean, beginner-friendly Python code that works with minimal setup.
+- Use standard libraries or widely-used packages and specify how to install
+  them.
+- Include basic error handling to make the script robust.
+- Avoid adding comments unless requested, to keep the code concise.
+- After generating the code, append a short instruction block explaining:
+  (1) how to install dependencies, (2) how to run the script, and (3) what the
+  script does.
+- If the prompt is vague, infer reasonable defaults.
+- Do NOT generate malicious or harmful code.
+"""
+
+# -----------------------------------------------------------------------------
+# Agno initialisation (storage + memory + agents)
+# -----------------------------------------------------------------------------
+
+# In-memory session storage (bypassing SqliteStorage API issues)
+session_store = {}  # Simple in-memory dictionary to store sessions
+
+def create_new_session():
+    """Create a new session with empty messages and code"""
+    session_id = str(uuid.uuid4())
+    session_store[session_id] = {
+        "messages": [],
+        "code": "",
+        "created_at": datetime.now().isoformat()
+    }
+    return session_id
 
 def get_all_sessions():
-    result = []
-    for file in SESSIONS_DIR.glob("*.json"):
-        session_id = file.stem
-        try:
-            with open(file, 'r') as f:
-                data = json.load(f)
-                data["id"] = session_id
-                result.append(data)
-        except Exception:
-            # Skip corrupted files
-            pass
-    return result
+    """Get all sessions from storage"""
+    return [{"id": session_id, **data} for session_id, data in session_store.items()]
 
-def generate_session_name(prompt):
-    """Generates a short descriptive name from the user prompt."""
+def get_session(session_id):
+    """Get session by ID"""
+    return session_store.get(session_id)
+
+def save_session(session_id, data):
+    """Save session data"""
+    session_store[session_id] = data
+
+# Memory DB for user-specific long-term memory
+memory_db = SqliteMemoryDb(table_name="user_memories", db_file="memories.db")
+
+# Define memory and agents as global variables
+memory = None
+reasoning_agent = None
+code_agent = None
+
+def init_agents():
+    """Initialize agents with current API keys"""
+    global memory, reasoning_agent, code_agent
+    
+    keys = load_api_keys()
+    openai_key = keys["openai_key"]
+    anthropic_key = keys["anthropic_key"]
+    
+    if not openai_key:
+        print("WARNING: OPENAI_API_KEY not set. The application will not function correctly.")
+        return None, None, None
+    
+    # Initialize OpenAI client
+    openai_client = OpenAI(api_key=openai_key)
+    
+    # Initialize memory with OpenAI
     try:
-        # Simple approach: Take first few meaningful words
-        prompt_lower = prompt.lower()
-        # Remove punctuation (optional, basic example)
-        prompt_lower = re.sub(r'[^\w\s]', '', prompt_lower)
-        
-        words = prompt_lower.split()
-        
-        # Basic stop words list - extend as needed
-        stop_words = {"a", "an", "the", "i", "want", "to", "build", "create", "make", "simple", "app", "script", "for", "of", "with", "about"}
-        
-        meaningful_words = [w for w in words if w not in stop_words]
-        
-        # Take first 2 meaningful words, capitalize
-        name_words = [w.capitalize() for w in meaningful_words[:2]]
-        
-        if not name_words:
-            return None # Fallback handled later
-            
-        return " ".join(name_words)
-    except Exception:
-        # In case of error, fallback to None
-        return None
-
-# Updated parser to also extract instructions
-def parse_code_and_instructions(markdown_string):
-    code_blocks = {
-        "html": "",
-        "css": "",
-        "javascript": ""
-    }
-    instructions = ""
-    code_part = markdown_string
-    instruction_heading = None
+        memory = Memory(
+            model=OpenAIChat(id="gpt-4", api_key=openai_key, client=openai_client),
+            db=memory_db
+        )
+    except Exception as e:
+        print(f"Error initializing memory: {e}")
+        memory = None
     
-    # Try to split by instruction headings
-    headings = ["### How to Run", "### Instructions for Use"]
-    for heading in headings:
-        if heading in markdown_string:
-            parts = markdown_string.split(heading, 1)
-            code_part = parts[0]
-            instructions = heading + parts[1] # Keep the heading
-            instruction_heading = heading
-            break
-            
-    # Regex to find ```language ... ``` blocks within the code part
-    pattern = r"```(\w+)\s*\n(.*?)\n```"
-    matches = re.findall(pattern, code_part, re.DOTALL)
-    
-    found_blocks = False
-    for lang, code in matches:
-        found_blocks = True
-        lang_lower = lang.lower()
-        if lang_lower == "html":
-            code_blocks["html"] = code.strip()
-        elif lang_lower == "css":
-            code_blocks["css"] = code.strip()
-        elif lang_lower == "javascript" or lang_lower == "js":
-            code_blocks["javascript"] = code.strip()
-            
-    # Handle cases: Only instructions found, or single block code + instructions
-    if not found_blocks and not any(code_blocks.values()):
-        # If we split by heading, the remaining code_part might be the actual code
-        # Or if no heading, the whole string might be just code or just instructions
-        potential_code = code_part.strip()
-        if instruction_heading: # Assume code_part is the script if heading was found
-             code_blocks = potential_code # Store as single string
-        elif "<html" in potential_code.lower() or "<div" in potential_code.lower(): # Guess HTML
-             code_blocks["html"] = potential_code
-        elif potential_code: # Assume it's script code if no blocks/HTML detected
-             code_blocks = potential_code # Store as single string
-        # If potential_code is empty but instructions exist, it's fine
+    # Initialize reasoning agent
+    try:
+        if anthropic_key:
+            reasoning_agent = Agent(
+                model=Claude(id="claude-3-sonnet", api_key=anthropic_key),
+                tools=[ReasoningTools(add_instructions=True)],
+                instructions=[
+                    "Analyze the user prompt, clarify the intent, and provide a detailed "
+                    "description for code generation. If the 'think' option is enabled, "
+                    "explain the reasoning process step-by-step."
+                ],
+                memory=memory,
+                enable_agentic_memory=True,
+                enable_user_memories=True,
+                enable_session_summaries=True,
+            )
+        else:
+            # Fallback to OpenAI if Anthropic key is not available
+            reasoning_agent = Agent(
+                model=OpenAIChat(id="gpt-4", api_key=openai_key, client=openai_client),
+                tools=[ReasoningTools(add_instructions=True)],
+                instructions=[
+                    "Analyze the user prompt, clarify the intent, and provide a detailed "
+                    "description for code generation. If the 'think' option is enabled, "
+                    "explain the reasoning process step-by-step."
+                ],
+                memory=memory,
+                enable_agentic_memory=True,
+                enable_user_memories=True,
+                enable_session_summaries=True,
+            )
+    except Exception as e:
+        print(f"Error initializing reasoning agent: {e}")
+        reasoning_agent = None
 
-    # If parsing failed for webapp but we have instructions, return raw code part
-    if isinstance(code_blocks, dict) and not any(code_blocks.values()) and code_part:
-         if "<html" in code_part.lower(): # Re-check for HTML
-             code_blocks["html"] = code_part.strip()
-         else: # Treat as single block if parsing failed
-             code_blocks = code_part.strip() 
+    # Initialize code generation agent
+    try:
+        code_agent = Agent(
+            model=OpenAIChat(id="gpt-4", api_key=openai_key, client=openai_client),
+            tools=[ReasoningTools(add_instructions=True)],
+            instructions=[
+                "Generate high-quality, working code based on the provided description. "
+                "Include all necessary imports, error handling, and documentation."
+            ],
+            memory=memory,
+            enable_agentic_memory=True,
+            enable_user_memories=True,
+            enable_session_summaries=True,
+        )
+    except Exception as e:
+        print(f"Error initializing code agent: {e}")
+        code_agent = None
 
-    return code_blocks, instructions.strip()
+    return memory, reasoning_agent, code_agent
 
-# Modify get_mock_code to include instructions
-def get_mock_code(prompt, prototype_type):
-    code = ""
-    instructions = ""
-    if prototype_type == "web_app":
-        code = {"html": "<!-- Mock HTML -->", "css": "/* Mock CSS */", "javascript": "// Mock JS"}
-        instructions = "### Instructions for Use\n1. Save HTML, CSS, JS in respective files.\n2. Open index.html in a browser."
-    else: # automation_script
-        code = "# Mock Python script\nprint('Hello Mock!')"
-        instructions = "### How to Run\n1. Save as mock_script.py.\n2. Run `python mock_script.py`."
-        
-    # Add todo specifics if relevant (overrides generic mocks)
-    if "todo" in prompt.lower() or "task" in prompt.lower():
-        if prototype_type == "web_app":
-             html_code = """<!DOCTYPE html>
-<html>
-<head>
-    <title>Simple Todo App</title>
-    <style>
-        body { font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; }
-        .todo-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; }
-        .todo-item button { background: #ff4d4d; color: white; border: none; padding: 5px 10px; cursor: pointer; }
-        input, button { padding: 8px; }
-        #add-btn { background: #4CAF50; color: white; border: none; cursor: pointer; }
-    </style>
-</head>
-<body>
-    <h1>Todo List</h1>
-    <div>
-        <input type="text" id="task-input" placeholder="Add a new task...">
-        <button id="add-btn">Add</button>
-    </div>
-    <div id="todo-list">
-        <!-- Tasks will be added here -->
-    </div>
+# Initialize agents
+memory, reasoning_agent, code_agent = init_agents()
 
-    <script>
-        // Task management
-        let tasks = [];
-        
-        function addTask() {
-            const taskInput = document.getElementById('task-input');
-            const taskText = taskInput.value.trim();
-            
-            if (taskText) {
-                tasks.push(taskText);
-                taskInput.value = '';
-                renderTasks();
-            }
-        }
-        
-        function deleteTask(index) {
-            tasks.splice(index, 1);
-            renderTasks();
-        }
-        
-        function renderTasks() {
-            const todoList = document.getElementById('todo-list');
-            todoList.innerHTML = '';
-            
-            tasks.forEach((task, index) => {
-                const taskElement = document.createElement('div');
-                taskElement.className = 'todo-item';
-                
-                const taskText = document.createElement('span');
-                taskText.textContent = task;
-                
-                const deleteButton = document.createElement('button');
-                deleteButton.textContent = 'Delete';
-                deleteButton.onclick = () => deleteTask(index);
-                
-                taskElement.appendChild(taskText);
-                taskElement.appendChild(deleteButton);
-                todoList.appendChild(taskElement);
-            });
-        }
-        
-        // Event listeners
-        document.getElementById('add-btn').addEventListener('click', addTask);
-        document.getElementById('task-input').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                addTask();
-            }
-        });
-        
-        // Initialize
-        renderTasks();
-    </script>
-</body>
-</html>"""
-             css_code = """body { font-family: Arial, sans-serif; ... }"""
-             js_code = """let tasks = []; ... renderTasks();"""
-             code = {"html": html_code, "css": css_code, "javascript": js_code}
-             instructions = "### Instructions for Use\n1. Save HTML as index.html, CSS as style.css, JS as script.js.\n2. Open index.html."
-        else: 
-             code = """# Simple Todo List CLI App ... main()""" # Shortened
-             instructions = "### How to Run\n1. Save as todo.py.\n2. Run `python todo.py`."
+# -----------------------------------------------------------------------------
+# Helper: pick system prompt based on prototype type
+# -----------------------------------------------------------------------------
 
-    return code, instructions
+def _select_system_prompt(prototype_type: str) -> str:
+    p = (prototype_type or "").lower()
+    if p in {"web_app", "webapp", "web"}:
+        return WEB_APP_SYSTEM_PROMPT
+    if p in {"automation_script", "script", "python"}:
+        return PYTHON_AUTOMATION_SYSTEM_PROMPT
+    return ""
 
-# API Routes
-@app.route('/create_session', methods=['POST', 'OPTIONS'])
-@add_cors_headers
+# -----------------------------------------------------------------------------
+# Routes
+# -----------------------------------------------------------------------------
+
+@app.route("/create_session", methods=["POST"])
 def create_session():
-    # Handle preflight OPTIONS request
-    if request.method == 'OPTIONS':
-        return jsonify({'message': 'OK'})
-    
     try:
-        # Generate a unique session ID
-        session_id = str(uuid.uuid4())
-        
-        # Initialize an empty session
-        session_data = {
-            "id": session_id,
-            "name": f"Session {session_id[:8]}",
-            "messages": [],
-            "code": ""
-        }
-        
-        # Save the session data
-        save_session(session_id, session_data)
-        
+        session_id = create_new_session()
+        print(f"Created new session with ID: {session_id}")
         return jsonify({"id": session_id})
     except Exception as e:
-        app.logger.error(f"Error in create_session: {str(e)}")
-        return jsonify({"error": str(e)}), 500
+        print(f"Error creating session: {e}")
+        return jsonify({"error": "Failed to create session"}), 500
 
-@app.route('/get_sessions', methods=['GET', 'OPTIONS'])
-@add_cors_headers
-def get_sessions():
-    if request.method == 'OPTIONS':
-        return jsonify({'message': 'OK'})
-    
+# Create a direct OpenAI client for operations that don't use agno
+direct_openai_client = None
+
+def init_openai_client():
+    """Initialize a direct OpenAI client"""
+    global direct_openai_client
+    openai_key = os.environ.get("OPENAI_API_KEY")
+    if openai_key:
+        direct_openai_client = OpenAI(api_key=openai_key)
+    return direct_openai_client
+
+# Initialize direct OpenAI client
+direct_openai_client = init_openai_client()
+
+@app.route("/enhance_prompt", methods=["POST"])
+def enhance_prompt():
     try:
-        sessions = get_all_sessions()
-        return jsonify(sessions)
+        data = request.json
+        prompt = data.get('prompt')
+        if not prompt:
+            return jsonify({"error": "No prompt provided"}), 400
+
+        # Call the async method using a synchronous wrapper
+        enhanced_prompt = agent.enhance_prompt_sync(prompt)
+        return jsonify({"enhanced_prompt": enhanced_prompt})
     except Exception as e:
-        app.logger.error(f"Error in get_sessions: {str(e)}")
+        print(f"Error enhancing prompt: {e}")
         return jsonify({"error": str(e)}), 500
 
-@app.route('/get_session/<session_id>', methods=['GET', 'OPTIONS'])
-@add_cors_headers
-def get_session(session_id):
-    if request.method == 'OPTIONS':
-        return jsonify({'message': 'OK'})
-    
+@app.route("/get_sessions", methods=["GET"])
+def get_sessions():
     try:
-        session = load_session(session_id)
+        # Combine sessions from agent storage and in-memory store
+        agent_sessions = []
+        try:
+            agent_sessions = agent.storage.get_all()
+        except Exception as e:
+            print(f"Error getting sessions from agent storage: {e}")
+        
+        # Get sessions from in-memory store
+        memory_sessions = [{"id": sid, **data} for sid, data in session_store.items()]
+        
+        # Combine and deduplicate sessions
+        all_sessions = {}
+        for session in agent_sessions:
+            session_id = session.get("id")
+            if session_id:
+                all_sessions[session_id] = session
+                
+        for session in memory_sessions:
+            session_id = session.get("id")
+            if session_id:
+                all_sessions[session_id] = session
+        
+        sessions_list = list(all_sessions.values())
+        print(f"Returning {len(sessions_list)} sessions")
+        return jsonify(sessions_list)
+    except Exception as e:
+        print(f"Error getting sessions: {e}")
+        return jsonify({"error": f"Failed to get sessions: {str(e)}"}), 500
+
+@app.route("/get_session/<session_id>", methods=["GET"])
+def get_session_route(session_id):
+    try:
+        # First try to get from in-memory session store
+        session = session_store.get(session_id)
+        if session:
+            print(f"Found session {session_id} in session store")
+            return jsonify(session)
+        
+        # If not found, try from agent storage
+        session = agent.storage.get(session_id)
         if not session:
+            print(f"Session {session_id} not found in either store")
             return jsonify({"error": "Session not found"}), 404
+            
+        print(f"Found session {session_id} in agent storage")
         return jsonify(session)
     except Exception as e:
-        app.logger.error(f"Error in get_session: {str(e)}")
-        return jsonify({"error": str(e)}), 500
+        print(f"Error getting session {session_id}: {e}")
+        return jsonify({"error": f"Failed to get session: {str(e)}"}), 500
 
-@app.route('/generate', methods=['POST', 'OPTIONS'])
-@add_cors_headers
-def generate():
-    if request.method == 'OPTIONS':
-        return jsonify({'message': 'OK'})
-    
+@app.route("/get_user_memories", methods=["GET"])
+def get_user_memories():
     try:
-        data = request.get_json()
-        prompt = data.get('prompt')
-        prototype_type = data.get('type')
-        session_id = data.get('session_id')
-
-        if not prompt or not prototype_type or not session_id:
-            return jsonify({"error": "Missing prompt, type, or session_id"}), 400
-
-        # Load current session
-        session = load_session(session_id)
-        if not session:
-            return jsonify({"error": "Session not found"}), 404
-            
-        # Add user message to session
-        session["messages"].append({"role": "user", "content": prompt})
+        user_id = request.args.get("user_id", "default_user")
         
-        # --- Generate Session Name if it's the first user message ---
-        # Check if this is the first prompt (user message is the only one added so far)
-        is_first_prompt = len(session["messages"]) == 1 
-        # Also check if the name is still the default format
-        is_default_name = session["name"].startswith("Session ") and len(session["id"]) >= 8 and session["name"].endswith(session["id"][:8])
-
-        if is_first_prompt and is_default_name:
-            new_name = generate_session_name(prompt)
-            if new_name:
-                session["name"] = new_name
-                # No need to save immediately, will be saved later anyway
-
-        # --- Generate code (using mock or real API) ---
-        explanation = ""
-        response_data = {}
-
-        if USE_MOCK:
-            mock_code, mock_instructions = get_mock_code(prompt, prototype_type)
-            explanation = f"Generated mock {'web app' if prototype_type == 'web_app' else 'script'} code!"
-            response_data = {"code": mock_code, "explanation": explanation, "instructions": mock_instructions}
-            
-            session["messages"].append({"role": "system", "content": explanation})
-            session["code"] = response_data["code"] 
-            session["instructions"] = response_data["instructions"] # Store instructions
-            save_session(session_id, session)
-            return jsonify(response_data)
+        # Check if memory is initialized
+        if memory:
+            memories = memory.get_user_memories(user_id=user_id)
         else:
-            # --- Real API call --- 
-            try:
-                generated_code = ""
-                generated_instructions = ""
-
-                if prototype_type == "web_app":
-                    # Specific prompt for web app with instructions
-                    enhanced_prompt = f"Generate the HTML, CSS, and JavaScript for a simple web application based on this description: {prompt}. Provide the code for each language in separate markdown code blocks, clearly labeled (e.g., ```html ... ```, ```css ... ```, ```javascript ... ```).\\n\\nAfter all code blocks, add a section starting exactly with `### Instructions for Use:`.\\nIn this section, provide **detailed, step-by-step instructions suitable for a non-technical user** on how to run this web application. Explain:\\n1.  **Saving:** How to copy and paste the HTML code into a file named `index.html`, the CSS code into `style.css`, and the JavaScript code into `script.js` using a basic text editor (like Notepad or TextEdit) or an IDE.\\n2.  **Running:** How to locate the `index.html` file on their computer and double-click it to open it in their default web browser.\\n3.  **Prerequisites:** Mention that no special software is needed other than a text editor and a web browser.\\n\\nRespond ONLY with the code blocks and the detailed instructions section."
-                    
-                    api_response = client.chat.completions.create(
-                        model="gpt-4o",
-                        messages=[{"role": "user", "content": enhanced_prompt}]
-                    )
-                    raw_response = api_response.choices[0].message.content
-                    parsed_code, generated_instructions = parse_code_and_instructions(raw_response)
-                    generated_code = parsed_code # This will be the dict or raw string
-                    explanation = "Web app code generated!"
-                    
-                else: # automation_script or other types
-                    enhanced_prompt = f"Generate a high-quality Python script for {prototype_type} based on the following description: {prompt}. Respond ONLY with the Python code inside a single markdown code block (```python ... ```).\\n\\nAfter the code block, add a section starting exactly with `### How to Run:`.\\nIn this section, provide **detailed, step-by-step instructions suitable for a non-technical user** on how to run this script. Assume the user might not be familiar with terminals. Explain:\\n1.  **Prerequisites:** Mention that Python needs to be installed on their computer (provide a link like https://www.python.org/downloads/ if possible).\\n2.  **Saving:** How to copy and paste the Python code into a file named `script.py` (or a more descriptive name if appropriate, like `automation_script.py`) using a basic text editor (like Notepad or TextEdit) or an IDE.\\n3.  **Running:**\\n    a.  How to open the command line interface (Terminal on macOS/Linux, Command Prompt or PowerShell on Windows).\\n    b.  How to navigate to the directory where they saved the file using the `cd` command (e.g., `cd Downloads` or `cd C:\\\\Users\\\\YourUsername\\\\Documents`).\\n    c.  How to run the script using the command `python script.py` (using the actual filename).\\n\\nRespond ONLY with the Python code block and the detailed instructions section."
-                    api_response = client.chat.completions.create(
-                        model="gpt-4o",
-                        messages=[{"role": "user", "content": enhanced_prompt}]
-                    )
-                    raw_response = api_response.choices[0].message.content
-                    # For scripts, parse_code_and_instructions should return string code and instructions
-                    generated_code, generated_instructions = parse_code_and_instructions(raw_response) 
-                    explanation = "Script code generated!"
-
-                response_data = {"code": generated_code, "explanation": explanation, "instructions": generated_instructions}
-                
-                # Add system message and code/instructions to session
-                session["messages"].append({"role": "system", "content": explanation})
-                session["code"] = response_data["code"] 
-                session["instructions"] = response_data["instructions"]
-                save_session(session_id, session)
-                return jsonify(response_data)
-
-            except Exception as e:
-                app.logger.error(f"OpenAI API error: {str(e)}")
-                app.logger.info("Falling back to mock response due to API error")
-                mock_code, mock_instructions = get_mock_code(prompt, prototype_type)
-                explanation = f"Generated using fallback (API error: {str(e)}). This is mock code."
-                response_data = {"code": mock_code, "explanation": explanation, "instructions": mock_instructions}
-
-                session["messages"].append({"role": "system", "content": explanation})
-                session["code"] = response_data["code"]
-                session["instructions"] = response_data["instructions"]
-                save_session(session_id, session)
-                return jsonify(response_data)
+            memories = ["Memory not initialized. Check API keys."]
             
+        return jsonify(memories)
     except Exception as e:
-        app.logger.error(f"Error in generate: {str(e)}")
+        print(f"Error getting memories for user {user_id}: {e}")
+        return jsonify({"error": "Failed to get user memories"}), 500
+
+@app.route("/generate", methods=["POST"])
+def generate():
+    try:
+        data = request.json
+        prompt = data.get('prompt')
+        prototype_type = data.get('type', 'Python Script')
+        session_id = data.get('session_id')
+        
+        if not prompt:
+            return jsonify({"error": "No prompt provided"}), 400
+
+        print(f"Processing request for prompt: {prompt[:50]}...")
+        
+        # Call the synchronous wrapper method
+        result = agent.process_request_sync(prompt, prototype_type)
+        
+        # Make sure we have a session ID
+        if not session_id:
+            session_id = result.get("session_id")
+            if not session_id:
+                session_id = str(uuid.uuid4())
+        
+        # Also save to our in-memory session store for redundancy
+        session_data = {
+            "messages": [
+                {"role": "user", "content": prompt},
+                {"role": "system", "content": "Generated code successfully!"}
+            ],
+            "code": result["code"],
+            "reasoning": result["reasoning"],
+            "enhanced_prompt": result.get("enhanced_prompt", ""),
+            "analysis": result.get("analysis", ""),
+            "id": session_id,
+            "name": f"Session {datetime.now().strftime('%b %d, %I:%M %p')}",
+            "created_at": datetime.now().isoformat(),
+            "updated_at": datetime.now().isoformat()
+        }
+        
+        # Save to in-memory session store
+        session_store[session_id] = session_data
+        
+        print(f"Successfully processed request, returning result. Session ID: {session_id}")
+        return jsonify({
+            "code": result["code"],
+            "reasoning": result["reasoning"],
+            "analysis": result["analysis"],
+            "enhanced_prompt": result.get("enhanced_prompt", ""),
+            "session_id": session_id
+        })
+    except Exception as e:
+        print(f"Error generating code: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": f"Failed to generate code: {str(e)}"}), 500
+
+@app.route("/rename_session/<session_id>", methods=["POST"])
+def rename_session(session_id):
+    try:
+        data = request.json
+        new_name = data.get('name')
+        if not new_name:
+            return jsonify({"error": "No name provided"}), 400
+        
+        # First, check if session exists in in-memory store
+        if session_id in session_store:
+            session_store[session_id]["name"] = new_name
+            print(f"Session {session_id} renamed to '{new_name}' in session store")
+            
+        # Also try to update in agent storage
+        try:
+            agent.storage.update(session_id, {"name": new_name})
+            print(f"Session {session_id} renamed to '{new_name}' in agent storage")
+        except Exception as e:
+            print(f"Error updating session in agent storage: {e}")
+            # Continue anyway since we might have updated the in-memory store
+            
+        return jsonify({"message": "Session renamed"})
+    except Exception as e:
+        print(f"Error renaming session: {e}")
         return jsonify({"error": str(e)}), 500
 
-@app.route('/enhance_prompt', methods=['POST', 'OPTIONS'])
-@add_cors_headers
-def enhance_prompt_route():
-    if request.method == 'OPTIONS':
-        return jsonify({'message': 'OK'})
-        
+@app.route("/delete_session/<session_id>", methods=["DELETE"])
+def delete_session(session_id):
+    try:
+        agent.storage.delete(session_id)
+        return jsonify({"message": "Session deleted"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+# -----------------------------------------------------------------------------
+# Remote Agent Routes
+# -----------------------------------------------------------------------------
+@app.route("/submit_remote_task", methods=["POST"])
+def submit_remote_task():
+    """Submit a task to be processed by a remote agent"""
     try:
         data = request.get_json()
-        prompt = data.get('prompt')
+        task_type = data.get("task_type")
+        prompt = data.get("prompt")
+        prototype_type = data.get("type", "Python Script")
+        user_id = data.get("user_id", "default_user")
+        session_id = data.get("session_id")
+        
+        if not task_type or not prompt or not session_id:
+            return jsonify({"error": "Missing required parameters"}), 400
+        
+        # Ensure remote agent pool is running
+        if not remote_agent_pool.running:
+            remote_agent_pool.start()
+        
+        # Submit the task
+        task_id = remote_agent_pool.submit_task(
+            task_type=task_type,
+            prompt=prompt,
+            prototype_type=prototype_type,
+            user_id=user_id,
+            session_id=session_id
+        )
+        
+        return jsonify({
+            "task_id": task_id,
+            "status": "submitted",
+            "message": "Task submitted successfully"
+        })
+    
+    except Exception as e:
+        print(f"Error submitting remote task: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/get_remote_task_status/<task_id>", methods=["GET"])
+def get_remote_task_status(task_id):
+    """Get the status of a remote task"""
+    try:
+        status = remote_agent_pool.get_task_status(task_id)
+        return jsonify(status)
+    
+    except Exception as e:
+        print(f"Error getting remote task status: {e}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/remote_enhance_prompt", methods=["POST"])
+def remote_enhance_prompt():
+    """Submit a prompt enhancement task to be processed by a remote agent"""
+    try:
+        data = request.get_json()
+        prompt = data.get("prompt")
+        session_id = data.get("session_id")
+        user_id = data.get("user_id", "default_user")
         
         if not prompt:
             return jsonify({"error": "Missing prompt"}), 400
-            
-        # Check if we should use mock response (if API key is missing)
-        if USE_MOCK:
-            enhanced = f"Enhanced: {prompt} (MOCK RESPONSE - Add details for better results)"
-            return jsonify({"enhanced_prompt": enhanced})
-            
-        # --- Real OpenAI API call for enhancement ---
-        try:
-            enhancement_instruction = f"Rewrite the following user request to make it a clear, detailed, and effective prompt for an AI code generation model. Focus on clarity, specificity, and including necessary details. Respond only with the rewritten prompt, nothing else:\n\nOriginal prompt: '{prompt}'"
-            
-            response = client.chat.completions.create(
-                model="gpt-4o", # Or a cheaper/faster model if preferred for enhancement
-                messages=[{"role": "user", "content": enhancement_instruction}],
-                temperature=0.5 # Lower temperature for more focused rewriting
-            )
-            enhanced_prompt = response.choices[0].message.content.strip()
-            
-            # Basic validation/cleanup (sometimes models add quotes)
-            if enhanced_prompt.startswith('"') and enhanced_prompt.endswith('"'):
-                enhanced_prompt = enhanced_prompt[1:-1]
-            
-            return jsonify({"enhanced_prompt": enhanced_prompt})
-            
-        except Exception as api_error:
-            app.logger.error(f"OpenAI API error during enhancement: {str(api_error)}")
-            # Fallback: return original prompt or a simple modification
-            enhanced = f"Enhanced: {prompt} (API ERROR - Could not enhance fully)"
-            return jsonify({"enhanced_prompt": enhanced})
-            
+        
+        # Create a session if none provided
+        if not session_id:
+            session_id = create_new_session()
+        
+        # Ensure remote agent pool is running
+        if not remote_agent_pool.running:
+            remote_agent_pool.start()
+        
+        # Submit the task
+        task_id = remote_agent_pool.submit_task(
+            task_type="enhance_prompt",
+            prompt=prompt,
+            prototype_type="",  # Not applicable for enhance_prompt
+            user_id=user_id,
+            session_id=session_id
+        )
+        
+        return jsonify({
+            "task_id": task_id,
+            "status": "submitted",
+            "message": "Prompt enhancement task submitted"
+        })
+    
     except Exception as e:
-        app.logger.error(f"Error in enhance_prompt: {str(e)}")
+        print(f"Error submitting remote enhance prompt task: {e}")
         return jsonify({"error": str(e)}), 500
 
-@app.route('/rename_session/<session_id>', methods=['POST', 'OPTIONS'])
-@add_cors_headers
-def rename_session(session_id):
-    if request.method == 'OPTIONS':
-        return jsonify({'message': 'OK'})
-        
+@app.route("/remote_generate", methods=["POST"])
+def remote_generate():
+    """Submit a code generation task to be processed by a remote agent"""
     try:
         data = request.get_json()
-        new_name = data.get('new_name')
+        prompt = data.get("prompt")
+        prototype_type = data.get("type", "Python Script")
+        user_id = data.get("user_id", "default_user")
         
-        if not new_name:
-            return jsonify({"error": "Missing new_name"}), 400
-            
-        # Load the session
-        session = load_session(session_id)
-        if not session:
-            return jsonify({"error": "Session not found"}), 404
-            
-        # Update the name
-        session['name'] = new_name
+        if not prompt:
+            return jsonify({"error": "Missing prompt"}), 400
         
-        # Save the updated session
-        save_session(session_id, session)
+        # Create a session
+        session_id = create_new_session()
         
-        return jsonify({"message": "Session renamed successfully", "session": session})
+        # Ensure remote agent pool is running
+        if not remote_agent_pool.running:
+            remote_agent_pool.start()
         
+        # Submit the task
+        task_id = remote_agent_pool.submit_task(
+            task_type="generate_code",
+            prompt=prompt,
+            prototype_type=prototype_type,
+            user_id=user_id,
+            session_id=session_id
+        )
+        
+        return jsonify({
+            "task_id": task_id,
+            "session_id": session_id,
+            "status": "submitted",
+            "message": "Code generation task submitted"
+        })
+    
     except Exception as e:
-        app.logger.error(f"Error in rename_session: {str(e)}")
+        print(f"Error submitting remote generate task: {e}")
         return jsonify({"error": str(e)}), 500
 
-@app.route('/delete_session/<session_id>', methods=['POST', 'OPTIONS']) # Using POST for simplicity
-@add_cors_headers
-def delete_session(session_id):
-    if request.method == 'OPTIONS':
-        return jsonify({'message': 'OK'})
-        
-    try:
-        session_path = get_session_path(session_id)
-        
-        if not session_path.exists():
-            return jsonify({"error": "Session not found"}), 404
-            
-        # Delete the file
-        session_path.unlink()
-        
-        return jsonify({"message": "Session deleted successfully"})
-        
-    except Exception as e:
-        app.logger.error(f"Error in delete_session: {str(e)}")
-        return jsonify({"error": str(e)}), 500
+# Add a specific route to handle OPTIONS requests
+@app.route('/<path:path>', methods=['OPTIONS'])
+def handle_options(path):
+    return '', 204
 
-if __name__ == '__main__':
-    print("VibeProto server starting...")
-    print(f"OPENAI_API_KEY is {'set' if os.environ.get('OPENAI_API_KEY') else 'NOT SET'}")
+# -----------------------------------------------------------------------------
+# Main
+# -----------------------------------------------------------------------------
+if __name__ == "__main__":
+    print("Starting VibeProto server on port 5000...")
+    # Start the remote agent pool
+    remote_agent_pool.start()
+    
+    # Add a hook to stop the remote agent pool when the app stops
+    import atexit
+    atexit.register(remote_agent_pool.stop)
+    
     app.run(host='0.0.0.0', port=5000, debug=True) 

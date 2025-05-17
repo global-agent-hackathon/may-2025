@@ -9,17 +9,56 @@
     <div class="container">
         <!-- Left Sidebar: Saved Sessions -->
         <div class="sidebar left-sidebar">
-            <h2>Saved Sessions</h2>
+            <div class="sidebar-header">
+                <h2>Saved Sessions</h2>
+                <button id="settings-btn" class="icon-button" title="Settings">⚙️</button>
+            </div>
             <div id="session-list" class="session-list">
                 <!-- Sessions will be dynamically added here -->
             </div>
             <button id="new-session">New Session</button>
         </div>
 
+        <!-- Settings Modal -->
+        <div id="settings-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>API Settings</h2>
+                    <button class="close-button">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="api-key-form">
+                        <div class="api-key-input">
+                            <label for="openai-key">OpenAI API Key</label>
+                            <input type="password" id="openai-key" placeholder="sk-...">
+                            <span class="status" id="openai-status">Not set</span>
+                        </div>
+                        <div class="api-key-input">
+                            <label for="anthropic-key">Anthropic API Key</label>
+                            <input type="password" id="anthropic-key" placeholder="sk-ant-...">
+                            <span class="status" id="anthropic-status">Not set</span>
+                        </div>
+                        <button id="save-keys">Save API Keys</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Main Chat Area -->
         <div class="chat-area">
-            <h1>VibeProto</h1>
-            <p>Build prototypes with natural language</p>
+            <!-- Title bar with VibeProto on left and Remote Mode toggle on right -->
+            <div class="title-bar">
+                <div class="title-left">
+                    <h1>VibeProto</h1>
+                    <p>Build prototypes with natural language</p>
+                </div>
+                <div class="title-right">
+                    <button id="remote-mode" class="remote-mode-btn-small" onclick="toggleRemoteMode()">
+                        <span id="remote-mode-icon">🔄</span> <span id="remote-mode-text">Remote Mode: OFF</span>
+                    </button>
+                </div>
+            </div>
+            
             <h2>What do you want to build?</h2>
             <div id="chat-messages" class="chat-messages">
                 <!-- Messages will be dynamically added here -->
@@ -51,7 +90,41 @@
             </div>
         </div>
     </div>
+    
     <!-- Corrected path for script.js -->
     <script src="script.js"></script>
+    
+    <!-- Test script to ensure the toggle functionality works -->
+    <script>
+        // Make sure toggleRemoteMode function is available globally
+        window.toggleRemoteMode = function() {
+            const btn = document.getElementById('remote-mode');
+            if (btn) {
+                if (btn.textContent === 'Remote Mode: OFF') {
+                    btn.textContent = 'Remote Mode: ON';
+                    btn.style.backgroundColor = '#4CAF50';
+                    btn.classList.add('active');
+                    console.log('Toggled to ON (inline)');
+                } else {
+                    btn.textContent = 'Remote Mode: OFF';
+                    btn.style.backgroundColor = '#2196F3';
+                    btn.classList.remove('active');
+                    console.log('Toggled to OFF (inline)');
+                }
+            }
+        };
+        
+        // Add direct event listener for debugging
+        document.addEventListener('DOMContentLoaded', function() {
+            const remoteBtn = document.getElementById('remote-mode');
+            if (remoteBtn) {
+                console.log('Remote button found in test script');
+                remoteBtn.addEventListener('click', function(e) {
+                    console.log('Remote button clicked');
+                    toggleRemoteMode();
+                });
+            }
+        });
+    </script>
 </body>
 </html> 

@@ -181,11 +181,24 @@ body {
 }
 
 .session-item {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    background: #2a2a2a;
+    cursor: pointer;
+    transition: background 0.2s;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px;
-    border-bottom: 1px solid #444;
+}
+
+.session-item:hover {
+    background: #3a3a3a;
+}
+
+.session-item.active {
+    background: #3a3a3a;
+    border-left: 3px solid #0088ff;
 }
 
 .session-name {
@@ -272,8 +285,9 @@ p {
 
 .prompt-actions {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
-    align-items: center;
+    margin-bottom: 15px;
 }
 
 .prompt-actions select {
@@ -292,4 +306,358 @@ p {
 
 .btn-secondary:hover {
     background-color: #777;
+}
+
+/* Style for think messages in chat */
+.message.think-message {
+  background-color: #2d3748;
+  color: #9ae6b4;
+  border-left: 3px solid #48bb78;
+  padding-left: 12px;
+  font-style: italic;
+}
+
+/* Enhanced thinking container with header and content */
+.thinking-container {
+  padding: 10px 12px;
+  margin-bottom: 15px;
+  font-style: normal;
+}
+
+.thinking-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #4fd1c5;
+}
+
+.reasoning-title {
+  color: #4fd1c5;
+  font-size: 1.1em;
+  font-weight: bold;
+  border-bottom: 1px solid #48bb78;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+  width: 100%;
+}
+
+.thinking-content {
+  margin-left: 10px;
+  line-height: 1.5;
+}
+
+.thinking-content p {
+  margin: 8px 0;
+  color: #9ae6b4;
+}
+
+/* Thinking dots animation */
+.thinking-dots {
+  display: inline-flex;
+  margin-right: 8px;
+}
+
+.thinking-dots span {
+  animation: thinking 1.4s infinite;
+  font-size: 16px;
+  font-weight: bold;
+  opacity: 0;
+}
+
+.thinking-dots span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.thinking-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.thinking-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes thinking {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Settings Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal-content {
+    background-color: #1e1e1e;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #444;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+    position: relative;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #fff;
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0 5px;
+}
+
+.close-button:hover {
+    color: #fff;
+}
+
+.api-key-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.api-key-input {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.api-key-input label {
+    color: #fff;
+    font-size: 14px;
+}
+
+.api-key-input input {
+    padding: 8px 12px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background: #2a2a2a;
+    color: #fff;
+    font-family: monospace;
+}
+
+.api-key-input .status {
+    font-size: 12px;
+    color: #666;
+}
+
+.status.set {
+    color: #4CAF50;
+}
+
+.status.not-set {
+    color: #f44336;
+}
+
+#save-keys {
+    background: #0088ff;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+#save-keys:hover {
+    background: #0077ee;
+}
+
+/* Settings Button */
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.icon-button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.icon-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Remote Mode Container - Make it really stand out */
+.remote-mode-container {
+    margin: 15px 0;
+    text-align: center;
+    width: 100%;
+    padding: 10px;
+    background-color: #333;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+/* Remote Mode Button - Make it more eye-catching */
+.remote-mode-btn {
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.remote-mode-btn:hover {
+    background-color: #1976D2;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+#remote-mode.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* Task status styles */
+.task-status {
+    padding: 8px;
+    margin-top: 10px;
+    border-radius: 5px;
+    background-color: #2d3748;
+    color: #eee;
+    font-size: 0.9em;
+}
+
+.task-status .status-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+}
+
+.task-status .task-id {
+    font-family: monospace;
+    color: #9ae6b4;
+}
+
+/* Title bar layout */
+.title-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.title-left {
+    flex: 1;
+}
+
+.title-left h1 {
+    margin-bottom: 5px;
+}
+
+.title-left p {
+    margin-top: 0;
+    color: #aaa;
+}
+
+.title-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Remote Mode Button and Indicator */
+.remote-mode-btn-small {
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.remote-mode-btn-small:hover {
+    background-color: #1976D2;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+}
+
+#remote-mode.remote-mode-btn-small.active {
+    background-color: #4CAF50;
+}
+
+/* Mode indicator - a small pill that shows the current mode */
+.mode-indicator {
+    background-color: #ff5252;
+    color: white;
+    border-radius: 20px;
+    padding: 3px 8px;
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Indicator when remote mode is active */
+.mode-indicator.active {
+    background-color: #4CAF50;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+    100% {
+        opacity: 1;
+    }
 } 

@@ -10,7 +10,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from prototype_agent import save_session
 
 # Import the generator module
-from generate import generate_prototype
+from generate import generate_prototype, enhance_prompt
 
 # Load environment variables
 load_dotenv()
@@ -108,6 +108,21 @@ if __name__ == "__main__":
 </html>"""
         
         return jsonify({'code': code})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/enhance_prompt', methods=['POST'])
+def enhance():
+    data = request.json
+    
+    if not data or 'prompt' not in data:
+        return jsonify({'error': 'Missing required field: prompt'}), 400
+    
+    prompt = data['prompt']
+    
+    try:
+        enhanced_prompt = enhance_prompt(prompt)
+        return jsonify({'enhanced_prompt': enhanced_prompt})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

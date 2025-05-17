@@ -1,16 +1,20 @@
 import os
 import json
 import time
-import openai
+from openai import OpenAI
 import argparse
+import sys  # Add sys import
 from pathlib import Path
 from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
 
-# Set up OpenAI API key
-openai.api_key = os.getenv('OPENAI_API_KEY')
+# Set up OpenAI client
+client = OpenAI(
+    api_key=os.getenv('OPENAI_API_KEY'),
+    timeout=60.0  # Increase timeout to avoid connection issues
+)
 
 # Set up paths
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,43 +28,39 @@ def enhance_prompt(basic_prompt):
     """
     Enhances a basic prompt with detailed UI/UX and functionality specs using GPT.
     """
-    # Define the enhancement instructions
-    # Tailor these instructions for better results
-    enhancement_system_prompt = """
-You are an expert UI/UX designer and software architect. 
-Your task is to take a basic user prompt for a web application and enhance it with specific, modern UI/UX details and functionality specifications.
-Focus on creating a clean, user-friendly interface.
-The enhanced prompt should guide an AI code generator to produce a high-quality prototype.
+    if not basic_prompt or not basic_prompt.strip():
+        raise ValueError("Empty prompt provided")
 
-Include these details where appropriate:
-- **Layout:** Use a centered container (e.g., max-width 800px, margin auto) on a light gray background.
-- **Main Content Area:** White background with a subtle box-shadow.
-- **Responsiveness:** Ensure the layout adapts reasonably to different screen sizes (mention flexbox or grid).
-- **Interactivity:** 
-    - Buttons: Specify clear actions (e.g., 'Add Task', 'Submit'). Use a specific color like green (e.g., #4CAF50) with a slightly darker hover effect.
-    - Input Fields: Clear placeholders, perhaps with labels above.
-    - Lists/Items: Consider animations for adding/deleting items (e.g., subtle fade-in/out).
-- **Functionality:** Break down the core features mentioned in the basic prompt into specific steps or components. For a to-do list, specify adding tasks, marking tasks as complete (with visual feedback like strikethrough), and deleting tasks.
-- **Structure:** Output *only* the enhanced prompt text, suitable for direct use in another AI model. Do not add explanations or conversational text around it.
-"""
-    
-    enhancement_user_prompt = f"Enhance this basic web app prompt: '{basic_prompt}'"
-    
     try:
-        response = openai.chat.completions.create(
-            model="gpt-4o-mini", # Use a cost-effective but capable model
+        completion = client.chat.completions.create(
+            model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": enhancement_system_prompt},
-                {"role": "user", "content": enhancement_user_prompt}
+                {
+                    "role": "system",
+                    "content": "You are an expert UI/UX designer and software architect. Enhance the given prompt with detailed specifications."
+                },
+                {
+                    "role": "user",
+                    "content": f"Enhance this basic web app prompt with UI/UX details: {basic_prompt}"
+                }
             ],
-            temperature=0.5, # Lower temperature for more focused enhancement
-            max_tokens=500  # Limit token usage
+            temperature=0.7,
+            max_tokens=500
         )
-        enhanced_prompt_text = response.choices[0].message.content.strip()
-        return enhanced_prompt_text
+        
+        if not completion.choices:
+            raise ValueError("No response received from OpenAI")
+            
+        enhanced_prompt = completion.choices[0].message.content
+        if not enhanced_prompt or not enhanced_prompt.strip():
+            raise ValueError("Empty response from OpenAI")
+            
+        return enhanced_prompt.strip()
+        
     except Exception as e:
-        print(f"Error during prompt enhancement: {e}", file=sys.stderr)
-        return basic_prompt # Return original prompt on error
+        error_msg = f"Error during prompt enhancement: {str(e)}"
+        print(error_msg, file=sys.stderr)
+        raise RuntimeError(error_msg)
 
 def generate_prototype(prompt, prototype_type):
     """
@@ -73,57 +73,44 @@ def generate_prototype(prompt, prototype_type):
     Returns:
         dict: A dictionary containing the generated code and metadata
     """
-    # Create a timestamp for unique file naming
-    timestamp = int(time.time())
-    
-    # Prepare the system prompt based on prototype type
-    system_prompts = {
-        "script": "You are an expert automation script creator. Generate a complete Python script that can be run immediately.",
-        "webapp": "You are an expert web app developer. Generate a complete web application with HTML, CSS, and JavaScript.",
-        "utility": "You are an expert utility developer. Generate a complete command-line utility in Python."
-    }
-    
-    system_prompt = system_prompts.get(prototype_type, system_prompts["script"])
-    
-    # Add context to the user prompt
-    enhanced_prompt = f"""
-    Create a {prototype_type} based on this description: {prompt}
-    
-    For a script, include all necessary imports and make it runnable with clear documentation.
-    For a web app, create HTML, CSS, and JavaScript files with a modern, responsive design.
-    For a utility, create a command-line tool with proper argument parsing and error handling.
-    
-    Provide the complete code files needed for the prototype to work.
-    """
-    
-    # Generate the prototype using OpenAI
-    response = openai.chat.completions.create(
-        model="gpt-4-turbo",
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": enhanced_prompt}
-        ],
-        temperature=0.7,
-        max_tokens=4000
-    )
-    
-    # Extract code from the response
-    generated_code = response.choices[0].message.content
-    
-    # Generate a simple analysis
-    analysis = "Code generated successfully. Review the code and test it thoroughly before deployment."
-    
-    # Save the generated code to a file
-    output_path = save_prototype(generated_code, prototype_type, timestamp)
-    
-    return {
-        "success": True,
-        "prototype_type": prototype_type,
-        "file_path": str(output_path),
-        "code": generated_code,
-        "analysis": analysis,
-        "timestamp": timestamp
-    }
+    try:
+        completion = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {
+                    "role": "system",
+                    "content": f"You are an expert {prototype_type} developer. Generate complete, runnable code."
+                },
+                {
+                    "role": "user",
+                    "content": f"Create a {prototype_type} that does: {prompt}"
+                }
+            ],
+            temperature=0.7,
+            max_tokens=2000
+        )
+        
+        if not completion.choices:
+            raise ValueError("No response received from OpenAI")
+            
+        generated_code = completion.choices[0].message.content
+        if not generated_code or not generated_code.strip():
+            raise ValueError("Empty response from OpenAI")
+            
+        timestamp = int(time.time())
+        output_path = save_prototype(generated_code.strip(), prototype_type, timestamp)
+        
+        return {
+            "success": True,
+            "code": generated_code.strip(),
+            "file_path": str(output_path),
+            "timestamp": timestamp
+        }
+        
+    except Exception as e:
+        error_msg = f"Error generating prototype: {str(e)}"
+        print(error_msg, file=sys.stderr)
+        raise RuntimeError(error_msg)
 
 def save_prototype(code, prototype_type, timestamp):
     """

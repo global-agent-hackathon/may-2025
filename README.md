@@ -8,17 +8,22 @@ VibeProto is an innovative tool designed to empower non-coders to create web app
 
 - **Web App Prototyping**: Generate functional HTML, CSS, and JavaScript prototypes from prompts like "Create a to-do list app."
 - **Python Script Creation**: Produce Python scripts for automation or logic-based tasks with ease.
-- **AI-Powered**: Utilizes OpenAI's GPT-4 for code generation and Agno for enhanced reasoning and prompt refinement.
+- **AI-Powered**: Utilizes OpenAI's GPT-4 for code generation with direct API integration for enhanced reliability.
 - **Session Management**: Save and manage your generated prototypes with an easy-to-use interface.
 - **Prompt Enhancement**: AI-powered prompt refinement to get better results.
 - **Detailed Instructions**: Step-by-step guides for using generated code, tailored for non-technical users.
+- **Think Feature**: Watch the AI's reasoning process in real-time as it analyzes and plans your code generation.
+- **API Key Management**: Secure storage and management of API keys through the settings interface.
+- **Remote Agent**: Cloud-based background processing that allows tasks to run even when your device is offline.
+- **Parallel Task Processing**: Run multiple tasks simultaneously with our pool of up to 10 remote agents.
 
 ## Setup Requirements
 
 Before you begin, ensure you have:
 - Python 3.8 or higher
 - Node.js and npm (for frontend)
-- OpenAI API key
+- OpenAI API key (required)
+- Anthropic API key (optional)
 
 ## Installation & Setup
 
@@ -70,22 +75,33 @@ Before you begin, ensure you have:
 
 ## Using VibeProto
 
-1. **Create a New Session**:
+1. **Configure API Keys**:
+   - Click the settings icon in the left sidebar
+   - Enter your OpenAI API key (required)
+   - Optionally add your Anthropic API key
+   - Save the keys to start using the application
+
+2. **Create a New Session**:
    - Click "New Session" to start a fresh prototype.
    - Your sessions are automatically saved and can be accessed later.
 
-2. **Generate Code**:
+3. **Choose Operating Mode**:
+   - **Standard Mode**: Tasks run immediately with live updates
+   - **Remote Mode**: Toggle "Remote Mode" on to delegate tasks to cloud-based agents that continue working even if you close your browser
+
+4. **Generate Code**:
    - Choose the type (Web App or Python Script).
    - Type your idea in plain English.
    - (Optional) Click "Enhance Prompt" for better results.
-   - Click "Generate Prototype".
+   - Click "Generate Prototype" and watch the AI think through your request.
+   - Review the AI's reasoning and the generated code.
 
-3. **View and Use Generated Code**:
+5. **View and Use Generated Code**:
    - The generated code appears in the right panel.
    - Detailed instructions for using the code are provided below it.
    - Use the "Copy Code" or "Download" buttons to save your work.
 
-4. **Managing Sessions**:
+6. **Managing Sessions**:
    - Your sessions are listed in the left sidebar.
    - Click on a session name to load it.
    - Use the "..." menu to rename or delete sessions.
@@ -147,4 +163,35 @@ VibeProto is just the beginning! Planned enhancements include:
 2. **Expanded Languages**: Adding more frameworks and programming languages.
 3. **Advanced Webapps Executions**: Will integrate more agents to build sophasticated webapps with simple plain english prompt.
 4. **Share & Deployment**: Shareable links to the project created by user so that they can share to others and make delpoyment easy.
-5. **Community Hub**: A marketplace for sharing and remixing prototypes. 
+5. **Community Hub**: A marketplace for sharing and remixing prototypes.
+
+## Recent Updates
+
+- **Remote Agent System**: Added cloud-based background processing that continues working even when users are offline
+- **Parallel Task Processing**: Support for running multiple tasks simultaneously with up to 10 agents
+- **Docker Support**: Added containerization for easy cloud deployment
+- **Direct OpenAI Integration**: Removed dependency on agno package for more reliable API calls
+- **Think Feature**: Added real-time display of AI reasoning during code generation
+- **Settings Interface**: New modal for managing API keys
+- **Enhanced Error Handling**: Better feedback for API and generation issues
+- **Improved UI**: Updated styling and animations for better user experience
+
+## Deployment Options
+
+VibeProto can be deployed in two ways:
+
+1. **Local Deployment**:
+   ```bash
+   # Start backend
+   python prototype_agent.py
+   
+   # Start frontend
+   cd frontend
+   npm start
+   ```
+
+2. **Docker Deployment** (for cloud/remote usage):
+   ```bash
+   # Build and start both services
+   docker-compose up -d
+   ``` 
