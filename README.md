@@ -1,177 +1,240 @@
-<div align="center" id="top">
-  <img src="./.assets/may-2025-banner.svg" alt="Agno" width="750" height="auto">
-</div>
+# 🚀 PolyTutor
 
-# The Global Agent Hackathon
+**PolyTutor** is an AI-powered, multi-agent tutoring platform designed to deliver personalized, subject-specific learning experiences in **Physics**, **Chemistry**, **Mathematics**, and **Languages**. Powered by advanced LLMs, real-time streaming, and smart agent orchestration, PolyTutor transforms the way learners engage with complex concepts.
 
-Welcome to the May 2025 edition of the Global Agent Hackathon!
+---
 
-Join us for a month-long, open-source AI Agent Hackathon — open to all builders and dreamers working on agents, RAG, tool use, and multi-agent systems.
+## 🌟 Key Features
 
-Powered by [Agno](https://agno.link/gh), [Exa](https://exa.ai), [Firecrawl](https://www.firecrawl.dev/), [Mem0](http://mem0.ai), [Unwind AI](https://www.theunwindai.com), [Browser Use](https://browser-use.com), [mcp.run](https://www.mcp.run), [Graphlit](https://www.graphlit.com/), [Lutra AI](https://www.lutra.ai), [Potpie](https://potpie.ai) and more.
+### 🎓 Multi-Subject Intelligence
 
-## 💰 Build something cool, win over $25,000 in cash and credits
+* **Physics**: Interactive problem-solving, concept visualization, and foundational explanations.
+* **Chemistry**: Molecular structures, chemical reactions, and theoretical concepts.
+* **Mathematics**: Step-by-step equation solving, concept breakdowns, and logical reasoning.
+* **Language Learning**:
 
-Win over $25,000 in cash and credits for your favorite AI tools for the most ambitious Agent projects!
+  * Grammar breakdowns
+  * Vocabulary builders
+  * Pronunciation helpers
+  * Cultural context & idioms
+  * Real-world practice dialogues
+  * Support for multiple languages (English, Spanish, French, German, Italian, Japanese, Chinese, danish)
 
-## Cash Prizes
+### 🧠 Intelligent Interactions
 
-### Best Use of Agno ([see details](/resources/agno.md)):
+* Real-time streaming of responses
+* Markdown-formatted outputs for seamless UI rendering
+* Smart subject-switching suggestions
+* Dark/Light mode support
+* Upload notes and PDFs for contextual learning
+* Contextual search via vector embeddings (LanceDB + OpenAI)
 
-Projects showcasing the best use case of Agno will get following cash prizes:
-- 🏆 **GRAND PRIZE**: $5,000 🏆
-- 🥇 1 winner: $2,000
-- 🥈 5 winners: $1,000 each
-- 🥉 10 winners: $500 each
-- 🏅 10 winners: $300 each
+---
 
-The $300, $500 and $1,000 prizes will be awarded on a rolling basis. The $2,000 and $5,000 prizes will be awarded at the end of the hackathon.
+## 🧱 System Architecture
 
-Judges: Dirk Brand, Yash Solanky, Monali Dambre
+![Architecture Diagram](./images/Poly_AI%20\(3\).jpeg)
 
-### Best use of Browser Use ([see details](/resources/browser-use.md)):
+PolyTutor uses a **multi-agent orchestration framework** to deliver domain-specific tutoring sessions, backed by OpenAI’s GPT models and a powerful document/vector search layer.
 
-Projects showcasing the best use case of Browser Use will get following cash prizes:
-- 🏆 **GRAND PRIZE**: $2,500 🏆
-- 🥉 2 winners: $500 each
-- 🥈 10 winners: $150 each
+### 🔁 Core Workflow
 
-The $150 prizes will be awarded on a rolling basis. The $500 and $2,500 prizes will be awarded at the end of the hackathon.
+1. **Frontend (React + Vite + TailwindCSS)**
 
-Judges: Larsen Cundric
+   * Clean user interface for prompt entry and visual display.
+   * Interactions trigger API calls to the backend via HTTPS.
 
-### Best use of Potpie 🥧 ([see details](/resources/potpie.md)):
+2. **Backend (FastAPI + Streaming)**
 
-Projects showcasing the best use case of Potpie will get following cash prizes:
-- 🏆 **GRAND PRIZE**: $200 🏆
-- 🥉 3 winners: $100 each
-- 🥈 5 winners: 3 months of Potpie Pro FREE!
+   * Manages real-time communication with users.
+   * Routes queries to the Agno agent system.
+   * Streams incremental results using `StreamingResponse`.
 
-All the prizes will be awarded at the end of the hackathon.
+3. **Agno Orchestrator**
 
-Judges: Aditi
+   * Acts as the system brain, routing tasks to appropriate agents.
+   * Maintains state, context, and user preferences.
 
-## Credits
+4. **Domain Validator Agent**
 
-### Browserbase - $1200 value:
+   * Ensures user prompt matches a supported subject.
+   * If mismatched, prompts user to rephrase or redirect.
 
-- Startup plan for free for a whole year to the best project built using Browserbase
+---
 
-Judges: Lindsay Gilson
+## 🤖 Specialized Agent System
 
-### Exa - Free $50 credits for everyone:
+### 🗣️ Language Agents
 
-Every participant gets free $50 Exa API credits!
+| Agent                  | Function                                                    |
+| ---------------------- | ----------------------------------------------------------- |
+| **Grammar Coach**      | Teaches grammar using target language and English examples. |
+| **Vocabulary Builder** | Generates word lists with usage examples.                   |
+| **Cultural Expert**    | Explains cultural idioms and expressions.                   |
+| **Dialogue Agent**     | Crafts practice dialogues for real-world scenarios.         |
 
-- To get the credits use the coupon code `EXA50API` by heading to the [Exa API Dashboard](https://dashboard.exa.ai/billing).
+### 🧪 STEM Agents
 
-### Best use of Firecrawl:
+| Agent                    | Function                                             |
+| ------------------------ | ---------------------------------------------------- |
+| **Concept Agent**        | Step-by-step conceptual teaching with examples.      |
+| **Visual Agent**         | Returns visuals, equations, or prompts for diagrams. |
+| **Problem Solver Agent** | Solves and explains problems clearly.                |
 
-- Every one is entitled to 5k Firecrawl credits, enter the coupon code `hackathon5k` on the [Firecrawl Dashboard](https://www.firecrawl.dev/app/settings)
+---
 
-### Best use of Mem0:
+## 🔍 Knowledge Integration
 
-- Mem0 is offering pro plan for free for 3 months to the best project built using Mem0. ([details coming soon](/resources/mem0.md))
+* Upload PDFs, slides, or text notes.
+* Vectorized using OpenAI embeddings + LanceDB.
+* Enables in-context answers referencing your personal knowledge base.
+* Search options:
 
-Judges: Taranjeet Singh
+  * **Database Only**
+  * **Web (DuckDuckGo) + YouTube**
+* New results get cached into the vector DB for faster reuse.
 
-### MCP Run:
+---
 
-- [MCP.Run](https://www.mcp.run) is offering a free 3 month pro account to any participant, using `AGNOHACK2025` at checkout. Thank you MCP.Run for sponsoring the hackathon!
+## 📡 Real-Time Experience
 
-### Best use of Graphlit:
+PolyTutor streams responses incrementally:
+
+```
+[Validating prompt...]
+[Routing to Chemistry Agents...]
+[Searching uploaded files...]
+[Generating answer...]
+```
 
-- Please [see details](/resources/graphlit.md)
+Final output is markdown-formatted — perfect for rich interfaces or PDF export.
 
-### Best use of Lutra AI:
+---
 
-- [Details coming soon](/resources/lutra-ai.md)
+## 🧰 Tech Stack
 
-## Groq Credits
+### ⚙️ Frontend
 
-Groq is the lowest cost inference provider with no tradeoffs on speed and they're offering $10 in Groq API credits to any participant (millions of tokens for all available models, including Llama 4 Scout and Maverick) and $300 in Groq API credits to the best project built using Groq.
+| Tool               | Purpose                    |
+| ------------------ | -------------------------- |
+| React + TypeScript | UI & state management      |
+| Vite               | Build tooling & hot reload |
+| TailwindCSS        | UI styling                 |
+| Shadcn UI          | Prebuilt UI components     |
+| Lucide Icons       | Clean vector icons         |
+| React Markdown     | Render Markdown safely     |
 
-- [Fill out this form for $10 in Groq API credits](https://forms.gle/1pBpXsi2j8btk1Rd6)
-- Best use of Groq will get $300 in Groq API credits + feature on [Groq Applications Showcase](https://console.groq.com/docs/showcase-applications)
+### 🔧 Backend
 
-## Special Recognitions
+| Tool             | Purpose                                   |
+| ---------------- | ----------------------------------------- |
+| Python + FastAPI | Web server & API                          |
+| Agno AI SDK      | Agent orchestration                       |
+| Streaming        | Real-time message updates to frontend     |
+| LanceDB          | Vector search for user-uploaded documents |
+| OpenAI GPT-4o    | Core reasoning engine                     |
 
-- The **top 5 projects** will be featured in the trending [Awesome LLM Apps repo](https://github.com/Shubhamsaboo/awesome-llm-apps), giving your work massive visibility in the AI community.
+---
 
-Judges: Shubham Saboo
+## 🗂️ Project Structure
 
-## 📚 Resources
+```
+.
+├── backend/
+│   ├── app/
+│   │   ├── api/
+│   │   ├── services/
+│   │   └── repositories/
+│   └── requirements.txt
+│
+└── query-pilot-chat/
+    ├── src/
+    │   ├── components/
+    │   ├── services/
+    │   └── styles/
+    ├── public/
+    └── package.json
+```
 
-Resources for each sponsor are available in the [resources](/resources) folder.
+---
 
-## ⏱️ Timeline
+## 🚀 Getting Started
 
-- **April 15th** - Hackathon starts
-- **May 30th** - Hackathon ends
+### 📦 Prerequisites
 
-## 🚀 How to Participate
+* Node.js (v16+)
+* Python 3.8+
+* Git
 
-1. **Submit your project** by creating a GitHub issue in this repo following the provided [template](./.github/ISSUE_TEMPLATE/submission-template.md).
-2. **Get category assignment**
-    - The Hackathon team will review your submission and assign it to a prize category.
-    - You can update your issue as you build, and we'll update the prize category accordingly.
-    - Prize categories can be updated until the hackathon ends.
-    - Categories include Best use of Agno, Firecrawl, Mem0, Graphlit and Browser Use.
-3. **Build your project** and submit a PR for your project in the submissions folder - we'll review, judge, and provide feedback. Note: you can start building as we review your submission.
-4. **When your PR is approved**, you join the pool to win the assigned cash prize and/or credits.
-    - Checkout the [How to Win](#how-to-win) section for more details.
-5. **Winning projects** will be moved to the **winners** folder.
+---
 
-## 🏆 How to Win
+### 🖥️ Frontend Setup
 
-Your submission will be judged on:
+```bash
+cd query-pilot-chat
+npm install
+npm run dev
+```
 
-- **Completed PR** with working code in the Hackathon GitHub repo.
-    - A **judge** will review the PR and provide feedback.
-    - Once approved, the PR will be merged and the project will be eligible for the prize pool.
-- **Demo Video** (2–3 mins) showing your agent in action.
-- **Comprehensive README.md** including:
-  - Overview of the idea
-  - Explanation of how it works
-  - Technologies/tools used
-  - All setup instructions (API keys, signups, etc.)
-- **Code Quality**: Error-free execution and passing basic review.
-- **Completeness**: Core functionality implemented as described in your original submission.
+---
 
-Feel free to share your progress on X or LinkedIn with the hashtag #GlobalAgentHackathon — even small updates can get you noticed and help build community momentum. This is completely optional, but always welcome and appreciated!
+### 🧪 Backend Setup
 
-## 📌 Submission Criteria
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
 
-Include the following in your submission:
+---
 
-**Project Title:** A clear, concise, and engaging title for your project.
+## 🔐 Environment Variables
 
-**Overview of the Idea:** Briefly describe your project in simple terms. What problem or opportunity does it address?
+### Backend `.env`
 
-**Project Goal:** What do you hope to achieve or demonstrate with this project?
+```env
+OPENAI_API_KEY=your_openai_api_key
+AZURE_OPENAI_API_KEY=your_azure_key
+AZURE_OPENAI_ENDPOINT=your_endpoint_url
+AZURE_OPENAI_API_VERSION=2024-12-01-preview
+AZURE_DEPLOYMENT_NAME=your_deployment
+```
 
-**How It Works:** Provide a step-by-step explanation or high-level breakdown of your Agentic System and how users will interact with it:
-- **User Flow**: Clearly describe the experience from the user's perspective
-- **Core Functionality**: List the key features your agent will offer
-- **Multimodal Elements** (if applicable): Specify if you're using text, images, audio, video, or combinations
+### Frontend `.env`
 
-**Tools Used:** List what you're planning to use, including any new tools you need to create.
+```env
+VITE_API_BASE_URL=http://localhost:8000/api
+```
 
-**UI Approach:** Describe the user interface for your project.
+---
 
-**Visuals:** Add mockups, diagrams, or sketches that demonstrate your idea or flow.
+## 🤝 Contributing
 
-**Team Information:**
-- **Team Lead:** GitHub handle and role
-- **Team Members:** GitHub handles and roles
-- **Background/Experience:** Brief team background
+We welcome contributions to make PolyTutor even more powerful.
 
-## 🤝 Want to Partner?
+1. Fork the repo
+2. Create a feature branch (`git checkout -b feature/your-feature`)
+3. Commit your changes
+4. Push and open a Pull Request
 
-If you're an AI company and want to help shape the next generation of Agent builders - we'd love to work with you!
+---
 
-Reach out to support@agno.com to get involved.
+## 👥 Team
 
-Let's make this the largest open-source AI Agent hackathon ever!
+| Name                    | Role                   |
+| ----------------------- | ---------------------- |
+| **Nandish Shah**        | AI & Backend Architect |
+| **Joseph Kimani Kamau** | Frontend & UX Engineer |
 
-**See you in the arena.**
+---
+
+## 🙏 Acknowledgments
+
+* **OpenAI** for powerful LLMs
+* **Agno** for agent orchestration
+* **Shadcn UI** for the modern component system
+* **FastAPI** for blazing-fast backend
+* **LanceDB** for vector storage and retrieval
+
