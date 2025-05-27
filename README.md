@@ -226,7 +226,7 @@ We welcome contributions to make PolyTutor even more powerful.
 | Name                    | Role                   |
 | ----------------------- | ---------------------- |
 | **Nandish Shah**        | AI & Backend Architect |
-| **Joseph Kimani Kamau** | Frontend & UX Engineer |
+| **Joseph Kimani Kamau** | AI & Backend Engineer |
 
 ---
 
