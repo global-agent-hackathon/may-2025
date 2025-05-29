@@ -1,0 +1,12 @@
+streamlit==1.32.0
+pyaudio==0.2.14
+openai-whisper==20231117
+pyyaml==6.0.1
+python-dotenv==1.0.1
+numpy==1.26.4
+azure-cognitiveservices-speech==1.34.0
+# PDF関連ライブラリ
+pypdf==3.17.4
+pdf2image==1.17.0
+# PowerPoint関連ライブラリ
+python-pptx==0.6.22
