@@ -7,11 +7,11 @@ import azure.cognitiveservices.speech as speechsdk  # type: ignore
 import numpy as np
 from dotenv import load_dotenv
 
-# ロギングの設定
+# Configure logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-# 環境変数を読み込む
+# Load environment variables
 load_dotenv()
 
 
@@ -23,19 +23,19 @@ class SpeechResult:
 
 class SpeechToTextService(Protocol):
     def start_recognition(self) -> None:
-        """音声認識を開始する"""
+        """Start speech recognition"""
         pass
 
     def stop_recognition(self) -> None:
-        """音声認識を停止する"""
+        """Stop speech recognition"""
         pass
 
     def get_result(self) -> str:
-        """最終結果を取得する"""
+        """Get final result"""
         pass
 
     def get_intermediate_result(self) -> str:
-        """中間結果を取得する"""
+        """Get intermediate result"""
         pass
 
 
@@ -48,10 +48,10 @@ class AzureSpeechService:
         self.service_region = service_region
         self.speech_config = speechsdk.SpeechConfig(subscription=speech_key, region=service_region)
 
-        # 日本語認識を有効にする
+        # Enable Japanese recognition
         self.speech_config.speech_recognition_language = "ja-JP"
 
-        # キューを初期化する
+        # Initialize queues
         self.result_queue: queue.Queue[str] = queue.Queue()
         self.intermediate_result_queue: queue.Queue[str] = queue.Queue()
         self.audio_queue: queue.Queue[np.ndarray[Any, np.dtype[np.float32]]] = queue.Queue()
@@ -59,7 +59,7 @@ class AzureSpeechService:
         self.push_stream = None
         self.speech_recognizer: Optional[speechsdk.SpeechRecognizer] = None
 
-        # 音声認識の設定を調整する
+        # Adjust speech recognition settings
         self.speech_config.set_property(
             speechsdk.PropertyId.SpeechServiceConnection_InitialSilenceTimeoutMs, "5000"
         )
@@ -77,7 +77,7 @@ class AzureSpeechService:
         )
 
     def start_recognition(self) -> None:
-        """音声認識を開始する"""
+        """Start speech recognition"""
         logger.debug("Starting recognition")
         try:
             self.create_recognizer()
@@ -145,7 +145,7 @@ class AzureSpeechService:
             return None
 
     def stop_recognition(self) -> None:
-        """音声認識を停止する"""
+        """Stop speech recognition"""
         logger.debug("Stopping recognition")
         try:
             if self.speech_recognizer is not None:
@@ -158,7 +158,7 @@ class AzureSpeechService:
             raise
 
     def get_result(self) -> str:
-        """認識結果を取得する"""
+        """Get recognition result"""
         try:
             return self.result_queue.get_nowait()
         except queue.Empty:
@@ -168,9 +168,9 @@ class AzureSpeechService:
             return ""
 
     def get_intermediate_result(self) -> str:
-        """中間認識結果を取得する"""
+        """Get intermediate recognition result"""
         try:
-            # キューから中間結果を取得する（待機しない）
+            # Get intermediate result from queue (non-blocking)
             result = self.intermediate_result_queue.get_nowait()
             return result
         except queue.Empty:
@@ -187,14 +187,14 @@ class SpeechToText:
         self.speech_service.stop_recognition()
 
     def process_audio(self, audio_data: np.ndarray[Any, np.dtype[np.float32]]) -> SpeechResult:
-        """音声データを処理して認識結果を返す"""
+        """Process audio data and return recognition result"""
         try:
-            # 中間結果を取得する
+            # Get intermediate result
             intermediate_text = self.speech_service.get_intermediate_result()
             if intermediate_text:
                 return SpeechResult(text=intermediate_text, is_final=False)
 
-            # 最終結果を取得する
+            # Get final result
             final_text = self.speech_service.get_result()
             if final_text:
                 return SpeechResult(text=final_text, is_final=True)

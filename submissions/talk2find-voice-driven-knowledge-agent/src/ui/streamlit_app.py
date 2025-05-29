@@ -15,8 +15,8 @@ from dotenv import load_dotenv
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# 親ディレクトリをPythonパスに追加
-sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+# Add parent directory to Python path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 load_dotenv()
 
@@ -201,7 +201,9 @@ def main() -> None:
     st.set_page_config(layout="wide")
     config = load_config()
 
-    # セッション状態を初期化する
+    # Initialize session state
+    if "is_recording" not in st.session_state:
+        st.session_state.is_recording = False
     if "audio_input" not in st.session_state:
         st.session_state.audio_input = None
     if "speech_to_text" not in st.session_state:
@@ -268,13 +270,13 @@ def main() -> None:
     main_col1, main_col2 = st.columns(2)
 
     with main_col1:
-        # --- 左ペインにタイトルとステータス表示を移動 --- #
+        # --- Move title and status display to left pane --- #
         st.title(get_text("title", lang))
 
-        # 録音状態を表示する
+        # Display recording status
         status_area = st.empty()
         if st.session_state.is_recording and st.session_state.recording_start_time is not None:
-            # 録音時間を計算して表示を更新
+            # Calculate recording time and update display
             recording_duration = int(time.time() - st.session_state.recording_start_time)
             minutes = recording_duration // 60
             seconds = recording_duration % 60
@@ -282,9 +284,9 @@ def main() -> None:
             status_area.info(get_text("recording", lang, duration=duration_str))
         else:
             status_area.info(get_text("not_recording", lang))
-        # --- 移動ここまで --- #
+        # --- End of Move title and status display to left pane --- #
 
-        # 音声入力デバイスを選択する
+        # Select audio input device
         temp_audio = AudioInput()
         available_devices = temp_audio.get_available_devices()
         device_names = [name for _, name in available_devices]
@@ -299,10 +301,10 @@ def main() -> None:
                 index=0,
             )
 
-            # --- ボタンエリア --- #
-            button_cols = st.columns([1, 1, 2])  # ボタン用に3列確保 (Start, Stop, Refresh)
+            # --- Button area --- #
+            button_cols = st.columns([1, 1, 2])  # Reserve 3 columns for buttons (Start, Stop, Refresh)
 
-            # Start ボタン (1列目)
+            # Start button (1st column)
             with button_cols[0]:
                 start_button = st.button(
                     get_text("start_recording", lang),
@@ -312,14 +314,14 @@ def main() -> None:
                 if start_button:
                     st.session_state.is_recording = True
                     st.session_state.recording_start_time = time.time()
-                    # 既存のspeech_to_textとaudio_inputをクリア
+                    # Clear existing speech_to_text and audio_input
                     if st.session_state.speech_to_text is not None:
                         st.session_state.speech_to_text = None
                     if st.session_state.audio_input is not None:
                         st.session_state.audio_input.stop()
                         st.session_state.audio_input = None
 
-                    # transcription_historyとcurrent_textとsummaryをクリア
+                    # Clear transcription_history, current_text, and summary
                     st.session_state.transcription_history = []
                     st.session_state.current_text = ""
                     st.session_state.summary = ""
@@ -372,7 +374,7 @@ def main() -> None:
 
                     st.rerun()
 
-            # Stop ボタン (2列目)
+            # Stop button (2nd column)
             with button_cols[1]:
                 stop_button = st.button(
                     get_text("stop_recording", lang),
@@ -387,7 +389,7 @@ def main() -> None:
 
                     st.rerun()
 
-            # Refresh PDF Index ボタン (3列目)
+            # Refresh PDF Index button (3rd column)
             with button_cols[2]:
                 if st.button(
                     get_text("refresh_pdf", lang), key="refresh_pdfs", use_container_width=True
@@ -397,19 +399,19 @@ def main() -> None:
                     )
 
                     docs_dir = config["search"]["directories"][0]
-                    # recreate=Trueで再初期化
+                    # Reinitialize with recreate=True
                     st.session_state.pdf_searcher = PDFSearcher(
                         docs_dir,
                         recreate_knowledge_base=True,
                     )
                     st.success(get_text("pdf_refreshed", lang))
 
-            # --- ボタンエリアここまで --- #
+            # --- End of button area --- #
 
-        # 文字起こしエリアを配置する
+        # Place transcription area
         st.subheader(get_text("transcription", lang))
 
-        # トランスクリプションを準備
+        # Prepare transcription
         # Always rebuild transcription_text from history and current_text for rendering
         all_texts_for_render = list(
             st.session_state.transcription_history
@@ -420,7 +422,7 @@ def main() -> None:
         # The st.session_state.transcription_display_text is still updated by the recording loop,
         # but here we use a freshly built version for the text_area value.
 
-        # テキストエリアでトランスクリプションを表示（選択可能）
+        # Display transcription in text area (selectable)
         # st.text_area(  # COMMENTED OUT
         #     get_text("transcription_label", lang),
         #     value=transcription_text_to_display,
@@ -490,22 +492,22 @@ def main() -> None:
             summary_area.markdown(st.session_state.summary)
         # --- End of Summary Section ---
 
-        # Web検索エイラを配置する
+        # Place web search area
         st.subheader(get_text("web_search", lang))
         # TODO: Implement Web search functionality
         web_search_area = (
             st.empty()
         )  # Use st.empty() if you plan to update it frequently, otherwise st.markdown directly
         if st.session_state.web_search_results:
-            # Web検索クエリを入力する
+            # Enter web search query
             web_search_area.markdown(st.session_state.web_search_results)
         # --- End of Web Search UI ---
 
-        # 関連情報エリアを配置する
+        # Place related information area
         st.subheader(get_text("related_info", lang))
         related_info_area = st.container()
 
-        # スライドまたはPDFがある場合に表示 -> PDFがある場合のみ表示に変更
+        # Display when slides or PDFs are available -> Changed to display only when PDFs are available
         has_pdfs = len(st.session_state.related_pdf_pages) > 0
 
         if has_pdfs:
@@ -542,7 +544,7 @@ def main() -> None:
                 else:
                     st.error(get_text("pdf_error", lang))
 
-                # PDFナビゲーションボタン
+                # PDF navigation buttons
                 col1_pdf, col2_pdf = st.columns(2)
                 with col1_pdf:
                     prev_pdf_disabled = st.session_state.selected_pdf_index <= 0
@@ -550,7 +552,7 @@ def main() -> None:
                     if st.button(
                         get_text("prev_pdf", lang),
                         key="prev_pdf_standalone",
-                        disabled=prev_pdf_disabled,  # キーを調整
+                        disabled=prev_pdf_disabled,  # Adjust key
                     ):
                         st.session_state.selected_pdf_index -= 1
 
@@ -561,7 +563,7 @@ def main() -> None:
                     if st.button(
                         get_text("next_pdf", lang),
                         key="next_pdf_standalone",
-                        disabled=next_pdf_disabled,  # キーを調整
+                        disabled=next_pdf_disabled,  # Adjust key
                     ):
                         st.session_state.selected_pdf_index += 1
 
@@ -569,7 +571,7 @@ def main() -> None:
         else:
             related_info_area.info(get_text("no_related_info", lang))
 
-    # 音声認識を処理する
+    # Process speech recognition
     if (
         st.session_state.is_recording
         and st.session_state.speech_to_text is not None
@@ -602,30 +604,30 @@ def main() -> None:
             except queue.Empty:
                 pass  # No new results, continue
 
-            # 録音時間を計算して表示を更新
+            # Calculate recording time and update display
             recording_duration = int(time.time() - st.session_state.recording_start_time)
             minutes = recording_duration // 60
             seconds = recording_duration % 60
             duration_str = f"{minutes:02d}:{seconds:02d}"
             status_area.info(get_text("recording", lang, duration=duration_str))
 
-            # 音声データを取得する
+            # Get audio data
             audio_data = next(st.session_state.audio_input.get_audio_data(), None)
             if audio_data is not None:
-                # 音声データを処理する
+                # Process audio data
                 result = st.session_state.speech_to_text.process_audio(audio_data)
                 if result.text:
-                    # 最終結果の場合、transcription_historyを更新する
+                    # For final results, update transcription_history
                     if result.is_final:
                         st.session_state.transcription_history.append(result.text)
                         st.session_state.current_text = ""
 
-                        # 全てのテキストをStreamlitに表示する
+                        # Display all text in Streamlit
                         all_texts = st.session_state.transcription_history
                         transcription_text = "\n".join(all_texts)
                         st.session_state["transcription_display_text"] = transcription_text
 
-                        # 表示を更新（リアルタイム更新）
+                        # Update display (real-time update)
                         logger.info(f"Display text: {all_texts}")
 
                         # --- Start: Modified section for background processing ---
@@ -660,21 +662,21 @@ def main() -> None:
                         # --- End: Modified section for background processing ---
 
                     else:
-                        # 中間結果の場合はcurrent_textのみを更新
+                        # For intermediate results, update only current_text
                         st.session_state.current_text = result.text
 
-                        # 全てのテキストをStreamlitに表示する
+                        # Display all text in Streamlit
                         all_texts = st.session_state.transcription_history
                         if st.session_state.current_text:
                             all_texts = all_texts + [st.session_state.current_text]
 
-                        # 現在のトランスクリプションをセッション状態に保存
+                        # Save current transcription to session state
                         transcription_text = "\n".join(all_texts)
                         st.session_state["transcription_display_text"] = transcription_text
 
                         st.rerun()
 
-            # StreamlitのUIを更新するために少し待機する
+            # Wait a bit to update Streamlit UI
             time.sleep(0.01)
 
 

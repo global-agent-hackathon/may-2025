@@ -1,19 +1,18 @@
-# logging をインポート
 import logging
 import os
-import shutil  # shutil をインポート
+import shutil
 import tempfile
 from typing import Any, Dict, List, Optional
 
 import pdf2image
 import pypandoc  # type: ignore
-from agno.embedder.google import GeminiEmbedder  # Gemini Embedder を追加
+from agno.embedder.google import GeminiEmbedder  
 from agno.knowledge.pdf import PDFKnowledgeBase
 from agno.vectordb.lancedb import LanceDb, SearchType
-from dotenv import load_dotenv  # dotenvをインポート
+from dotenv import load_dotenv 
 from PIL import Image
 
-# .env ファイルを読み込む
+# Load .env file
 load_dotenv()
 
 logger = logging.getLogger(__name__)
@@ -21,21 +20,21 @@ logger = logging.getLogger(__name__)
 
 class PDFSearcher:
     def __init__(self, search_directory: str, recreate_knowledge_base: bool = False):
-        """PDFファイルを検索するクラス (DOCXも一時PDFに変換して対応)
+        """Class for searching PDF files (also handles DOCX by converting to temporary PDF)
 
         Args:
-            search_directory: 検索対象のディレクトリ (PDFおよびDOCXファイルを含む)
-            recreate_knowledge_base: Trueの場合、既存のナレッジベースを削除して再構築する
+            search_directory: Target directory for search (containing PDF and DOCX files)
+            recreate_knowledge_base: If True, delete existing knowledge base and rebuild
         """
 
-        self.search_directory = os.path.abspath(search_directory)  # search_directory を正規化
+        self.search_directory = os.path.abspath(search_directory)  # Normalize search_directory
         self.recreate_knowledge_base = recreate_knowledge_base
-        self.temporary_pdf_files: List[str] = []  # 一時PDFファイルリストを初期化
-        self.source_mapping: Dict[str, Dict[str, Any]] = {}  # 一時PDFと元のDOCX情報をマッピング
+        self.temporary_pdf_files: List[str] = []  # Initialize temporary PDF file list
+        self.source_mapping: Dict[str, Dict[str, Any]] = {}  # Map temporary PDF to original DOCX info
 
         if not os.path.isdir(self.search_directory):
             raise ValueError(
-                f"指定された検索ディレクトリが見つかりません: {self.search_directory}"
+                f"Specified search directory not found: {self.search_directory}"
             )
 
         self.knowledge_base = self._initialize_knowledge_base(
@@ -43,24 +42,24 @@ class PDFSearcher:
         )
 
     def _initialize_knowledge_base(self, recreate: bool) -> Optional[PDFKnowledgeBase]:
-        """agno の Knowledge Base を初期化し、データをロードする
-        指定されたディレクトリ内のPDFとDOCX(一時PDFに変換)を対象とする。
+        """Initialize agno Knowledge Base and load data
+        Targets PDF and DOCX files (converted to temporary PDF) in the specified directory.
         """
         google_api_key = os.getenv("GOOGLE_API_KEY")
         if not google_api_key:
-            logger.error("環境変数 GOOGLE_API_KEY が設定されていません。")
-            # Error時はmainなど呼び出し元で処理することも考慮する
-            raise ValueError("環境変数 GOOGLE_API_KEY が設定されていません。")
+            logger.error("Environment variable GOOGLE_API_KEY is not set.")
+            # Handle errors in main or calling function when needed
+            raise ValueError("Environment variable GOOGLE_API_KEY is not set.")
 
-        # 古い一時ディレクトリが残っていれば削除
+        # Remove old temporary directories if they exist
         for item in os.listdir(self.search_directory):
             item_path = os.path.join(self.search_directory, item)
             if os.path.isdir(item_path) and item.startswith("_temp_docx_conv_"):
                 try:
                     shutil.rmtree(item_path)
-                    logger.info(f"古い一時ディレクトリを削除しました: {item_path}")
+                    logger.info(f"Removed old temporary directory: {item_path}")
                 except Exception as e:
-                    logger.error(f"古い一時ディレクトリの削除に失敗 ({item_path}): {e}")
+                    logger.error(f"Failed to remove old temporary directory ({item_path}): {e}")
 
         vector_db = LanceDb(
             uri="tmp/lancedb_pdf_and_docx",
@@ -69,43 +68,43 @@ class PDFSearcher:
             embedder=GeminiEmbedder(api_key=google_api_key),
         )
 
-        # 検索対象ディレクトリ内のファイルを探索
-        all_files_to_load: List[str] = []  # 実際にKnowledgeBaseにロードするPDFパスのリスト
-        self.temporary_pdf_files = []  # 初期化
-        self.source_mapping = {}  # 初期化
+        # Explore files in the search target directory
+        all_files_to_load: List[str] = []  # List of PDF paths to actually load into KnowledgeBase
+        self.temporary_pdf_files = []  # Initialize
+        self.source_mapping = {}  # Initialize
         self.temp_docx_pdf_subdir: str | None = None
 
-        # 一時ディレクトリを作成して、その中にDOCXから変換したPDFを保存する
-        # PDFSearcherのインスタンスが生きている間だけ存在するようにする
-        # `PDFSearcher`の終了時に、その一時サブディレクトリを削除する。
+        # Create temporary directory to save PDFs converted from DOCX
+        # Exists only while PDFSearcher instance is alive
+        # Delete the temporary subdirectory when `PDFSearcher` ends
         self.temp_docx_pdf_subdir = tempfile.mkdtemp(
             dir=self.search_directory, prefix="_temp_docx_conv_"
         )
-        logger.info(f"DOCX変換用の一時サブディレクトリを作成: {self.temp_docx_pdf_subdir}")
+        logger.info(f"Created temporary subdirectory for DOCX conversion: {self.temp_docx_pdf_subdir}")
 
-        # PDFKnowledgeBaseは一つのディレクトリしか見ないので、元のディレクトリを指定するしかない。
+        # PDFKnowledgeBase only looks at one directory, so we have to specify the original directory
 
         for root, _, files in os.walk(self.search_directory):
             if (
                 self.temp_docx_pdf_subdir in root
-            ):  # 一時サブディレクトリ自体はスキャン対象外（無限ループ防止）
+            ):  # Exclude temporary subdirectory itself from scan (prevent infinite loop)
                 continue
             for file in files:
                 original_file_path = os.path.join(root, file)
                 if file.lower().endswith(".pdf"):
-                    # PDFファイルはそのまま。source_mappingに登録。
+                    # PDF files as-is. Register in source_mapping
                     stem_filename = os.path.splitext(os.path.basename(file))[0]
                     self.source_mapping[stem_filename] = {
                         "original_path": original_file_path,
                         "original_type": "pdf",
                         "is_temporary": False,
-                        "display_path": original_file_path,  # 表示用のパス
-                        "kb_source_path": original_file_path,  # KBが認識するパス
+                        "display_path": original_file_path,  # Path for display
+                        "kb_source_path": original_file_path,  # Path recognized by KB
                     }
                 elif file.lower().endswith(".docx"):
                     try:
-                        # DOCXを一時サブディレクトリ内のPDFに変換
-                        # ファイル名は元のファイル名にサフィックスをつけるなどして一意性を保つ
+                        # Convert DOCX to PDF in temporary subdirectory
+                        # Ensure uniqueness by adding suffix to original filename
                         relative_docx_path = os.path.relpath(
                             original_file_path, self.search_directory
                         )
@@ -116,10 +115,10 @@ class PDFSearcher:
 
                         os.makedirs(
                             os.path.dirname(temp_pdf_path), exist_ok=True
-                        )  # サブディレクトリ構造を維持
+                        )  # Maintain subdirectory structure
 
                         logger.info(
-                            f"DOCXを一時PDFに変換中: {original_file_path} -> {temp_pdf_path}"
+                            f"Converting DOCX to temporary PDF: {original_file_path} -> {temp_pdf_path}"
                         )
 
                         try:
@@ -136,79 +135,79 @@ class PDFSearcher:
                                 extra_args=[
                                     "--pdf-engine=xelatex",
                                     "-V",
-                                    "mainfont=Times New Roman",  # 英語フォント
+                                    "mainfont=Times New Roman",  # English font
                                     "-V",
-                                    "CJKmainfont=Hiragino Sans",  # 日本語フォント
+                                    "CJKmainfont=Hiragino Sans",  # Japanese font
                                     f"--include-in-header={header_file_path}",
                                 ],
                             )
                             logger.info(
-                                f"DOCXから一時PDFへの変換成功 (via pypandoc): {temp_pdf_path}"
+                                f"Successfully converted DOCX to temporary PDF (via pypandoc): {temp_pdf_path}"
                             )
                         except RuntimeError as e_runtime_pandoc:
-                            # pypandoc.exceptions.PandocNotFoundErrorが
-                            # RuntimeError のサブクラスの場合があるためRuntimeErrorをキャッチ
+                            # pypandoc.exceptions.PandocNotFoundError may be
+                            # a subclass of RuntimeError, so catch RuntimeError
                             logger.error(
-                                f"pypandoc実行時エラー ({original_file_path}):"
+                                f"pypandoc runtime error ({original_file_path}):"
                                 + f"{e_runtime_pandoc}."
-                                + "pandocがインストールされ、PATHが通っているか確認してください。"
+                                + "Please check if pandoc is installed and in PATH."
                             )
                             continue
                         except Exception as e_pandoc:
                             logger.error(
-                                "pypandocでのDOCXからPDFへの変換に失敗"
+                                "Failed to convert DOCX to PDF with pypandoc"
                                 + f"({original_file_path}): {e_pandoc}"
                             )
-                            continue  # 次のファイルの処理へ
+                            continue  # Continue to next file
 
                         all_files_to_load.append(temp_pdf_path)
                         self.temporary_pdf_files.append(temp_pdf_path)
                         stem_filename = os.path.splitext(os.path.basename(safe_pdf_filename))[0]
                         self.source_mapping[stem_filename] = {
-                            "original_path": original_file_path,  # 元のDOCXパス
+                            "original_path": original_file_path,  # Original DOCX path
                             "original_type": "docx",
                             "is_temporary": True,
-                            "display_path": temp_pdf_path,  # ユーザー変更: 表示は変換後のPDFパス
-                            "kb_source_path": temp_pdf_path,  # KBが認識するパス
-                            "is_temporary_source": True,  # この結果が一時ファイル由来か
+                            "display_path": temp_pdf_path,  # User change: display converted PDF path
+                            "kb_source_path": temp_pdf_path,  # Path recognized by KB
+                            "is_temporary_source": True,  # Whether this result is from temporary file
                         }
                     except Exception as e:
-                        logger.error(f"DOCXから一時PDFへの変換に失敗 ({original_file_path}): {e}")
+                        logger.error(f"Failed to convert DOCX to temporary PDF ({original_file_path}): {e}")
 
         knowledge_base = PDFKnowledgeBase(
-            path=self.search_directory,  # 正規化されたsearch_directory を使用
+            path=self.search_directory,  # Use normalized search_directory
             vector_db=vector_db,
         )
         logger.info(
-            f"Agno Knowledge Base (Gemini Embedder, PDF+一時DOCX) のインスタンス作成完了 "
+            f"Agno Knowledge Base (Gemini Embedder, PDF+temporary DOCX) instance creation completed "
             f"({self.search_directory})"
         )
 
         try:
             knowledge_base.load(
                 recreate=recreate
-            )  # ここで search_directory 内のPDFがロードされる（一時PDF含む）
+            )  # Load PDFs in search_directory here (including temporary PDFs)
         except Exception as e:
-            logger.error(f"ナレッジベースのロード中にエラーが発生しました: {e}")
-            self.cleanup_temporary_files()  # エラー時は一時ファイルをクリーンアップ
-            raise  # エラーを再送出
+            logger.error(f"Error occurred while loading knowledge base: {e}")
+            self.cleanup_temporary_files()  # Clean up temporary files on error
+            raise  # Re-raise error
 
         return knowledge_base
 
     def search(self, query: str, top_k: int = 3) -> List[Dict]:
-        logger.info(f"'{query}' でナレッジベースを検索中 (取得数={top_k})...")
+        logger.info(f"Searching knowledge base for '{query}' (retrieving {top_k} results)...")
 
         if self.knowledge_base is None:
-            logger.warning("ナレッジベースが初期化されていません。空の結果を返します。")
+            logger.warning("Knowledge base is not initialized. Returning empty results.")
             return []
 
         try:
             search_results = self.knowledge_base.search(query, top_k)
         except Exception as e:
-            logger.error(f"ナレッジベース検索中にエラー: {e}")
+            logger.error(f"Error during knowledge base search: {e}")
             return []
 
-        logger.info(f"検索結果 {len(search_results)} 件取得")
+        logger.info(f"Retrieved {len(search_results)} search results")
         formatted_results = []
         for doc in search_results:
             meta_data = getattr(doc, "meta_data", {})
@@ -225,7 +224,7 @@ class PDFSearcher:
                     original_path = source_entry.get("original_path", raw_source_path)
                     is_temporary_source = source_entry.get("is_temporary", False)
                 else:
-                    logger.warning(f"source_mappingにキーが見つかりません (doc_name: {doc_name}")
+                    logger.warning(f"Key not found in source_mapping (doc_name: {doc_name}")
 
             formatted_results.append(
                 {
@@ -242,20 +241,20 @@ class PDFSearcher:
         return formatted_results
 
     def get_page_image(self, file_path: str, page_index: int) -> Image.Image | None:
-        """指定されたファイルの指定ページの画像を取得。
-        file_pathがDOCXの場合、一時PDFを経由して画像を取得する。
+        """Get image of specified page from specified file.
+        If file_path is DOCX, get image via temporary PDF.
         """
 
         if not file_path or not os.path.exists(file_path):
             logger.error(
-                "get_page_image: 指定されたPDFファイルが見つかりません:"
-                + f"{file_path} (元ファイル: {file_path})"
+                "get_page_image: Specified PDF file not found:"
+                + f"{file_path} (original file: {file_path})"
             )
             return None
 
         logger.info(
-            f"get_page_image: {file_path} の"
-            + f"{page_index + 1} ページ目の画像を取得します (元ファイル: {file_path})"
+            f"get_page_image: Getting image of page {page_index + 1} from {file_path} "
+            + f"(original file: {file_path})"
         )
         with tempfile.TemporaryDirectory() as temp_image_dir:
             try:
@@ -269,15 +268,15 @@ class PDFSearcher:
                 )
                 return images[0] if images else None
             except Exception as e:
-                logger.error(f"PDFからの画像変換中にエラー ({file_path}): {e}")
+                logger.error(f"Error during image conversion from PDF ({file_path}): {e}")
                 return None
 
     def cleanup_temporary_files(self) -> None:
-        """DOCXから変換された一時PDFファイルと、それらを格納していた一時サブディレクトリを削除する"""
-        logger.info("一時ファイルのクリーンアップを開始します...")
-        # 一時ディレクトリ(TemporaryDirectoryオブジェクト)のクリーンアップ
+        """Delete temporary PDF files converted from DOCX and the temporary subdirectory that contained them"""
+        logger.info("Starting cleanup of temporary files...")
+        # Cleanup temporary directory (TemporaryDirectory object)
 
-        # search_directory内に作成した一時サブディレクトリを削除
+        # Delete temporary subdirectory created in search_directory
         if (
             hasattr(self, "temp_docx_pdf_subdir")
             and self.temp_docx_pdf_subdir
@@ -285,15 +284,15 @@ class PDFSearcher:
         ):
             try:
                 shutil.rmtree(self.temp_docx_pdf_subdir)
-                logger.info(f"一時サブディレクトリを削除しました: {self.temp_docx_pdf_subdir}")
+                logger.info(f"Deleted temporary subdirectory: {self.temp_docx_pdf_subdir}")
             except Exception as e:
                 logger.error(
-                    f"一時サブディレクトリの削除に失敗 ({self.temp_docx_pdf_subdir}): {e}"
+                    f"Failed to delete temporary subdirectory ({self.temp_docx_pdf_subdir}): {e}"
                 )
         self.temp_docx_pdf_subdirs = None
-        self.temporary_pdf_files = []  # リストもクリア
-        self.source_mapping = {}  # マッピングもクリア
+        self.temporary_pdf_files = []  # Clear list as well
+        self.source_mapping = {}  # Clear mapping as well
 
     def __del__(self) -> None:
-        """PDFSearcherインスタンス破棄時に一時ファイルをクリーンアップ"""
+        """Clean up temporary files when PDFSearcher instance is destroyed"""
         self.cleanup_temporary_files()

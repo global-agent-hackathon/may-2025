@@ -35,7 +35,7 @@ class AudioInput:
         self.is_running = False
         self.available_devices: List[Tuple[int, str]] = []
 
-        # 利用可能なデバイスを表示する
+        # Display available devices
         for i in range(self.audio.get_device_count()):
             device_info = self.audio.get_device_info_by_index(i)
             if int(device_info["maxInputChannels"]) > 0:
@@ -51,7 +51,7 @@ class AudioInput:
     def start(self) -> None:
         try:
             logger.debug("Starting audio stream")
-            # デバイス情報を取得する
+            # Get device information
             if self.device_index is not None:
                 device_info = self.audio.get_device_info_by_index(self.device_index)
                 logger.debug(
@@ -72,7 +72,7 @@ class AudioInput:
                 )
                 self.device_index = cast(int, device_info["index"])
 
-            # デバイスの設定を確認する
+            # Check device settings
             logger.debug(
                 f"Opening stream with: rate={self.sample_rate}, "
                 f"channels={self.channels}, chunk_size={self.chunk_size}"
@@ -114,17 +114,17 @@ class AudioInput:
     ) -> Tuple[bytes | None, int]:
         if status:
             logger.warning(f"Audio stream status: {status}")
-            return (in_data, pyaudio.paContinue)  # エラー状態の場合はデータを追加しない
+            return (in_data, pyaudio.paContinue)  # Don't add data in error state
         try:
             if in_data is None:
                 logger.warning("Received None data in callback")
                 return (None, pyaudio.paContinue)
 
-            # 音声データをキューに追加する
+            # Add audio data to queue
             audio_array = np.frombuffer(in_data, dtype=np.float32)
-            # 音量を調整する
-            audio_array = audio_array * 4.0  # 音量を4倍に増加
-            # クリッピングを防ぐ
+            # Adjust volume
+            audio_array = audio_array * 4.0  # Increase volume by 4x
+            # Prevent clipping
             audio_array = np.clip(audio_array, -1.0, 1.0)
 
             self.audio_queue.put(audio_array.tobytes())
@@ -138,7 +138,7 @@ class AudioInput:
     ) -> Generator[np.ndarray[Any, np.dtype[np.float32]], None, None]:
         while self.is_running:
             try:
-                data = self.audio_queue.get(timeout=1.0)  # 1秒のタイムアウト
+                data = self.audio_queue.get(timeout=1.0)  # 1 second timeout
                 audio_array = np.frombuffer(data, dtype=np.float32)
 
                 yield audio_array

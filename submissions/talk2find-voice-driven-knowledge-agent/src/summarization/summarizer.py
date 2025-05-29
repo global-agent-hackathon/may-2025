@@ -4,7 +4,7 @@ import vertexai  # type: ignore
 from dotenv import load_dotenv
 from vertexai.generative_models import GenerativeModel  # type: ignore
 
-# .env ファイルを読み込む
+# Load .env file
 load_dotenv()
 
 

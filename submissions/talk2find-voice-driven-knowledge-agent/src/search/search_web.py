@@ -1,6 +1,4 @@
 import datetime
-
-# logging をインポート
 import logging
 from textwrap import dedent
 from typing import Optional
@@ -8,14 +6,14 @@ from typing import Optional
 from agno.agent import Agent
 from agno.models.google import Gemini
 from agno.tools.exa import ExaTools
-from dotenv import load_dotenv  # dotenvをインポート
+from dotenv import load_dotenv
 
-# .env ファイルを読み込む
+# Load .env file
 load_dotenv()
 
 logger = logging.getLogger(__name__)
 
-# 初期プロンプトを言語別に定義する。Constantとして定義する。
+# Define initial prompts by language as constants
 DESCRIPTION = {
     "ja": dedent("""
         あなたはトピック分析と検索に優れた調査員です。
@@ -46,7 +44,7 @@ EXPECTED_OUTPUT = {
     "ja": dedent("""
         以下の形式で出力してください：
 
-        #### 抽出キーワードと解説
+        #### Extracted Keywords and Explanations
 
         - キーワード: xxx
         - 解説: xxx（100文字以内）
@@ -88,7 +86,7 @@ QUERY_TEMPLATE = {
 
 class WebSearcher:
     def __init__(self, language: str = "ja", include_domains: list[str] | None = None):
-        """Web検索するクラス"""
+        """Class for web searching"""
 
         model = Gemini(id="gemini-2.5-pro-preview-03-25", temperature=0.25)
         self.research_scholar = Agent(
@@ -110,18 +108,18 @@ class WebSearcher:
         self.include_domains = include_domains
 
     def search(self, query: str) -> Optional[str]:
-        """Web検索を実行するメソッド
+        """Method to execute web search
         Args:
-            query: 検索クエリ
-            max_results: 最大検索結果数
+            query: Search query
+            max_results: Maximum number of search results
         Returns:
-            検索結果のリスト
+            List of search results
         """
-        logger.info(f"'{query}' でWeb検索中...")
+        logger.info(f"Searching web for '{query}'...")
 
         query = QUERY_TEMPLATE[self.language].format(query=query)
         result = self.research_scholar.run(query)
 
-        logger.info(f"Web検索結果: {result.content}")
+        logger.info(f"Web search result: {result.content}")
 
         return result.content
