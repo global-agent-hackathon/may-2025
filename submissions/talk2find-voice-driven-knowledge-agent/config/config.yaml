@@ -1,0 +1,13 @@
+audio:
+  sample_rate: 16000
+  chunk_size: 1024
+  channels: 1
+
+search:
+  directories:
+    - ./data
+
+
+summarization:
+  interval_seconds: 5
+  max_length: 200
