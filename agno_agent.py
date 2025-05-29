@@ -116,7 +116,7 @@ class VibeProtoAgent:
         self.storage = SimpleSqliteStorage("vibeproto.db")
         self.client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
     
-    async def enhance_prompt(self, prompt: str) -> str:
+    async def enhance_prompt(self, prompt: str, media_type: str = None) -> str:
         """Enhance the user's prompt for better code generation"""
         system_prompt = """You are an expert prompt engineer specializing in creating comprehensive prompts for professional web application development.
         Transform the user's request into a detailed prompt that will generate production-quality code with STUNNING, MODERN UI/UX.
@@ -192,6 +192,42 @@ class VibeProtoAgent:
         The result should make users think "Wow, this looks amazing!" not just function correctly.
         
         IMPORTANT: Even for simple requests, emphasize that the UI must be BEAUTIFUL, MODERN, and PROFESSIONAL."""
+        
+        # Add multimodal context if applicable
+        if media_type:
+            multimodal_context = {
+                'image': """
+                
+MULTIMODAL CONTEXT: The user has provided an IMAGE along with their request.
+Analyze the image carefully and incorporate:
+- Visual design elements shown in the image
+- UI/UX patterns and layouts from the image
+- Color schemes and styling from the image
+- Any specific components or features visible in the image
+- Use the image as design inspiration for the generated code
+                """,
+                'audio': """
+                
+MULTIMODAL CONTEXT: The user has provided an AUDIO file along with their request.
+Consider incorporating:
+- Audio playback functionality if relevant
+- Sound-based interactions or feedback
+- Any requirements related to the audio content
+- Audio visualization if appropriate
+                """,
+                'video': """
+                
+MULTIMODAL CONTEXT: The user has provided a VIDEO file along with their request.
+Consider incorporating:
+- Video playback functionality if relevant
+- Animation patterns shown in the video
+- UI interactions demonstrated in the video
+- Any specific features or behaviors shown in the video
+                """
+            }
+            
+            if media_type in multimodal_context:
+                system_prompt += multimodal_context[media_type]
         
         response = self.client.chat.completions.create(
             model="gpt-4",
@@ -429,22 +465,22 @@ Return the pure HTML file only."""
         
         return response.choices[0].message.content
     
-    async def process_request(self, prompt: str, prototype_type: str) -> Dict[str, Any]:
+    async def process_request(self, prompt: str, prototype_type: str, media_type: str = None) -> Dict[str, Any]:
         """Process a user request from start to finish"""
         # Generate a session ID
         session_id = str(uuid.uuid4())
         
         # Use the internal method with the generated session ID
-        return await self._process_request_internal(prompt, prototype_type, session_id)
+        return await self._process_request_internal(prompt, prototype_type, session_id, media_type)
     
-    def enhance_prompt_sync(self, prompt: str) -> str:
+    def enhance_prompt_sync(self, prompt: str, media_type: str = None) -> str:
         """Synchronous wrapper for enhance_prompt"""
         import asyncio
         try:
             # Create a new event loop for this thread
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
-            return loop.run_until_complete(self.enhance_prompt(prompt))
+            return loop.run_until_complete(self.enhance_prompt(prompt, media_type))
         except Exception as e:
             print(f"Error in enhance_prompt_sync: {e}")
             raise e
@@ -452,7 +488,7 @@ Return the pure HTML file only."""
             if loop:
                 loop.close()
             
-    def process_request_sync(self, prompt: str, prototype_type: str) -> Dict[str, Any]:
+    def process_request_sync(self, prompt: str, prototype_type: str, media_type: str = None) -> Dict[str, Any]:
         """Synchronous wrapper for process_request"""
         import asyncio
         try:
@@ -464,7 +500,7 @@ Return the pure HTML file only."""
             session_id = str(uuid.uuid4())
             
             # Process the request
-            result = loop.run_until_complete(self._process_request_internal(prompt, prototype_type, session_id))
+            result = loop.run_until_complete(self._process_request_internal(prompt, prototype_type, session_id, media_type))
             return result
         except Exception as e:
             print(f"Error in process_request_sync: {e}")
@@ -473,10 +509,10 @@ Return the pure HTML file only."""
             if loop:
                 loop.close()
     
-    async def _process_request_internal(self, prompt: str, prototype_type: str, session_id: str) -> Dict[str, Any]:
+    async def _process_request_internal(self, prompt: str, prototype_type: str, session_id: str, media_type: str = None) -> Dict[str, Any]:
         """Internal method to process a request with a provided session ID"""
         # Enhance the prompt
-        enhanced_prompt = await self.enhance_prompt(prompt)
+        enhanced_prompt = await self.enhance_prompt(prompt, media_type)
         
         # Generate code
         result = await self.generate_code(enhanced_prompt, prototype_type)

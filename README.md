@@ -8,18 +8,22 @@ VibeProto is an innovative tool designed to empower non-coders to create web app
 
 - **Web App Prototyping**: Generate functional HTML, CSS, and JavaScript prototypes from prompts like "Create a to-do list app."
 - **Python Script Creation**: Produce Python scripts for automation or logic-based tasks with ease.
-- **AI-Powered**: Utilizes OpenAI's GPT-4 for code generation with direct API integration for enhanced reliability.
 - **Advanced Reasoning**: Leverages Agno's advanced reasoning capabilities for:
   - Multi-step task planning and execution
   - Context-aware code generation
   - Intelligent error handling and recovery
   - Dynamic prompt enhancement
   - Automated code quality checks
+- **Multimodal Input Support**: Powered by Agno's advanced processing capabilities:
+  - **📷 Image Input**: Upload screenshots, mockups, wireframes, or UI designs to show exactly what you want built
+  - **🎵 Audio Input**: Record voice descriptions of your ideas for natural speech-to-prototype conversion
+  - **🎥 Video Input**: Upload screen recordings, workflow demonstrations, or visual walkthroughs to show complex interactions
+  - **🎤 Real-time Voice**: Click-to-speak functionality for immediate voice input and transcription
+  - **Visual Context Understanding**: AI analyzes uploaded media to understand layouts, workflows, and requirements
 - **Session Management**: Save and manage your generated prototypes with Agno's persistent storage system.
 - **Prompt Enhancement**: AI-powered prompt refinement using Agno's context-aware processing.
 - **Detailed Instructions**: Step-by-step guides for using generated code, tailored for non-technical users.
-- **Think Feature**: Watch the AI's reasoning process in real-time as it analyzes and plans your code generation.
-- **API Key Management**: Secure storage and management of API keys through the settings interface.
+- **Think Feature**: Watch Agno's advanced reasoning process in real-time as it analyzes your requirements and plans optimal code generation strategies.
 - **Remote Agent**: Cloud-based background processing that allows tasks to run even when your device is offline.
 - **Parallel Task Processing**: Run multiple tasks simultaneously with our pool of up to 10 remote agents.
 
@@ -98,6 +102,11 @@ Before you begin, ensure you have:
 4. **Generate Code**:
    - Choose the type (Web App or Python Script).
    - Type your idea in plain English.
+   - **Enhance with Multimodal Inputs** (powered by Agno):
+     - **📷 Images**: Upload mockups, screenshots, or UI designs to show visual requirements
+     - **🎵 Audio**: Record yourself explaining the project for natural voice-to-code conversion  
+     - **🎥 Video**: Upload screen recordings or workflow demonstrations to show complex interactions
+     - **🎤 Voice**: Click the mic button to speak your prompt directly
    - (Optional) Click "Enhance Prompt" for better results.
    - Click "Generate Prototype" and watch the AI think through your request.
    - Review the AI's reasoning and the generated code.
@@ -121,6 +130,12 @@ For Web Apps:
 For Python Scripts:
 - "Write a script to rename files in a directory"
 - "Create a data scraper for a website"
+
+**Multimodal Input Examples** (powered by Agno):
+- **Image + Text**: Upload a screenshot of a website + "Build something similar but for recipes"
+- **Video + Text**: Record yourself using an app + "Automate this workflow with a Python script"
+- **Audio Only**: Record "Create a calculator app with a dark theme and large buttons"
+- **Voice + Image**: Speak "Make this design responsive" while uploading a UI mockup
 
 ## Troubleshooting
 
@@ -172,14 +187,16 @@ User Flow DIagram: https://drive.google.com/file/d/17SEgnxu7maWrthKX9-ijAScVvYa1
 
 ## Future Plans
 VibeProto is just the beginning! Planned enhancements include:
-1. **Multimodal Inputs**: Support for sketches or images alongside text prompts. and voice enabled prompt generation.
+1. **Enhanced Multimodal Processing**: Expand Agno's capabilities to support real-time camera input, document scanning, and multi-file uploads.
 2. **Expanded Languages**: Adding more frameworks and programming languages.
-3. **Advanced Webapps Executions**: Will integrate more agents to build sophasticated webapps with simple plain english prompt.
-4. **Share & Deployment**: Shareable links to the project created by user so that they can share to others and make delpoyment easy.
+3. **Advanced Webapps Executions**: Will integrate more agents to build sophisticated webapps with simple plain english prompt.
+4. **Share & Deployment**: Shareable links to the project created by user so that they can share to others and make deployment easy.
 5. **Community Hub**: A marketplace for sharing and remixing prototypes.
+6. **AI Collaboration**: Multi-agent collaboration where different AI agents handle design, backend, and frontend development.
 
 ## Recent Updates
 
+- **Multimodal Input Support**: Implemented Agno-powered support for image, audio, video, and real-time voice inputs to enhance prototype descriptions
 - **Enhanced UI Design**: Improved visual design with modern gradients, card layouts, and custom checkboxes
 - **Unicode Support**: Fixed character encoding issues for proper display of special characters
 - **Remote Agent System**: Added cloud-based background processing that continues working even when users are offline

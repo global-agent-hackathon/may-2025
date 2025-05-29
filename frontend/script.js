@@ -14,6 +14,247 @@ let taskStatusCheckInterval = null;
 let codeEditor = null; // Global codeEditor variable
 let lastGeneratedCode = null;
 
+// Multimodal input tracking
+let multimodalInputs = {
+    image: null,
+    audio: null,
+    video: null
+};
+
+// Multimodal file handling functions
+function handleFileSelection(fileInput, mediaType) {
+    const file = fileInput.files[0];
+    if (!file) {
+        multimodalInputs[mediaType] = null;
+        updateMultimodalPreview();
+        return;
+    }
+    
+    // Validate file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+        showNotification(`File too large. Maximum size is 10MB.`, 'error');
+        fileInput.value = '';
+        return;
+    }
+    
+    // Convert to base64
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        multimodalInputs[mediaType] = {
+            base64: e.target.result.split(',')[1], // Remove data:type;base64, prefix
+            name: file.name,
+            type: file.type,
+            size: file.size
+        };
+        updateMultimodalPreview();
+    };
+    reader.onerror = function() {
+        showNotification(`Error reading ${mediaType} file`, 'error');
+        fileInput.value = '';
+    };
+    reader.readAsDataURL(file);
+}
+
+function updateMultimodalPreview() {
+    const previewContainer = document.getElementById('multimodal-preview');
+    if (!previewContainer) return;
+    
+    previewContainer.innerHTML = '';
+    
+    // Show preview for each attached media
+    Object.keys(multimodalInputs).forEach(mediaType => {
+        const media = multimodalInputs[mediaType];
+        if (media) {
+            const previewItem = document.createElement('div');
+            previewItem.className = 'media-preview-item';
+            
+            let previewContent = '';
+            
+            if (mediaType === 'image') {
+                previewContent = `
+                    <img src="data:${media.type};base64,${media.base64}" alt="${media.name}">
+                    <div class="media-info">
+                        <div class="media-name">${media.name}</div>
+                        <div class="media-type">Image (${formatFileSize(media.size)})</div>
+                    </div>
+                `;
+            } else if (mediaType === 'audio') {
+                previewContent = `
+                    <div style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: #3a3a3a; border-radius: 4px;">
+                        🎵
+                    </div>
+                    <div class="media-info">
+                        <div class="media-name">${media.name}</div>
+                        <div class="media-type">Audio (${formatFileSize(media.size)})</div>
+                    </div>
+                `;
+            } else if (mediaType === 'video') {
+                previewContent = `
+                    <div style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; background: #3a3a3a; border-radius: 4px;">
+                        🎥
+                    </div>
+                    <div class="media-info">
+                        <div class="media-name">${media.name}</div>
+                        <div class="media-type">Video (${formatFileSize(media.size)})</div>
+                    </div>
+                `;
+            }
+            
+            previewContent += `<button class="remove-media" onclick="removeMultimodalInput('${mediaType}')">Remove</button>`;
+            
+            previewItem.innerHTML = previewContent;
+            previewContainer.appendChild(previewItem);
+        }
+    });
+}
+
+function removeMultimodalInput(mediaType) {
+    multimodalInputs[mediaType] = null;
+    
+    // Clear the file input
+    const fileInput = document.getElementById(`${mediaType}-upload`);
+    if (fileInput) {
+        fileInput.value = '';
+    }
+    
+    updateMultimodalPreview();
+}
+
+// Make removeMultimodalInput globally available for onclick handlers
+window.removeMultimodalInput = removeMultimodalInput;
+
+// Speech Recognition functionality
+let recognition = null;
+let isRecording = false;
+
+function initSpeechRecognition() {
+    // Check if browser supports speech recognition
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+    if (!SpeechRecognition) {
+        console.warn('Speech recognition not supported in this browser');
+        // Hide mic button if not supported
+        const micButton = document.getElementById('mic-button');
+        if (micButton) {
+            micButton.style.display = 'none';
+        }
+        return;
+    }
+    
+    recognition = new SpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    // Use browser language or default to English
+    recognition.lang = navigator.language || 'en-US';
+    
+    let finalTranscript = '';
+    
+    recognition.onstart = function() {
+        console.log('Speech recognition started');
+        isRecording = true;
+        const micButton = document.getElementById('mic-button');
+        if (micButton) {
+            micButton.classList.add('recording');
+            micButton.innerHTML = '🔴 Recording...';
+        }
+        
+        // Get existing text to append to
+        const promptTextarea = document.getElementById('prompt');
+        if (promptTextarea && promptTextarea.value) {
+            finalTranscript = promptTextarea.value + ' ';
+        }
+    };
+    
+    recognition.onresult = function(event) {
+        let interimTranscript = '';
+        
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+            const transcript = event.results[i][0].transcript;
+            if (event.results[i].isFinal) {
+                finalTranscript += transcript + ' ';
+            } else {
+                interimTranscript += transcript;
+            }
+        }
+        
+        // Update the prompt textarea with the transcript
+        const promptTextarea = document.getElementById('prompt');
+        if (promptTextarea) {
+            promptTextarea.value = finalTranscript + interimTranscript;
+        }
+    };
+    
+    recognition.onerror = function(event) {
+        console.error('Speech recognition error:', event.error);
+        isRecording = false;
+        const micButton = document.getElementById('mic-button');
+        if (micButton) {
+            micButton.classList.remove('recording');
+            micButton.innerHTML = '🎤 Mic';
+        }
+        
+        if (event.error === 'no-speech') {
+            showNotification('No speech detected. Please try again.', 'info');
+        } else if (event.error === 'not-allowed') {
+            showNotification('Microphone access denied. Please allow microphone access.', 'error');
+        } else {
+            showNotification(`Speech recognition error: ${event.error}`, 'error');
+        }
+    };
+    
+    recognition.onend = function() {
+        console.log('Speech recognition ended');
+        isRecording = false;
+        const micButton = document.getElementById('mic-button');
+        if (micButton) {
+            micButton.classList.remove('recording');
+            micButton.innerHTML = '🎤 Mic';
+        }
+        finalTranscript = '';
+    };
+}
+
+function toggleSpeechRecognition() {
+    if (!recognition) {
+        showNotification('Speech recognition not supported in this browser', 'error');
+        return;
+    }
+    
+    if (isRecording) {
+        recognition.stop();
+    } else {
+        try {
+            recognition.start();
+        } catch (e) {
+            if (e.message.includes('already started')) {
+                recognition.stop();
+                setTimeout(() => {
+                    recognition.start();
+                }, 100);
+            } else {
+                console.error('Error starting speech recognition:', e);
+                showNotification('Error starting speech recognition', 'error');
+            }
+        }
+    }
+}
+
+function formatFileSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+function getActiveMultimodalInput() {
+    // Return the first non-null multimodal input
+    for (const [type, data] of Object.entries(multimodalInputs)) {
+        if (data) {
+            return { type, data };
+        }
+    }
+    return null;
+}
+
 // Professional notification system
 function createNotificationSystem() {
     // Create notification container if it doesn't exist
@@ -254,12 +495,78 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.log("DOM content loaded");
     
     await loadSessions();
-    document.getElementById('generate').addEventListener('click', generate);
-    document.getElementById('enhance-prompt').addEventListener('click', enhancePrompt);
-    document.getElementById('new-session').addEventListener('click', createNewSession);
-    document.getElementById('copy-code').addEventListener('click', copyCode);
-    document.getElementById('download-code').addEventListener('click', downloadCode);
-    document.getElementById('push-to-zed').addEventListener('click', pushToZed);
+    
+    // Add event listeners with confirmation logging
+    const generateBtn = document.getElementById('generate');
+    const enhanceBtn = document.getElementById('enhance-prompt');
+    const newSessionBtn = document.getElementById('new-session');
+    const copyBtn = document.getElementById('copy-code');
+    const downloadBtn = document.getElementById('download-code');
+    const executeBtn = document.getElementById('push-to-zed');
+    
+    if (generateBtn) {
+        generateBtn.addEventListener('click', generate);
+        console.log("✅ Generate button event listener attached");
+    } else {
+        console.error("❌ Generate button not found");
+    }
+    
+    if (enhanceBtn) {
+        enhanceBtn.addEventListener('click', enhancePrompt);
+        console.log("✅ Enhance prompt button event listener attached");
+    } else {
+        console.error("❌ Enhance prompt button not found");
+    }
+    
+    if (newSessionBtn) {
+        newSessionBtn.addEventListener('click', createNewSession);
+        console.log("✅ New session button event listener attached");
+    } else {
+        console.error("❌ New session button not found");
+    }
+    
+    if (copyBtn) {
+        copyBtn.addEventListener('click', copyCode);
+        console.log("✅ Copy code button event listener attached");
+    } else {
+        console.error("❌ Copy code button not found");
+    }
+    
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', downloadCode);
+        console.log("✅ Download code button event listener attached");
+    } else {
+        console.error("❌ Download code button not found");
+    }
+    
+    if (executeBtn) {
+        executeBtn.addEventListener('click', pushToZed);
+        console.log("✅ Execute Code button event listener attached");
+    } else {
+        console.error("❌ Execute Code button not found");
+    }
+    
+    // Add multimodal input listeners
+    const imageUpload = document.getElementById('image-upload');
+    const audioUpload = document.getElementById('audio-upload');
+    const videoUpload = document.getElementById('video-upload');
+    
+    if (imageUpload) {
+        imageUpload.addEventListener('change', (e) => handleFileSelection(e.target, 'image'));
+    }
+    if (audioUpload) {
+        audioUpload.addEventListener('change', (e) => handleFileSelection(e.target, 'audio'));
+    }
+    if (videoUpload) {
+        videoUpload.addEventListener('change', (e) => handleFileSelection(e.target, 'video'));
+    }
+    
+    // Initialize speech recognition and add mic button listener
+    initSpeechRecognition();
+    const micButton = document.getElementById('mic-button');
+    if (micButton) {
+        micButton.addEventListener('click', toggleSpeechRecognition);
+    }
     
     // Setup Remote Mode toggle - Make sure this runs after the DOM is fully loaded
     const remoteModeBtn = document.getElementById('remote-mode');
@@ -315,6 +622,9 @@ async function loadSessions() {
             sessionDiv.dataset.id = session.id;
             
             // Create the session name that users can click to load the session
+            const sessionContent = document.createElement('div');
+            sessionContent.className = 'session-content';
+            
             const sessionName = document.createElement('div');
             sessionName.className = 'session-name';
             
@@ -325,7 +635,49 @@ async function loadSessions() {
                 sessionName.textContent = `Session ${session.id.slice(0,8)}`;
             }
             
-            sessionName.onclick = () => loadSession(session.id);
+            // Create the date display
+            const sessionDate = document.createElement('div');
+            sessionDate.className = 'session-date';
+            
+            // Format the date from created_at
+            if (session.created_at) {
+                try {
+                    const date = new Date(session.created_at);
+                    const now = new Date();
+                    const diffTime = now - date;
+                    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                    
+                    if (diffDays === 0) {
+                        // Today - show time
+                        sessionDate.textContent = `Today at ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+                    } else if (diffDays === 1) {
+                        // Yesterday
+                        sessionDate.textContent = `Yesterday at ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+                    } else if (diffDays < 7) {
+                        // This week - show day name
+                        sessionDate.textContent = `${date.toLocaleDateString([], {weekday: 'long'})} at ${date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+                    } else {
+                        // Older - show full date
+                        sessionDate.textContent = date.toLocaleDateString([], {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                    }
+                } catch (e) {
+                    sessionDate.textContent = 'Date unknown';
+                }
+            } else {
+                sessionDate.textContent = 'Date unknown';
+            }
+            
+            // Assemble the session content
+            sessionContent.appendChild(sessionName);
+            sessionContent.appendChild(sessionDate);
+            
+            sessionContent.onclick = () => loadSession(session.id);
             
             // Create the actions menu with 3 dots
             const actionsDiv = document.createElement('div');
@@ -361,7 +713,7 @@ async function loadSessions() {
             actionsDiv.appendChild(dropdownMenu);
             
             // Assemble the session item
-            sessionDiv.appendChild(sessionName);
+            sessionDiv.appendChild(sessionContent);
             sessionDiv.appendChild(actionsDiv);
             
             // Add to the session list
@@ -551,33 +903,18 @@ async function loadSession(sessionId) {
         }
         
         // Update code display
-        if (session.code) {
-            console.log("Loading code from session");
-            
-            // Store in localStorage for backup
-            if (session.code !== "Describe your prototype and click \"Generate Prototype\" to create code.") {
-                localStorage.setItem('vibeproto_last_code', session.code);
-                lastGeneratedCode = session.code;
-            }
-            
-            // Use our direct display function 
+        if (session.code && session.code !== "Describe your prototype and click \"Generate Prototype\" to create code.") {
+            console.log("Session has code, displaying it");
             displayCode(session.code);
             
-            // Force update with delay to ensure it takes effect
+            // Store in localStorage and global variable
+            localStorage.setItem('vibeproto_last_code', session.code);
+            lastGeneratedCode = session.code;
+            
+            // Force update as backup
             setTimeout(() => {
                 console.log("Force updating code display from session");
-                
-                // Direct update to code display element
-                const codeDisplayElement = document.getElementById('code-display');
-                if (codeDisplayElement) {
-                    codeDisplayElement.textContent = session.code;
-                }
-                
-                // Update editor if available
-                if (codeEditor) {
-                    codeEditor.setValue(session.code);
-                    codeEditor.refresh();
-                }
+                displayCode(session.code); // Use displayCode instead of direct manipulation
             }, 100);
         } else {
             console.log("No code in session, showing default message");
@@ -824,6 +1161,7 @@ async function generate() {
     try {
         if (remoteMode) {
             // Use remote code generation
+            const multimodalInput = getActiveMultimodalInput();
             const response = await fetch('http://localhost:5000/remote_generate', {
                 method: 'POST',
                 headers: { 
@@ -833,7 +1171,8 @@ async function generate() {
                 body: JSON.stringify({
                     prompt,
                     type: prototypeType,
-                    user_id: userId
+                    user_id: userId,
+                    multimodal_input: multimodalInput ? {[multimodalInput.type]: multimodalInput.data.base64} : null
                 }),
                 mode: 'cors'
             });
@@ -876,6 +1215,7 @@ async function generate() {
             
         } else {
             // Use direct code generation
+            const multimodalInput = getActiveMultimodalInput();
             const response = await fetch('http://localhost:5000/generate', {
                 method: 'POST',
                 headers: { 
@@ -887,7 +1227,8 @@ async function generate() {
                     type: prototypeType,
                     session_id: currentSessionId,
                     user_id: userId,
-                    think: true // Always enable thinking
+                    think: true, // Always enable thinking
+                    multimodal_input: multimodalInput ? {[multimodalInput.type]: multimodalInput.data.base64} : null
                 }),
                 mode: 'cors'
             });
@@ -930,23 +1271,6 @@ async function generate() {
                 
                 // Use our direct display function with multiple fallbacks
                 displayCode(result.code);
-                
-                // Force display after a small delay to ensure it takes
-                setTimeout(() => {
-                    console.log("FORCE DISPLAYING CODE AFTER DELAY");
-                    
-                    // Get the pre element and update its content directly
-                    const codeDisplayElement = document.getElementById('code-display');
-                    if (codeDisplayElement) {
-                        codeDisplayElement.textContent = result.code;
-                    }
-                    
-                    // Also try to update the code editor if it exists
-                    if (codeEditor) {
-                        codeEditor.setValue(result.code);
-                        codeEditor.refresh();
-                    }
-                }, 200);
             } else {
                 console.warn("Generation did not return any code");
             }
@@ -1371,23 +1695,6 @@ function handleRemoteGenerateResult(taskStatus) {
         
         // Use our direct display function
         displayCode(result.code);
-        
-        // Force display after a small delay to ensure it takes
-        setTimeout(() => {
-            console.log("FORCE DISPLAYING CODE AFTER DELAY");
-            
-            // Get the pre element and update its content directly
-            const codeDisplayElement = document.getElementById('code-display');
-            if (codeDisplayElement) {
-                codeDisplayElement.textContent = result.code;
-            }
-            
-            // Also try to update the code editor if it exists
-            if (codeEditor) {
-                codeEditor.setValue(result.code);
-                codeEditor.refresh();
-            }
-        }, 200);
     } else {
         console.warn("Remote generation did not return any code");
     }
@@ -1438,26 +1745,282 @@ function displayCode(code) {
         lastGeneratedCode = code;
     }
     
-    // Get the pre element and update its content
-    const codeDisplayElement = document.getElementById('code-display');
-    if (codeDisplayElement) {
-        codeDisplayElement.textContent = code;
+    // Generate instructions for the code
+    const instructions = generateDetailedInstructions(code);
+    
+    // Get the code container
+    const codeContainer = document.getElementById('code-output');
+    if (codeContainer) {
+        // Escape HTML in code to prevent parsing issues
+        const escapedCode = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        
+        // Create new structure with code and instructions
+        codeContainer.innerHTML = `
+            <div class="code-display-container">
+                <pre id="code-display" style="width: 100%; overflow: auto; margin: 0; padding: 10px; background-color: #1e1e1e; color: #e0e0e0; font-family: 'Courier New', monospace; white-space: pre-wrap; border-radius: 5px; max-height: 60vh;">${escapedCode}</pre>
+                <div class="code-instructions">
+                    <h4>📋 Step-by-Step Instructions for Non-Technical Users</h4>
+                    ${instructions}
+                </div>
+            </div>
+        `;
+        
+        // Debug: Log what we're displaying
+        console.log("Code container updated with:", escapedCode.substring(0, 100) + "...");
+        
+        // Double-check the element exists and has content
+        const newCodeDisplay = document.getElementById('code-display');
+        if (newCodeDisplay) {
+            console.log("Code display element created successfully with content length:", newCodeDisplay.textContent.length);
+        } else {
+            console.error("Failed to create code-display element");
+        }
     } else {
-        console.error("Could not find code-display element");
+        console.error("Could not find code-output container");
+        
+        // Fallback: try to find the original code-display element
+        const fallbackElement = document.getElementById('code-display');
+        if (fallbackElement) {
+            console.log("Using fallback code display element");
+            fallbackElement.textContent = code;
+        }
     }
+}
+
+function generateDetailedInstructions(code) {
+    if (!code || code === "Describe your prototype and click \"Generate Prototype\" to create code.") {
+        return "<p>No instructions available yet. Generate some code first!</p>";
+    }
+    
+    // Detect code type
+    const isHTML = code.includes('<!DOCTYPE') || code.includes('<html') || code.includes('<div') || code.includes('<script>');
+    const isPython = code.includes('def ') || code.includes('import ') || code.includes('print(') || code.includes('if __name__');
+    const isJavaScript = code.includes('function ') || code.includes('const ') || code.includes('let ') || code.includes('console.log');
+    
+    let instructions = '';
+    
+    if (isHTML) {
+        instructions = `
+            <p><strong>🌐 You've generated a Web Application!</strong> Here's how to run it using Cursor:</p>
+            
+            <div class="instruction-steps">
+                <h5>Step 1: Save the Code</h5>
+                <ol>
+                    <li>Click the <strong>"Copy Code"</strong> button above</li>
+                    <li>Open <strong>Cursor</strong> (your AI-powered code editor)</li>
+                    <li>Create a new file: <code>Ctrl+N</code> (Windows) or <code>Cmd+N</code> (Mac)</li>
+                    <li>Paste the code: <code>Ctrl+V</code> (Windows) or <code>Cmd+V</code> (Mac)</li>
+                    <li>Save the file with a <code>.html</code> extension (e.g., <code>my-app.html</code>)</li>
+                </ol>
+                
+                <h5>Step 2: Run Your Web App</h5>
+                <ol>
+                    <li>In Cursor, right-click on your HTML file in the file explorer</li>
+                    <li>Select <strong>"Open with Live Server"</strong> or <strong>"Open in Browser"</strong></li>
+                    <li>If you don't see this option, install the "Live Server" extension in Cursor</li>
+                    <li>Your web app will open in your default browser automatically!</li>
+                </ol>
+                
+                <h5>Step 3: Make Changes (Optional)</h5>
+                <ol>
+                    <li>Go back to Cursor and modify the code</li>
+                    <li>Save the file (<code>Ctrl+S</code> or <code>Cmd+S</code>)</li>
+                    <li>The browser will automatically refresh to show your changes</li>
+                    <li>Ask Cursor's AI for help: Press <code>Ctrl+K</code> and describe what you want to change</li>
+                </ol>
+                
+                <h5>🎯 What This Code Does:</h5>
+                <p>This is a complete web application that runs in your browser. It includes:</p>
+                <ul>
+                    <li><strong>HTML</strong>: The structure and content of your app</li>
+                    <li><strong>CSS</strong>: The styling and visual design</li>
+                    <li><strong>JavaScript</strong>: The interactive functionality</li>
+                </ul>
+                
+                <h5>🔧 Troubleshooting:</h5>
+                <ul>
+                    <li><strong>File won't open?</strong> Make sure you saved it with a <code>.html</code> extension</li>
+                    <li><strong>No Live Server?</strong> Go to Extensions in Cursor and install "Live Server"</li>
+                    <li><strong>App looks broken?</strong> Check the browser console (F12) for error messages</li>
+                    <li><strong>Need help?</strong> Ask Cursor's AI: "Help me fix this HTML code"</li>
+                </ul>
+            </div>
+        `;
+    } else if (isPython) {
+        instructions = `
+            <p><strong>🐍 You've generated a Python Script!</strong> Here's how to run it using Cursor:</p>
+            
+            <div class="instruction-steps">
+                <h5>Step 1: Save the Code</h5>
+                <ol>
+                    <li>Click the <strong>"Copy Code"</strong> button above</li>
+                    <li>Open <strong>Cursor</strong> (your AI-powered code editor)</li>
+                    <li>Create a new file: <code>Ctrl+N</code> (Windows) or <code>Cmd+N</code> (Mac)</li>
+                    <li>Paste the code: <code>Ctrl+V</code> (Windows) or <code>Cmd+V</code> (Mac)</li>
+                    <li>Save the file with a <code>.py</code> extension (e.g., <code>my-script.py</code>)</li>
+                </ol>
+                
+                <h5>Step 2: Install Python (if needed)</h5>
+                <ol>
+                    <li>Check if Python is installed: Open Terminal in Cursor (<code>Ctrl+\`</code>)</li>
+                    <li>Type <code>python --version</code> and press Enter</li>
+                    <li>If you see a version number (like 3.9.x), you're good to go!</li>
+                    <li>If not, download Python from <code>python.org</code> and install it</li>
+                </ol>
+                
+                <h5>Step 3: Install Required Packages</h5>
+                <ol>
+                    <li>Look at the top of your code for <code>import</code> statements</li>
+                    <li>In Cursor's Terminal, install packages with: <code>pip install package-name</code></li>
+                    <li>Common commands:
+                        <ul>
+                            <li><code>pip install requests</code> (for web requests)</li>
+                            <li><code>pip install beautifulsoup4</code> (for web scraping)</li>
+                            <li><code>pip install pandas</code> (for data handling)</li>
+                        </ul>
+                    </li>
+                </ol>
+                
+                <h5>Step 4: Run Your Script</h5>
+                <ol>
+                    <li>In Cursor's Terminal, navigate to your file's folder</li>
+                    <li>Run the script: <code>python my-script.py</code></li>
+                    <li>Follow any prompts the script shows you</li>
+                    <li>Watch the magic happen! 🎉</li>
+                </ol>
+                
+                <h5>Step 5: Customize and Improve</h5>
+                <ol>
+                    <li>Use Cursor's AI to modify the script: Press <code>Ctrl+K</code></li>
+                    <li>Ask questions like: "Make this faster" or "Add error handling"</li>
+                    <li>Test your changes by running the script again</li>
+                </ol>
+                
+                <h5>🎯 What This Script Does:</h5>
+                <p>This Python script automates a task for you. It can:</p>
+                <ul>
+                    <li>Process files and data automatically</li>
+                    <li>Connect to websites and APIs</li>
+                    <li>Organize and manipulate information</li>
+                    <li>Save you hours of manual work</li>
+                </ul>
+                
+                <h5>🔧 Troubleshooting:</h5>
+                <ul>
+                    <li><strong>Import errors?</strong> Install missing packages with <code>pip install package-name</code></li>
+                    <li><strong>Script won't run?</strong> Check you're in the right folder in Terminal</li>
+                    <li><strong>Python not found?</strong> Try <code>python3</code> instead of <code>python</code></li>
+                    <li><strong>Need help?</strong> Ask Cursor's AI: "Help me fix this Python error"</li>
+                </ul>
+            </div>
+        `;
+    } else if (isJavaScript) {
+        instructions = `
+            <p><strong>⚡ You've generated JavaScript Code!</strong> Here's how to run it using Cursor:</p>
+            
+            <div class="instruction-steps">
+                <h5>Step 1: Save the Code</h5>
+                <ol>
+                    <li>Click the <strong>"Copy Code"</strong> button above</li>
+                    <li>Open <strong>Cursor</strong> (your AI-powered code editor)</li>
+                    <li>Create a new file: <code>Ctrl+N</code> (Windows) or <code>Cmd+N</code> (Mac)</li>
+                    <li>Paste the code: <code>Ctrl+V</code> (Windows) or <code>Cmd+V</code> (Mac)</li>
+                    <li>Save the file with a <code>.js</code> extension (e.g., <code>my-script.js</code>)</li>
+                </ol>
+                
+                <h5>Step 2: Run with Node.js</h5>
+                <ol>
+                    <li>Install Node.js from <code>nodejs.org</code> if you haven't already</li>
+                    <li>Open Terminal in Cursor (<code>Ctrl+\`</code>)</li>
+                    <li>Navigate to your file's location</li>
+                    <li>Run: <code>node my-script.js</code></li>
+                </ol>
+                
+                <h5>Step 3: Alternative - Run in Browser</h5>
+                <ol>
+                    <li>Create an HTML file to host your JavaScript</li>
+                    <li>Add your JS code between <code>&lt;script&gt;</code> tags</li>
+                    <li>Open the HTML file in your browser</li>
+                    <li>Check the browser console (F12) to see output</li>
+                </ol>
+                
+                <h5>🎯 What This Code Does:</h5>
+                <p>This JavaScript code can run in browsers or with Node.js to:</p>
+                <ul>
+                    <li>Process data and perform calculations</li>
+                    <li>Interact with web pages and APIs</li>
+                    <li>Create interactive user experiences</li>
+                    <li>Automate repetitive tasks</li>
+                </ul>
+            </div>
+        `;
+    } else {
+        // Generic instructions for unknown code types
+        instructions = `
+            <p><strong>💻 You've generated some code!</strong> Here's how to work with it in Cursor:</p>
+            
+            <div class="instruction-steps">
+                <h5>Step 1: Save the Code</h5>
+                <ol>
+                    <li>Click the <strong>"Copy Code"</strong> button above</li>
+                    <li>Open <strong>Cursor</strong> (your AI-powered code editor)</li>
+                    <li>Create a new file: <code>Ctrl+N</code> (Windows) or <code>Cmd+N</code> (Mac)</li>
+                    <li>Paste the code: <code>Ctrl+V</code> (Windows) or <code>Cmd+V</code> (Mac)</li>
+                    <li>Save with an appropriate file extension (ask Cursor's AI if unsure)</li>
+                </ol>
+                
+                <h5>Step 2: Get Help from Cursor's AI</h5>
+                <ol>
+                    <li>Press <code>Ctrl+K</code> (Windows) or <code>Cmd+K</code> (Mac)</li>
+                    <li>Ask: "How do I run this code?"</li>
+                    <li>Cursor's AI will provide specific instructions for your code type</li>
+                </ol>
+                
+                <h5>Step 3: Run Your Code</h5>
+                <ol>
+                    <li>Follow the AI's recommendations for your specific language</li>
+                    <li>Use Cursor's built-in Terminal if needed</li>
+                    <li>Install any required dependencies the AI suggests</li>
+                </ol>
+            </div>
+        `;
+    }
+    
+    // Add universal tips
+    instructions += `
+        <div class="cursor-tips">
+            <h5>💡 Pro Tips for Using Cursor:</h5>
+            <ul>
+                <li><strong>Ask AI for help:</strong> Press <code>Ctrl+K</code> (or <code>Cmd+K</code>) and describe what you want</li>
+                <li><strong>Explain code:</strong> Select any code and ask "What does this do?"</li>
+                <li><strong>Fix errors:</strong> If you see red squiggly lines, right-click and select "Fix with AI"</li>
+                <li><strong>Improve code:</strong> Ask "Make this code better" or "Add comments to explain this"</li>
+                <li><strong>Quick reference:</strong> Hover over any function or variable to see what it does</li>
+            </ul>
+        </div>
+        
+        <div class="execution-reminder">
+            <p><strong>🚀 Ready to Execute?</strong> Click the <strong>"Execute Code"</strong> button above to run your code directly, or follow the manual steps for more control!</p>
+        </div>
+    `;
+    
+    return instructions;
 }
 
 // Replace the previous functions with our simplified version
 function forceDisplayCode(code) {
-    displayCode(code);
+    console.log("FORCE DISPLAYING CODE:", code.substring(0, 50) + "...");
+    displayCode(code); // Use the main displayCode function which now handles everything
 }
 
 function ensureCodeIsDisplayed(code) {
-    displayCode(code);
+    displayCode(code); // Use the main displayCode function which now handles everything
 }
 
 // Function to push code to Zed IDE - with error handling improvements
 async function pushToZed() {
+    console.log("Execute Code button clicked!");
+    
     try {
         let codeText = "";
         
@@ -1465,21 +2028,28 @@ async function pushToZed() {
         const codeDisplayElement = document.getElementById('code-display');
         if (codeDisplayElement) {
             codeText = codeDisplayElement.textContent;
+            console.log("Got code from code-display element, length:", codeText.length);
+        } else {
+            console.log("No code-display element found");
         }
         
         // Also check localStorage as a backup
         if (!codeText || codeText === "Describe your prototype and click \"Generate Prototype\" to create code.") {
             codeText = localStorage.getItem('vibeproto_last_code');
+            console.log("Using localStorage backup code, length:", codeText ? codeText.length : 0);
             if (!codeText) {
-                showNotification('No code available to execute', 'error');
+                showNotification('No code available to execute. Generate some code first!', 'error');
                 return;
             }
         }
         
         console.log("Executing code, length:", codeText.length);
+        console.log("First 100 chars:", codeText.substring(0, 100));
         
         // Check if this is HTML content
         const isHTML = codeText.includes('<!DOCTYPE') || codeText.includes('<html>');
+        console.log("Is HTML content:", isHTML);
+        
         if (isHTML) {
             console.log("HTML content detected, adding special handling");
             
@@ -1489,6 +2059,8 @@ async function pushToZed() {
                 fileType: "html",
                 fileName: "index.html"
             };
+            
+            console.log("Sending HTML payload to server...");
             
             // Send the code to the backend with file info
             const response = await fetch('http://localhost:5000/push_to_zed', {
@@ -1501,15 +2073,21 @@ async function pushToZed() {
                 mode: 'cors'
             });
             
+            console.log("Server response status:", response.status);
+            
             // Check response
             if (response.ok) {
                 const result = await response.json();
+                console.log("Server response:", result);
                 showNotification('HTML application opened in browser successfully! 🚀', 'success');
             } else {
                 const errorText = await response.text();
+                console.error("Server error:", errorText);
                 showNotification(`Failed to execute code: ${errorText}`, 'error');
             }
         } else {
+            console.log("Non-HTML content, using normal approach");
+            
             // For non-HTML content, use the normal approach
             const response = await fetch('http://localhost:5000/push_to_zed', {
                 method: 'POST',
@@ -1521,10 +2099,13 @@ async function pushToZed() {
                 mode: 'cors'
             });
             
+            console.log("Server response status:", response.status);
+            
             // Check for JSON response
             const contentType = response.headers.get("content-type");
             if (contentType && contentType.includes("application/json")) {
                 const result = await response.json();
+                console.log("Server JSON response:", result);
                 
                 if (response.ok) {
                     if (result.output) {
@@ -1538,6 +2119,7 @@ async function pushToZed() {
             } else {
                 // Handle non-JSON response
                 const textResult = await response.text();
+                console.log("Server text response:", textResult);
                 if (response.ok) {
                     showNotification('Code executed successfully! 🎉', 'success');
                 } else {
@@ -1577,28 +2159,12 @@ document.addEventListener('DOMContentLoaded', () => {
                                 // Use the most recent code we have
                                 if (lastGeneratedCode) {
                                     setTimeout(() => {
-                                        forceDisplayCode(lastGeneratedCode);
-                                        
-                                        // Double-check and force direct update if needed
-                                        setTimeout(() => {
-                                            if (codeDisplayElement && codeDisplayElement.textContent !== lastGeneratedCode) {
-                                                console.log("EMERGENCY CODE DISPLAY UPDATE");
-                                                codeDisplayElement.textContent = lastGeneratedCode;
-                                            }
-                                        }, 300);
+                                        displayCode(lastGeneratedCode); // Use displayCode instead of forceDisplayCode
                                     }, 100);
                                 } else if (localStorage.getItem('vibeproto_last_code')) {
                                     const savedCode = localStorage.getItem('vibeproto_last_code');
                                     setTimeout(() => {
-                                        forceDisplayCode(savedCode);
-                                        
-                                        // Double-check and force direct update if needed
-                                        setTimeout(() => {
-                                            if (codeDisplayElement && codeDisplayElement.textContent !== savedCode) {
-                                                console.log("EMERGENCY CODE DISPLAY UPDATE FROM LOCALSTORAGE");
-                                                codeDisplayElement.textContent = savedCode;
-                                            }
-                                        }, 300);
+                                        displayCode(savedCode); // Use displayCode instead of forceDisplayCode
                                     }, 100);
                                 }
                             } else {

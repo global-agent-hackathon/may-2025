@@ -22,8 +22,12 @@
         <!-- Left Sidebar: Saved Sessions -->
         <div class="sidebar left-sidebar">
             <div class="sidebar-header">
-                <h2>Saved Sessions</h2>
+                <h2>💾 Saved Sessions</h2>
                 <button id="settings-btn" class="icon-button" title="Settings">⚙️</button>
+            </div>
+            <div class="sessions-title-section">
+                <h3>Your Prototype History</h3>
+                <p>Click any session to continue working</p>
             </div>
             <div id="session-list" class="session-list">
                 <!-- Sessions will be dynamically added here -->
@@ -83,6 +87,31 @@
                         <option value="web_app">Web App</option>
                     </select>
                     <button id="enhance-prompt" class="btn-secondary">Enhance Prompt ✨</button>
+                </div>
+                <!-- Multimodal input section -->
+                <div class="multimodal-input">
+                    <div class="multimodal-header">
+                        <span>Attach Media (Optional)</span>
+                        <small>Add images, audio, or video to enhance your prompt</small>
+                    </div>
+                    <div class="multimodal-buttons">
+                        <label for="image-upload" class="file-input-label">
+                            📷 Image
+                            <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                        </label>
+                        <label for="audio-upload" class="file-input-label">
+                            🎵 Audio
+                            <input type="file" id="audio-upload" accept="audio/*" style="display: none;">
+                        </label>
+                        <label for="video-upload" class="file-input-label">
+                            🎥 Video
+                            <input type="file" id="video-upload" accept="video/*" style="display: none;">
+                        </label>
+                        <button id="mic-button" class="file-input-label mic-button" title="Click to speak your prompt. Click again to stop recording.">
+                            🎤 Mic
+                        </button>
+                    </div>
+                    <div id="multimodal-preview" class="multimodal-preview"></div>
                 </div>
                 <button id="generate">Generate Prototype</button>
             </div>

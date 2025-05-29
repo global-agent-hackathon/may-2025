@@ -7,6 +7,8 @@ from agno.storage.sqlite import SqliteStorage
 from agno.memory.v2.memory import Memory
 from agno.memory.v2.db.sqlite import SqliteMemoryDb
 from agno.tools.reasoning import ReasoningTools
+from agno.media import Image, Audio, Video
+import base64
 import os
 import uuid
 from datetime import datetime
@@ -18,6 +20,99 @@ from remote_agent import remote_agent_pool
 
 # Load environment variables from .env file if it exists
 dotenv.load_dotenv()
+
+# -----------------------------------------------------------------------------
+# Multimodal Processing Functions
+# -----------------------------------------------------------------------------
+
+def process_multimodal_input(multimodal_data):
+    """
+    Process multimodal input data and return appropriate Agno media objects
+    Args:
+        multimodal_data: Dict containing image, audio, or video data
+    Returns:
+        Processed media object or None
+    """
+    if not multimodal_data or not isinstance(multimodal_data, dict):
+        return None
+    
+    try:
+        if 'image' in multimodal_data:
+            image_data = multimodal_data['image']
+            if isinstance(image_data, str):
+                # Assume base64 encoded string
+                return Image(base64_encoded=image_data)
+            elif isinstance(image_data, dict) and 'base64' in image_data:
+                return Image(base64_encoded=image_data['base64'])
+        
+        elif 'audio' in multimodal_data:
+            audio_data = multimodal_data['audio']
+            if isinstance(audio_data, str):
+                return Audio(base64_encoded=audio_data)
+            elif isinstance(audio_data, dict) and 'base64' in audio_data:
+                return Audio(base64_encoded=audio_data['base64'])
+        
+        elif 'video' in multimodal_data:
+            video_data = multimodal_data['video']
+            if isinstance(video_data, str):
+                return Video(base64_encoded=video_data)
+            elif isinstance(video_data, dict) and 'base64' in video_data:
+                return Video(base64_encoded=video_data['base64'])
+    
+    except Exception as e:
+        print(f"Error processing multimodal input: {e}")
+        return None
+    
+    return None
+
+def enhance_prompt_with_multimodal_context(prompt, media_type=None):
+    """
+    Enhance the prompt with multimodal context information
+    Args:
+        prompt: Original text prompt
+        media_type: Type of media (image, audio, video)
+    Returns:
+        Enhanced prompt with multimodal context
+    """
+    if not media_type:
+        return prompt
+    
+    context_additions = {
+        'image': """
+        
+**MULTIMODAL CONTEXT**: An image has been provided along with this request. 
+Please analyze the image content and incorporate visual elements, layout, design patterns, 
+or any relevant visual information into your code generation. Consider:
+- UI/UX elements shown in the image
+- Color schemes and design patterns
+- Layout structures
+- Any text or data visible in the image
+- Design inspiration for the prototype
+        """,
+        'audio': """
+        
+**MULTIMODAL CONTEXT**: An audio file has been provided along with this request.
+Please consider any audio-related requirements, speech content, or audio processing 
+needs when generating the code. This might include:
+- Audio playback functionality
+- Speech-to-text processing
+- Audio analysis features
+- Sound-based interactions
+        """,
+        'video': """
+        
+**MULTIMODAL CONTEXT**: A video file has been provided along with this request.
+Please consider any video-related requirements, visual content, or video processing
+needs when generating the code. This might include:
+- Video playback functionality
+- Video analysis features
+- Frame extraction
+- Video-based interactions
+- Animation patterns shown in the video
+        """
+    }
+    
+    return prompt + context_additions.get(media_type, '')
 
 app = Flask(__name__)
 # Configure CORS to handle preflight requests correctly
@@ -394,14 +489,31 @@ def generate():
         prompt = data.get('prompt')
         prototype_type = data.get('type', 'Python Script')
         session_id = data.get('session_id')
+        multimodal_input = data.get('multimodal_input')
         
         if not prompt:
             return jsonify({"error": "No prompt provided"}), 400
 
         print(f"Processing request for prompt: {prompt[:50]}...")
         
-        # Call the synchronous wrapper method
-        result = agent.process_request_sync(prompt, prototype_type)
+        # Process multimodal input if provided
+        media_object = None
+        media_type = None
+        if multimodal_input:
+            media_object = process_multimodal_input(multimodal_input)
+            if media_object:
+                # Determine media type
+                for key in ['image', 'audio', 'video']:
+                    if key in multimodal_input:
+                        media_type = key
+                        break
+                print(f"Processed multimodal input: {media_type}")
+                
+                # Enhance prompt with multimodal context
+                prompt = enhance_prompt_with_multimodal_context(prompt, media_type)
+        
+        # Call the synchronous wrapper method with media_type
+        result = agent.process_request_sync(prompt, prototype_type, media_type)
         
         # Make sure we have a session ID
         if not session_id:
@@ -574,9 +686,25 @@ def remote_generate():
         prompt = data.get("prompt")
         prototype_type = data.get("type", "Python Script")
         user_id = data.get("user_id", "default_user")
+        multimodal_input = data.get("multimodal_input")
         
         if not prompt:
             return jsonify({"error": "Missing prompt"}), 400
+        
+        # Process multimodal input if provided
+        media_type = None
+        if multimodal_input:
+            media_object = process_multimodal_input(multimodal_input)
+            if media_object:
+                # Determine media type
+                for key in ['image', 'audio', 'video']:
+                    if key in multimodal_input:
+                        media_type = key
+                        break
+                print(f"Processed multimodal input for remote generation: {media_type}")
+                
+                # Enhance prompt with multimodal context
+                prompt = enhance_prompt_with_multimodal_context(prompt, media_type)
         
         # Create a session
         session_id = create_new_session()
