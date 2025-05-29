@@ -93,6 +93,116 @@ Work in progress - developing intuitive interface for voice-driven search experi
 - uv package manager
 - Microphone access for voice input
 
+### System Dependencies
+
+This project requires additional system dependencies for document processing:
+
+#### Install uv (Python package manager)
+
+**macOS/Linux:**
+```bash
+# Using the official installer
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Or using Homebrew (macOS)
+brew install uv
+
+# Or using pip
+pip install uv
+```
+
+**Windows:**
+```bash
+# Using PowerShell
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+
+# Or using pip
+pip install uv
+```
+
+#### Install TeX Live (for PDF generation from DOCX files)
+
+TeX Live is required on all platforms for document conversion functionality.
+
+**macOS:**
+```bash
+# Option 1: Install MacTeX (full TeX Live distribution, ~4GB)
+brew install --cask mactex
+
+# Option 2: Install BasicTeX (minimal TeX Live, ~100MB)
+brew install --cask basictex
+# After BasicTeX installation, you may need additional packages:
+sudo tlmgr update --self
+sudo tlmgr install xetex
+
+# Option 3: Install TeX Live directly (medium size, ~1GB)
+brew install texlive
+```
+
+**Ubuntu/Debian:**
+```bash
+sudo apt-get update
+sudo apt-get install texlive-full
+# Or for a minimal installation:
+sudo apt-get install texlive-base texlive-latex-recommended texlive-xetex
+```
+
+**Windows:**
+1. Download and install TeX Live from: https://www.tug.org/texlive/windows.html
+2. Or use Chocolatey: `choco install texlive`
+
+#### Install Pandoc (for document conversion)
+
+**macOS:**
+```bash
+# Using Homebrew
+brew install pandoc
+```
+
+**Ubuntu/Debian:**
+```bash
+sudo apt-get update
+sudo apt-get install pandoc
+```
+
+**Windows:**
+1. Download from: https://pandoc.org/installing.html
+2. Or use Chocolatey: `choco install pandoc`
+
+#### Install librsvg (for SVG processing)
+
+**macOS:**
+```bash
+# Using Homebrew
+brew install librsvg
+```
+
+**Ubuntu/Debian:**
+```bash
+sudo apt-get update
+sudo apt-get install librsvg2-bin librsvg2-dev
+```
+
+**Windows:**
+```bash
+# Using Chocolatey
+choco install rsvg-convert
+
+# Or download from: https://github.com/miyako/console-rsvg-convert
+```
+
+**Verify Installation:**
+```bash
+# Check if pandoc is installed
+pandoc --version
+
+# Check if xelatex (from TeX Live) is available
+xelatex --version
+
+# Check if librsvg is installed
+rsvg-convert --version
+```
+
 ### Quick Start
 ```bash
 # Clone and setup
