@@ -166,6 +166,3 @@ This project addresses critical pain points in modern knowledge work:
 ### Development Status
 Currently in active development for the Global Agent Hackathon May 2025, with core functionality implemented and UI refinements in progress.
 
----
-
-*Reference: [GitHub Issue #64](https://github.com/global-agent-hackathon/global-agent-hackathon-may-2025/issues/64)* 
