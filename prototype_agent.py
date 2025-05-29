@@ -605,7 +605,111 @@ def remote_generate():
         print(f"Error submitting remote generate task: {e}")
         return jsonify({"error": str(e)}), 500
 
-# Add a specific route to handle OPTIONS requests
+@app.route("/push_to_zed", methods=["POST"])
+def push_to_zed():
+    """Execute/run the generated code"""
+    try:
+        data = request.get_json()
+        code = data.get("code")
+        file_type = data.get("fileType", "")
+        file_name = data.get("fileName", "generated_code")
+        
+        if not code:
+            return jsonify({"error": "No code provided"}), 400
+        
+        print(f"Executing code of type: {file_type}")
+        
+        # Handle different file types
+        if file_type == "html" or code.strip().startswith("<!DOCTYPE") or "<html" in code:
+            # For HTML files, save and open in browser
+            import tempfile
+            import webbrowser
+            import os
+            
+            # Create a temporary HTML file with UTF-8 encoding
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.html', delete=False, encoding='utf-8') as temp_file:
+                temp_file.write(code)
+                temp_file_path = temp_file.name
+            
+            # Open in default browser
+            webbrowser.open(f'file://{os.path.abspath(temp_file_path)}')
+            
+            return jsonify({
+                "message": "HTML code opened in browser successfully",
+                "file_path": temp_file_path
+            })
+            
+        elif code.strip().startswith("import ") or "def " in code or "print(" in code:
+            # For Python files, save and optionally run
+            import tempfile
+            import subprocess
+            import os
+            
+            # Create a temporary Python file with UTF-8 encoding
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False, encoding='utf-8') as temp_file:
+                temp_file.write(code)
+                temp_file_path = temp_file.name
+            
+            try:
+                # Try to run the Python code
+                result = subprocess.run(
+                    ['python', temp_file_path], 
+                    capture_output=True, 
+                    text=True, 
+                    timeout=30  # 30 second timeout
+                )
+                
+                if result.returncode == 0:
+                    return jsonify({
+                        "message": "Python code executed successfully",
+                        "output": result.stdout,
+                        "file_path": temp_file_path
+                    })
+                else:
+                    return jsonify({
+                        "message": "Python code saved but execution had errors",
+                        "error": result.stderr,
+                        "file_path": temp_file_path
+                    })
+                    
+            except subprocess.TimeoutExpired:
+                return jsonify({
+                    "message": "Python code saved but execution timed out",
+                    "file_path": temp_file_path
+                })
+            except Exception as e:
+                return jsonify({
+                    "message": f"Python code saved but couldn't execute: {str(e)}",
+                    "file_path": temp_file_path
+                })
+        
+        else:
+            # For other code types, just save to a file
+            import tempfile
+            
+            # Determine file extension
+            extension = ".txt"
+            if "function" in code and "{" in code:
+                extension = ".js"
+            elif "def " in code:
+                extension = ".py"
+            elif "<" in code and ">" in code:
+                extension = ".html"
+            
+            # Create temporary file with UTF-8 encoding
+            with tempfile.NamedTemporaryFile(mode='w', suffix=extension, delete=False, encoding='utf-8') as temp_file:
+                temp_file.write(code)
+                temp_file_path = temp_file.name
+            
+            return jsonify({
+                "message": f"Code saved to file successfully",
+                "file_path": temp_file_path
+            })
+    
+    except Exception as e:
+        print(f"Error executing code: {e}")
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/<path:path>', methods=['OPTIONS'])
 def handle_options(path):
     return '', 204

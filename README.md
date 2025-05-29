@@ -9,8 +9,14 @@ VibeProto is an innovative tool designed to empower non-coders to create web app
 - **Web App Prototyping**: Generate functional HTML, CSS, and JavaScript prototypes from prompts like "Create a to-do list app."
 - **Python Script Creation**: Produce Python scripts for automation or logic-based tasks with ease.
 - **AI-Powered**: Utilizes OpenAI's GPT-4 for code generation with direct API integration for enhanced reliability.
-- **Session Management**: Save and manage your generated prototypes with an easy-to-use interface.
-- **Prompt Enhancement**: AI-powered prompt refinement to get better results.
+- **Advanced Reasoning**: Leverages Agno's advanced reasoning capabilities for:
+  - Multi-step task planning and execution
+  - Context-aware code generation
+  - Intelligent error handling and recovery
+  - Dynamic prompt enhancement
+  - Automated code quality checks
+- **Session Management**: Save and manage your generated prototypes with Agno's persistent storage system.
+- **Prompt Enhancement**: AI-powered prompt refinement using Agno's context-aware processing.
 - **Detailed Instructions**: Step-by-step guides for using generated code, tailored for non-technical users.
 - **Think Feature**: Watch the AI's reasoning process in real-time as it analyzes and plans your code generation.
 - **API Key Management**: Secure storage and management of API keys through the settings interface.
@@ -137,6 +143,13 @@ If you encounter issues:
 ## Tools Used
 
 - **OpenAI GPT-4**: Powers the generation of accurate and functional code
+- **Agno Framework**: Provides:
+  - Advanced reasoning and task planning
+  - Persistent storage and session management
+  - Context-aware prompt enhancement
+  - Multi-step task execution
+  - Automated code quality assurance
+  - Error recovery and handling
 - **Flask**: Backend server framework
 - **React**: Frontend framework
 - **SQLite**: Session storage
@@ -167,6 +180,8 @@ VibeProto is just the beginning! Planned enhancements include:
 
 ## Recent Updates
 
+- **Enhanced UI Design**: Improved visual design with modern gradients, card layouts, and custom checkboxes
+- **Unicode Support**: Fixed character encoding issues for proper display of special characters
 - **Remote Agent System**: Added cloud-based background processing that continues working even when users are offline
 - **Parallel Task Processing**: Support for running multiple tasks simultaneously with up to 10 agents
 - **Docker Support**: Added containerization for easy cloud deployment

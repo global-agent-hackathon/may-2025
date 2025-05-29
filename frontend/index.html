@@ -4,6 +4,18 @@
     <title>VibeProto</title>
     <!-- Corrected path for styles.css -->
     <link rel="stylesheet" href="styles.css">
+    
+    <!-- CodeMirror Libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/selection/active-line.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -80,13 +92,14 @@
         <!-- Right Sidebar: Code Display -->
         <div class="sidebar right-sidebar">
             <h2>Generated Code</h2>
-            <div id="code-output" class="code-display">
-                <pre>Generated code will appear here...</pre>
+            <div id="code-output" class="code-container">
+                <!-- Simplified direct code display that will always work -->
+                <pre id="code-display" style="width: 100%; height: 100%; overflow: auto; margin: 0; padding: 10px; background-color: #1e1e1e; color: #e0e0e0; font-family: 'Courier New', monospace; white-space: pre-wrap; border-radius: 5px;">Describe your prototype and click "Generate Prototype" to create code.</pre>
             </div>
             <div class="code-actions">
                 <button id="copy-code">Copy Code</button>
                 <button id="download-code">Download</button>
-                <button id="analyze-code">Analyze</button>
+                <button id="push-to-zed">Execute Code</button>
             </div>
         </div>
     </div>

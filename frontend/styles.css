@@ -36,6 +36,8 @@ body {
     max-width: 550px;
     border-left: 1px solid #444;
     border-right: none;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Chat Area */
@@ -116,9 +118,10 @@ body {
     border-radius: 5px;
     white-space: pre-wrap;
     overflow-y: auto;
-    height: 70%;
+    flex: 1;
     margin-bottom: 20px;
     font-family: 'Courier New', monospace; /* Ensure monospace for code */
+    min-height: 200px;
 }
 
 .code-display pre {
@@ -159,6 +162,8 @@ body {
     display: flex;
     gap: 10px;
     justify-content: space-between;
+    margin-top: auto;
+    padding-bottom: 20px;
 }
 
 .code-actions button {
@@ -356,6 +361,8 @@ p {
 .thinking-dots {
   display: inline-flex;
   margin-right: 8px;
+  align-items: center;
+  height: 20px;
 }
 
 .thinking-dots span {
@@ -363,6 +370,7 @@ p {
   font-size: 16px;
   font-weight: bold;
   opacity: 0;
+  margin: 0 1px;
 }
 
 .thinking-dots span:nth-child(1) {
@@ -387,6 +395,72 @@ p {
   100% {
     opacity: 0;
   }
+}
+
+/* Make thinking dots work inside buttons */
+button .thinking-dots {
+  display: inline-flex;
+  margin-right: 5px;
+  height: 16px;
+  vertical-align: middle;
+}
+
+button .thinking-dots span {
+  font-size: 14px;
+  margin: 0 1px;
+}
+
+/* Ensure the button doesn't change size while loading */
+#enhance-prompt {
+  min-width: 150px;
+}
+
+#generate {
+  min-width: 160px;
+}
+
+/* Code container with CodeMirror - make sure it's fully visible */
+.code-container {
+    flex: 1;
+    margin-bottom: 20px;
+    background: #222;
+    border-radius: 5px;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 70vh; /* Force minimum height */
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.5); /* Add inner shadow to make it visible */
+}
+
+#code-editor {
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+    overflow: auto;
+    position: relative; /* Establish positioning context */
+}
+
+/* CodeMirror Styling */
+.code-display {
+    height: 100%;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #222;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.cm-editor {
+    height: 100%;
+    border: 1px solid #444;
+    border-radius: 5px;
+    background-color: #222;
+}
+
+.cm-content {
+    padding: 10px;
+    color: #e0e0e0;
 }
 
 /* Settings Modal */
