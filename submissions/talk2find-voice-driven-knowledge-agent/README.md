@@ -64,10 +64,10 @@ Work in progress - developing intuitive interface for voice-driven search experi
 
 ## Team Information
 
-- **Team Lead**: [@s-shohey](https://github.com/s-shohey) - Project Lead & AI Engineer
+- **Team Lead**: [@s-shohey](https://github.com/s-shohey)
 - **Team Members**: 
-  - [@nibura2002](https://github.com/nibura2002) - Backend Developer
-  - [@jaewook-hwang-mcd](https://github.com/jaewook-hwang-mcd) - Frontend Developer
+  - [@nibura2002](https://github.com/nibura2002) 
+  - [@jaewook-hwang-mcd](https://github.com/jaewook-hwang-mcd) 
 - **Background/Experience**: We are employees of [MC Digital, Inc.](https://www.mcdigital.jp/en/)
 
 ## Technical Architecture
