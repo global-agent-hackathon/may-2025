@@ -30,9 +30,11 @@ function handleFileSelection(fileInput, mediaType) {
         return;
     }
     
-    // Validate file size (max 10MB)
-    if (file.size > 10 * 1024 * 1024) {
-        showNotification(`File too large. Maximum size is 10MB.`, 'error');
+    // Validate file size (max 100MB for videos)
+    const maxSize = mediaType === 'video' ? 100 * 1024 * 1024 : 50 * 1024 * 1024;
+    if (file.size > maxSize) {
+        const maxSizeMB = mediaType === 'video' ? 100 : 50;
+        showNotification(`File too large. Maximum size is ${maxSizeMB}MB for ${mediaType}.`, 'error');
         fileInput.value = '';
         return;
     }
@@ -586,11 +588,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadSessions() {
     try {
         const response = await fetch('http://localhost:5000/get_sessions', {
-            method: 'GET',
             headers: {
-                'Access-Control-Allow-Origin': '*'
-            },
-            mode: 'cors'
+                'Content-Type': 'application/json'
+            }
         });
         if (!response.ok) {
             console.error(`Error fetching sessions: ${response.status} ${response.statusText}`);
@@ -843,9 +843,8 @@ async function loadSession(sessionId) {
         const response = await fetch(`http://localhost:5000/get_session/${sessionId}`, {
             method: 'GET',
             headers: {
-                'Access-Control-Allow-Origin': '*'
-            },
-            mode: 'cors'
+                'Content-Type': 'application/json'
+            }
         });
         
         if (!response.ok) {
@@ -978,8 +977,7 @@ async function enhancePrompt() {
             const response = await fetch('http://localhost:5000/remote_enhance_prompt', {
                 method: 'POST',
                 headers: { 
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ 
                     prompt,
@@ -1021,8 +1019,7 @@ async function enhancePrompt() {
             const response = await fetch('http://localhost:5000/enhance_prompt', {
                 method: 'POST',
                 headers: { 
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ prompt }),
                 mode: 'cors'
@@ -1165,8 +1162,7 @@ async function generate() {
             const response = await fetch('http://localhost:5000/remote_generate', {
                 method: 'POST',
                 headers: { 
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     prompt,
@@ -1219,8 +1215,7 @@ async function generate() {
             const response = await fetch('http://localhost:5000/generate', {
                 method: 'POST',
                 headers: { 
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     prompt,
@@ -1587,9 +1582,8 @@ function checkPendingTasks() {
             const response = await fetch(`http://localhost:5000/get_remote_task_status/${taskId}`, {
                 method: 'GET',
                 headers: {
-                    'Access-Control-Allow-Origin': '*'
-                },
-                mode: 'cors'
+                    'Content-Type': 'application/json'
+                }
             });
             const taskStatus = await response.json();
             
@@ -2066,8 +2060,7 @@ async function pushToZed() {
             const response = await fetch('http://localhost:5000/push_to_zed', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(payload),
                 mode: 'cors'
@@ -2092,8 +2085,7 @@ async function pushToZed() {
             const response = await fetch('http://localhost:5000/push_to_zed', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ code: codeText }),
                 mode: 'cors'

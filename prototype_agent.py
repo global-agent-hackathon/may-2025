@@ -1,8 +1,8 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, make_response
 from flask_cors import CORS
 from agno.agent import Agent
 from agno.models.openai import OpenAIChat
-from agno.models.anthropic import Claude
+# from agno.models.anthropic import Claude  # Removed - using OpenAI only
 from agno.storage.sqlite import SqliteStorage
 from agno.memory.v2.memory import Memory
 from agno.memory.v2.db.sqlite import SqliteMemoryDb
@@ -17,9 +17,19 @@ from pathlib import Path
 from openai import OpenAI
 from agno_agent import agent
 from remote_agent import remote_agent_pool
+import warnings
+import logging
 
 # Load environment variables from .env file if it exists
 dotenv.load_dotenv()
+
+# Suppress specific warnings
+warnings.filterwarnings("ignore", message=".*SyncHttpxClientWrapper.*")
+warnings.filterwarnings("ignore", category=ResourceWarning)
+
+# Reduce logging noise
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("openai").setLevel(logging.WARNING)
 
 # -----------------------------------------------------------------------------
 # Multimodal Processing Functions
@@ -54,6 +64,7 @@ def process_multimodal_input(multimodal_data):
         
         elif 'video' in multimodal_data:
             video_data = multimodal_data['video']
+            print(f"Processing video input with size: {len(video_data.get('base64', '')) if isinstance(video_data, dict) else len(video_data)} chars")
             if isinstance(video_data, str):
                 return Video(base64_encoded=video_data)
             elif isinstance(video_data, dict) and 'base64' in video_data:
@@ -61,6 +72,8 @@ def process_multimodal_input(multimodal_data):
     
     except Exception as e:
         print(f"Error processing multimodal input: {e}")
+        import traceback
+        traceback.print_exc()
         return None
     
     return None
@@ -102,19 +115,53 @@ needs when generating the code. This might include:
         'video': """
         
 **MULTIMODAL CONTEXT**: A video file has been provided along with this request.
-Please consider any video-related requirements, visual content, or video processing
-needs when generating the code. This might include:
-- Video playback functionality
-- Video analysis features
-- Frame extraction
-- Video-based interactions
-- Animation patterns shown in the video
+Please analyze the video content carefully and extract:
+
+1. **UI/UX PATTERNS**:
+   - Layout structures and grid systems shown
+   - Navigation patterns and menu designs
+   - Card layouts and listing presentations
+   - Search/filter interfaces
+   - Hero sections and landing page designs
+   - Color schemes and visual hierarchy
+   - Typography and spacing patterns
+   - Interactive elements and animations
+
+2. **FUNCTIONALITY OBSERVED**:
+   - Search and filtering mechanisms
+   - Listing/browsing interfaces
+   - Detail view layouts
+   - Booking/reservation flows
+   - Map integrations
+   - Image galleries and carousels
+   - User interaction patterns
+   - Responsive design behaviors
+
+3. **DESIGN INSPIRATION**:
+   - Modern, clean aesthetic elements
+   - Professional color palettes
+   - Component structures (cards, buttons, forms)
+   - Animation and transition styles
+   - Mobile and desktop layouts
+   - Visual feedback mechanisms
+
+Use the video as a blueprint to create a similar web application with:
+- The same level of polish and professionalism
+- Similar layout and component structures
+- Comparable user experience flows
+- Modern, responsive design
+- Beautiful animations and interactions
+
+Note: Since this is a video demonstration, focus on recreating the visual design, layout patterns, and user experience rather than exact functionality.
         """
     }
     
     return prompt + context_additions.get(media_type, '')
 
 app = Flask(__name__)
+# Configure larger upload limits for video files
+app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100MB max request size
+
 # Configure CORS to handle preflight requests correctly
 CORS(app, resources={r"/*": {
     "origins": ["http://localhost:3000", "http://localhost:5000", "*"],
@@ -287,55 +334,38 @@ def init_agents():
         print("WARNING: OPENAI_API_KEY not set. The application will not function correctly.")
         return None, None, None
     
-    # Initialize OpenAI client
-    openai_client = OpenAI(api_key=openai_key)
-    
-    # Initialize memory with OpenAI
+    # Initialize OpenAI client with better error handling
     try:
-        memory = Memory(
-            model=OpenAIChat(id="gpt-4", api_key=openai_key, client=openai_client),
-            db=memory_db
-        )
+        openai_client = OpenAI(api_key=openai_key)
     except Exception as e:
-        print(f"Error initializing memory: {e}")
-        memory = None
+        print(f"Error initializing OpenAI client: {e}")
+        openai_client = None
     
-    # Initialize reasoning agent
+    # Disable memory system temporarily to avoid pickle errors
+    print("Memory system disabled to avoid threading/pickle issues")
+    memory = None
+    
+    # Initialize reasoning agent without memory
     try:
-        if anthropic_key:
-            reasoning_agent = Agent(
-                model=Claude(id="claude-3-sonnet", api_key=anthropic_key),
-                tools=[ReasoningTools(add_instructions=True)],
-                instructions=[
-                    "Analyze the user prompt, clarify the intent, and provide a detailed "
-                    "description for code generation. If the 'think' option is enabled, "
-                    "explain the reasoning process step-by-step."
-                ],
-                memory=memory,
-                enable_agentic_memory=True,
-                enable_user_memories=True,
-                enable_session_summaries=True,
-            )
-        else:
-            # Fallback to OpenAI if Anthropic key is not available
-            reasoning_agent = Agent(
-                model=OpenAIChat(id="gpt-4", api_key=openai_key, client=openai_client),
-                tools=[ReasoningTools(add_instructions=True)],
-                instructions=[
-                    "Analyze the user prompt, clarify the intent, and provide a detailed "
-                    "description for code generation. If the 'think' option is enabled, "
-                    "explain the reasoning process step-by-step."
-                ],
-                memory=memory,
-                enable_agentic_memory=True,
-                enable_user_memories=True,
-                enable_session_summaries=True,
-            )
+        reasoning_agent = Agent(
+            model=OpenAIChat(id="gpt-4", api_key=openai_key, client=openai_client),
+            tools=[ReasoningTools(add_instructions=True)],
+            instructions=[
+                "Analyze the user prompt, clarify the intent, and provide a detailed "
+                "description for code generation. If the 'think' option is enabled, "
+                "explain the reasoning process step-by-step."
+            ],
+            memory=None,
+            enable_agentic_memory=False,
+            enable_user_memories=False,
+            enable_session_summaries=False,
+        )
+        print("Reasoning agent initialized successfully")
     except Exception as e:
         print(f"Error initializing reasoning agent: {e}")
         reasoning_agent = None
 
-    # Initialize code generation agent
+    # Initialize code generation agent without memory  
     try:
         code_agent = Agent(
             model=OpenAIChat(id="gpt-4", api_key=openai_key, client=openai_client),
@@ -344,11 +374,12 @@ def init_agents():
                 "Generate high-quality, working code based on the provided description. "
                 "Include all necessary imports, error handling, and documentation."
             ],
-            memory=memory,
-            enable_agentic_memory=True,
-            enable_user_memories=True,
-            enable_session_summaries=True,
+            memory=None,
+            enable_agentic_memory=False,
+            enable_user_memories=False,
+            enable_session_summaries=False,
         )
+        print("Code agent initialized successfully")
     except Exception as e:
         print(f"Error initializing code agent: {e}")
         code_agent = None
@@ -392,14 +423,30 @@ def init_openai_client():
     global direct_openai_client
     openai_key = os.environ.get("OPENAI_API_KEY")
     if openai_key:
-        direct_openai_client = OpenAI(api_key=openai_key)
+        try:
+            direct_openai_client = OpenAI(api_key=openai_key)
+            print("Direct OpenAI client initialized successfully")
+        except Exception as e:
+            print(f"Error initializing direct OpenAI client: {e}")
+            direct_openai_client = None
+    else:
+        print("No OpenAI API key found")
+        direct_openai_client = None
     return direct_openai_client
 
 # Initialize direct OpenAI client
 direct_openai_client = init_openai_client()
 
-@app.route("/enhance_prompt", methods=["POST"])
+@app.route("/enhance_prompt", methods=["POST", "OPTIONS"])
 def enhance_prompt():
+    # Handle preflight OPTIONS request
+    if request.method == "OPTIONS":
+        response = make_response()
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        return response
+        
     try:
         data = request.json
         prompt = data.get('prompt')
@@ -408,13 +455,25 @@ def enhance_prompt():
 
         # Call the async method using a synchronous wrapper
         enhanced_prompt = agent.enhance_prompt_sync(prompt)
-        return jsonify({"enhanced_prompt": enhanced_prompt})
+        response = jsonify({"enhanced_prompt": enhanced_prompt})
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        return response
     except Exception as e:
         print(f"Error enhancing prompt: {e}")
-        return jsonify({"error": str(e)}), 500
+        response = jsonify({"error": str(e)})
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        return response, 500
 
-@app.route("/get_sessions", methods=["GET"])
+@app.route("/get_sessions", methods=["GET", "OPTIONS"])
 def get_sessions():
+    # Handle preflight OPTIONS request
+    if request.method == "OPTIONS":
+        response = make_response()
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        return response
+        
     try:
         # Combine sessions from agent storage and in-memory store
         agent_sessions = []
@@ -440,10 +499,14 @@ def get_sessions():
         
         sessions_list = list(all_sessions.values())
         print(f"Returning {len(sessions_list)} sessions")
-        return jsonify(sessions_list)
+        response = jsonify(sessions_list)
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        return response
     except Exception as e:
         print(f"Error getting sessions: {e}")
-        return jsonify({"error": f"Failed to get sessions: {str(e)}"}), 500
+        response = jsonify({"error": f"Failed to get sessions: {str(e)}"})
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        return response, 500
 
 @app.route("/get_session/<session_id>", methods=["GET"])
 def get_session_route(session_id):
@@ -473,17 +536,29 @@ def get_user_memories():
         
         # Check if memory is initialized
         if memory:
-            memories = memory.get_user_memories(user_id=user_id)
+            try:
+                memories = memory.get_user_memories(user_id=user_id)
+                return jsonify(memories)
+            except Exception as e:
+                print(f"Error getting memories from memory object: {e}")
+                return jsonify(["Memory system error - memories not available"])
         else:
-            memories = ["Memory not initialized. Check API keys."]
+            return jsonify(["Memory not initialized - no persistent memories available"])
             
-        return jsonify(memories)
     except Exception as e:
-        print(f"Error getting memories for user {user_id}: {e}")
+        print(f"Error in get_user_memories route: {e}")
         return jsonify({"error": "Failed to get user memories"}), 500
 
-@app.route("/generate", methods=["POST"])
+@app.route("/generate", methods=["POST", "OPTIONS"])
 def generate():
+    # Handle preflight OPTIONS request
+    if request.method == "OPTIONS":
+        response = make_response()
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+        return response
+        
     try:
         data = request.json
         prompt = data.get('prompt')
@@ -492,7 +567,9 @@ def generate():
         multimodal_input = data.get('multimodal_input')
         
         if not prompt:
-            return jsonify({"error": "No prompt provided"}), 400
+            response = jsonify({"error": "No prompt provided"})
+            response.headers["Access-Control-Allow-Origin"] = "*"
+            return response, 400
 
         print(f"Processing request for prompt: {prompt[:50]}...")
         
@@ -541,18 +618,22 @@ def generate():
         session_store[session_id] = session_data
         
         print(f"Successfully processed request, returning result. Session ID: {session_id}")
-        return jsonify({
+        response = jsonify({
             "code": result["code"],
             "reasoning": result["reasoning"],
             "analysis": result["analysis"],
             "enhanced_prompt": result.get("enhanced_prompt", ""),
             "session_id": session_id
         })
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        return response
     except Exception as e:
         print(f"Error generating code: {str(e)}")
         import traceback
         traceback.print_exc()
-        return jsonify({"error": f"Failed to generate code: {str(e)}"}), 500
+        response = jsonify({"error": f"Failed to generate code: {str(e)}"})
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        return response, 500
 
 @app.route("/rename_session/<session_id>", methods=["POST"])
 def rename_session(session_id):
@@ -838,9 +919,50 @@ def push_to_zed():
         print(f"Error executing code: {e}")
         return jsonify({"error": str(e)}), 500
 
+@app.route("/", methods=["GET"])
+def health_check():
+    """Health check endpoint"""
+    return jsonify({
+        "status": "running",
+        "message": "VibeProto server is running",
+        "version": "1.0.0",
+        "agents_status": {
+            "reasoning_agent": reasoning_agent is not None,
+            "code_agent": code_agent is not None,
+            "memory": memory is not None,
+            "direct_openai_client": direct_openai_client is not None
+        }
+    })
+
+@app.route("/favicon.ico", methods=["GET"])
+def favicon():
+    """Return empty favicon to avoid 404 errors"""
+    return '', 204
+
 @app.route('/<path:path>', methods=['OPTIONS'])
 def handle_options(path):
-    return '', 204
+    response = make_response()
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization, X-Requested-With"
+    response.headers["Access-Control-Max-Age"] = "3600"
+    return response, 200
+
+@app.errorhandler(413)
+def request_entity_too_large(error):
+    """Handle file too large errors"""
+    return jsonify({
+        "error": "File too large. Maximum upload size is 100MB.",
+        "details": "Please use a smaller video file or compress it before uploading."
+    }), 413
+
+@app.errorhandler(500)
+def internal_error(error):
+    """Handle internal server errors"""
+    return jsonify({
+        "error": "Internal server error",
+        "details": str(error)
+    }), 500
 
 # -----------------------------------------------------------------------------
 # Main

@@ -218,11 +218,48 @@ Consider incorporating:
                 'video': """
                 
 MULTIMODAL CONTEXT: The user has provided a VIDEO file along with their request.
-Consider incorporating:
-- Video playback functionality if relevant
-- Animation patterns shown in the video
-- UI interactions demonstrated in the video
-- Any specific features or behaviors shown in the video
+CRITICAL: Analyze the video to extract and replicate the UI/UX design patterns shown.
+
+VIDEO ANALYSIS REQUIREMENTS:
+1. **Visual Design Extraction**:
+   - Identify the color scheme, gradients, and visual theme
+   - Note the typography hierarchy and font styles
+   - Observe spacing, padding, and layout grid system
+   - Extract button styles, card designs, and component patterns
+   - Identify animation and transition effects
+
+2. **Layout & Structure**:
+   - Analyze the page structure and sections
+   - Identify navigation patterns (header, sidebar, tabs, etc.)
+   - Note responsive design breakpoints and behaviors
+   - Extract grid layouts for listings/cards
+   - Observe hero sections and feature areas
+
+3. **Component Patterns**:
+   - Card designs for listings/items
+   - Search bars and filter interfaces
+   - Image galleries and carousels
+   - Forms and input designs
+   - Modal/popup patterns
+   - Loading states and skeletons
+
+4. **User Experience Flow**:
+   - Navigation and browsing patterns
+   - Search and filter interactions
+   - Detail view presentations
+   - Booking/purchase flows
+   - User feedback mechanisms
+
+IMPLEMENTATION DIRECTIVE:
+Create a web application that closely mimics the design language, layout patterns, and user experience shown in the video. The goal is to produce a professional-looking clone with similar visual appeal and functionality.
+
+For Airbnb-style videos, focus on:
+- Property listing cards with images, prices, and ratings
+- Search interface with location, dates, and guest inputs
+- Filter sidebar or modal with categories
+- Map integration placeholder
+- Responsive grid layouts
+- Clean, modern aesthetic with plenty of whitespace
                 """
             }
             
@@ -241,160 +278,76 @@ Consider incorporating:
         
         return response.choices[0].message.content
     
-    async def generate_code(self, prompt: str, prototype_type: str) -> Dict[str, str]:
-        """Generate code based on the prompt and prototype type"""
-        
-        # More specific system prompts based on prototype type
-        if prototype_type.lower() == "web_app" or "web" in prototype_type.lower():
-            # PROMPT-BOOSTER SYSTEM PROMPT
-            system_prompt = """You are both a UX architect and front-end engineer creating STUNNING, MODERN web applications.
+    async def generate_code(self, prompt: str, prototype_type: str) -> Dict[str, Any]:
+        """Generate code based on the enhanced prompt"""
+        if prototype_type.lower() in ['web_app', 'webapp', 'web', 'web app']:
+            system_prompt = """You are an expert full-stack developer specializing in creating beautiful, modern web applications.
 
-WORKFLOW:
-STEP-1 (spec):
-  • Audience: Who will use this?
-  • Problem: What pain does it solve?
-  • Devices: Mobile-first? Desktop-first?
-  • #Screens: How many views needed?
-  • Primary CTA: What's the main action?
-  • Brand vibe: 3 adjectives (e.g., playful, professional, minimal)
+REQUIREMENTS:
+1. Generate a COMPLETE, WORKING HTML file with embedded CSS and JavaScript
+2. Create exactly what the user asks for - NO default todo apps or hardcoded templates
+3. Use modern design principles with stunning visual aesthetics
+4. Implement responsive design that works on all devices
+5. Include smooth animations and professional interactions
+6. Add proper error handling and user feedback
+7. Use semantic HTML and accessibility best practices
+8. Ensure all functionality works without external dependencies (except CDN libraries)
 
-STEP-2 (wireframe):
-  • Create HTML comments representing the layout structure
-  • Define component hierarchy
-  • Mark interactive elements
+DESIGN STANDARDS:
+- Modern gradient backgrounds or sophisticated color schemes
+- Card-based layouts with subtle shadows
+- Rounded corners (12-24px)
+- Custom-styled form elements (no browser defaults)
+- Smooth transitions (0.3s ease)
+- Hover effects on interactive elements
+- Professional typography with clear hierarchy
+- Proper spacing and visual balance
 
-STEP-3 (code):
-  • Single HTML file with embedded Tailwind CSS via CDN
-  • Modern JavaScript (ES6+)
-  • Responsive, accessible, performant
+TECHNICAL REQUIREMENTS:
+- Single HTML file with embedded CSS/JS
+- Use CSS Grid/Flexbox for layouts
+- Include CSS variables for theming
+- Modern JavaScript (ES6+)
+- Local storage for data persistence when relevant
+- Keyboard navigation support
+- Touch-friendly for mobile devices
 
-STEP-4 (QA):
-  • Check contrast ratios (≥ 4.5:1)
-  • Verify touch targets (≥ 48×48px)
-  • Test keyboard navigation
-  • Ensure responsive design
-
-HARD DESIGN RULES:
-GRID: 12-col, 4px baseline. Breakpoints: 0/600/960/1280/1440
-BUTTONS: min-touch 48×48px; radius rounded-md; primary color only once per view
-SPACING: Use Tailwind scale only (p-2, p-4, p-6, p-8) - NO magic numbers
-TEXT: Use prose classes for readability; cap line-length at 70ch
-MOTION: 200-400ms transitions with ease-in-out; respect prefers-reduced-motion
-ACCESSIBILITY: All text/background pairs ≥ AA; include aria-labels on icons
-COLOR: Use a cohesive palette with proper contrast
-
-TODO APP SPECIFIC REQUIREMENTS:
-1. LAYOUT:
-   - Centered container (max-w-2xl mx-auto)
-   - Header with gradient background
-   - Large, prominent input field (min-height 56px)
-   - Large, clickable Add button (min 48×48px)
-   - Task cards with proper spacing (gap-4)
-   - Action buttons visible on hover
-
-2. COMPONENTS:
-   - Input: Large text field with rounded borders, shadow on focus
-   - Add Button: Primary color, large size, proper padding
-   - Task Card: White bg, shadow, rounded corners, hover effects
-   - Checkbox: Custom styled, 24×24px minimum
-   - Delete/Edit buttons: Icon buttons, 40×40px
-
-3. INTERACTIONS:
-   - Enter key to add task
-   - Click checkbox to toggle
-   - Smooth animations (200-300ms)
-   - Visual feedback on all actions
-
-RETURN ONLY CODE - NO EXPLANATIONS!
-
-CRITICAL OUTPUT REQUIREMENTS:
-- Pure HTML file with embedded CSS and JavaScript
-- NO explanatory text visible on the page
-- NO descriptions about what was built or how to use it
-- Beautiful gradient background (not plain white)
-- Clean, working interface only"""
+OUTPUT: Return ONLY the complete HTML code - no explanations or descriptions."""
             
-            # Step 1: Generate spec and wireframe
-            spec_response = self.client.chat.completions.create(
+            response = self.client.chat.completions.create(
                 model="gpt-4",
                 messages=[
                     {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": f"""USER_DESIRE: "{prompt}"
-                    
-First, create the SPEC and WIREFRAME as HTML comments, then generate the complete code.
-
-Example output structure:
-<!-- SPEC
-Audience: Everyone who needs task management
-Problem: Keeping track of daily tasks
-Devices: Mobile-first, responsive to desktop
-Screens: 1 (single page app)
-Primary CTA: Add new task
-Brand vibe: Clean, modern, professional
--->
-
-<!-- WIREFRAME
-┌─────────────────────────────────┐
-│  Header (Gradient BG)           │
-│  ┌───────────────────────────┐  │
-│  │    TaskMaster             │  │
-│  └───────────────────────────┘  │
-├─────────────────────────────────┤
-│  Add Task Section               │
-│  ┌─────────────────┬─────────┐  │
-│  │ Input (Large)   │ Add Btn │  │
-│  └─────────────────┴─────────┘  │
-├─────────────────────────────────┤
-│  Task List                      │
-│  ┌───────────────────────────┐  │
-│  │ □ Task 1        [✎] [🗑]  │  │
-│  └───────────────────────────┘  │
-│  ┌───────────────────────────┐  │
-│  │ ✓ Task 2        [✎] [🗑]  │  │
-│  └───────────────────────────┘  │
-└─────────────────────────────────┘
--->
-
-Then create the COMPLETE HTML with:
-- Tailwind CSS via CDN
-- Proper component sizing
-- Working JavaScript
-- All interactions functional"""}
+                    {"role": "user", "content": prompt}
                 ],
                 temperature=0.2,
                 max_tokens=4000
             )
             
-            code = spec_response.choices[0].message.content
+            code = response.choices[0].message.content
             
-            # Step 2: Quality check and enhance
-            qa_prompt = f"""Review this code and ensure:
-1. Input field is large (min-height: 56px, text-lg or text-xl)
-2. Add button is prominent (min 48x48px, px-6 py-3 or larger)
-3. Task display area uses cards with proper spacing
-4. All buttons meet minimum touch target (48x48px)
-5. Proper contrast ratios
-6. Working functionality (add, complete, delete tasks)
-7. Enter key adds tasks
-8. Tasks persist in localStorage
-9. REMOVE ANY EXPLANATORY TEXT - no descriptions about changes or improvements
-10. Add beautiful background gradient to body (not just white)
+            # Quality enhancement step
+            qa_prompt = f"""Review and enhance this code to ensure:
+1. It perfectly matches the user's request
+2. All interactive elements are properly sized (min 44px touch targets)
+3. Beautiful, modern design with professional aesthetics
+4. All functionality is working correctly
+5. Responsive design for all screen sizes
+6. Smooth animations and transitions
+7. Remove any visible explanatory text from the page
+8. Clean, production-ready code
+
+User's original request: {prompt}
 
 Current code:
 {code}
 
-CRITICAL: Return ONLY the cleaned HTML code with:
-- No explanatory text visible on the page
-- Beautiful gradient background (like: bg-gradient-to-br from-purple-50 to-pink-50)
-- All functionality working
-- NO DESCRIPTIONS OR EXPLANATIONS in the HTML content
-
-Return the pure HTML file only."""
+Return ONLY the improved HTML code with no explanations."""
             
             qa_response = self.client.chat.completions.create(
                 model="gpt-4",
-            messages=[
-                    {"role": "system", "content": "You are a UI/UX expert. Fix any issues and return only the improved HTML code."},
+                messages=[
+                    {"role": "system", "content": "You are a senior UI/UX developer. Enhance the code to be production-ready."},
                     {"role": "user", "content": qa_prompt}
                 ],
                 temperature=0.1,
@@ -403,15 +356,12 @@ Return the pure HTML file only."""
             
             final_code = qa_response.choices[0].message.content
             
-            # Extract reasoning from the process
-            reasoning = f"""Design Process:
-1. Analyzed user needs for: {prompt}
-2. Created responsive layout with proper component sizing
-3. Implemented Tailwind CSS for consistent styling
-4. Added smooth animations and hover effects
-5. Ensured accessibility with ARIA labels and keyboard navigation
-6. Optimized for mobile-first design
-7. Added localStorage for data persistence"""
+            reasoning = f"""Generated web application based on: {prompt}
+- Created responsive, modern design
+- Implemented all requested functionality
+- Added professional styling and animations
+- Ensured cross-device compatibility
+- Included accessibility features"""
             
             return {
                 "code": final_code,
