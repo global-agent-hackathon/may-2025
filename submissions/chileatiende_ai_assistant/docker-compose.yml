@@ -1,0 +1,28 @@
+services:
+  tests: # Defined so app can depend on it
+    build: .
+    volumes:
+      - .:/usr/src/app
+    env_file:
+      - .env
+    command: ["python", "-m", "pytest", "--cov=app"]
+
+  app:
+    build: .
+    ports:
+      - "5000:5000" # Map host port 5000 to container port 5000
+    volumes:
+      - .:/usr/src/app # Mount current directory to workdir in container for development
+      # Add a separate volume for data if needed, to persist it across container restarts
+      # - app_data:/usr/src/app/data 
+    env_file:
+      - .env # Load environment variables from .env file (ensure this file exists and is configured)
+    # The default CMD from the Dockerfile ["python", "run.py"] will be used to start the app.
+    # This script first runs tests.
+    depends_on:
+      tests:
+        condition: service_completed_successfully
+
+# Uncomment if you want to persist data in a named volume like 'app_data' above
+# volumes:
+#   app_data: 
