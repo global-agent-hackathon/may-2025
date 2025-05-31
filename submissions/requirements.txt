@@ -1,0 +1,8 @@
+phidata
+google-generativeai
+firecrawl-py
+streamlit
+python-dotenv
+Pillow
+agno
+google-search-results
