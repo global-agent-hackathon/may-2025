@@ -1,0 +1,89 @@
+Epic: Clinician Accesses AI-Suggested Clinical Trials for Patient
+Goal: Enable clinicians to efficiently find relevant, AI-identified clinical trial matches for their patients within their workflow, understand the match rationale, and access further trial details, all while ensuring performance, security, and usability.
+Functional User Stories (Focus: What the user can DO):
+ID: CTM-F01 - Initiate Trial Search
+As a: Clinician
+I want to: Click a dedicated button/link within the patient's context (EHR/dashboard)
+So that I can: Trigger the AI-powered clinical trial matching process for the currently selected patient.
+AC:
+A "Find Clinical Trials" (or similar) button/link is visible on the patient's main screen/dashboard .
+Clicking the button sends an asynchronous request to the backend API with the patient's identifier.
+The button becomes temporarily disabled or shows a visual cue indicating initiation.
+ID: CTM-F02 - View Search Progress Indicator
+As a: Clinician
+I want to: See a clear visual indicator (e.g., spinner, message) after initiating the search
+So that I can: Know that the system is actively processing my request and hasn't stalled.
+AC:
+Upon successful initiation (CTM-F01), a loading indicator is displayed in the designated trial results area.
+The indicator persists until results are returned or an error occurs.
+The rest of the application remains usable (asynchronous).
+ID: CTM-F03 - View Successful Trial Matches
+As a: Clinician
+I want to: See a list of potential clinical trials ranked by suitability when the AI search completes successfully
+So that I can: Quickly identify the most promising trial options for my patient.
+AC:
+When the backend returns a successful response with trial data, the loading indicator (CTM-F02) is replaced by a list.
+Each list item displays: Trial ID (NCT#), Title, Status ("Recruiting"), Phase, Primary Condition.
+Trials are sorted/ranked based on relevance determined by the AI.
+The display area is scrollable if the list exceeds the viewable space.
+ID: CTM-F04 - Understand Match Rationale
+As a: Clinician
+I want to: See key patient data points and criteria that led the AI to suggest a specific trial
+So that I can: Trust the AI's suggestion and quickly grasp its relevance to my patient's situation.
+AC:
+Within each trial item in the results list (CTM-F03), a concise summary of "Key Match Criteria" is displayed (e.g., "Diagnosis Match: Stage III NSCLC", "Age Eligible").
+Any potential flags or uncertainties identified by the AI are clearly indicated (e.g., "Flag: Ambiguous smoking history note").
+ID: CTM-F05 - Access Full Trial Details
+As a: Clinician
+I want to: Click on a specific trial in the results list to navigate to its full details
+So that I can: Review the complete protocol information, eligibility criteria, and site locations/contacts.
+AC:
+Each trial item in the list (CTM-F03) contains a clickable link/element.
+Clicking the link opens the official trial page (e.g., ClinicalTrials.gov) in a new tab/window OR displays more detailed information fetched from the backend within the application.
+Contact information (if available from the backend) is displayed or linked.
+ID: CTM-F06 - View 'No Matches Found' Notification
+As a: Clinician
+I want to: Receive a clear notification if the AI search completes but finds no suitable, actively recruiting trials
+So that I can: Know the search was performed and understand that no current opportunities were identified by the system.
+AC:
+When the backend returns a response indicating no matches, the loading indicator (CTM-F02) is replaced by a user-friendly message (e.g., "No suitable recruiting trials found matching the patient's current criteria.").
+The message is clearly distinct from an error state.
+ID: CTM-F07 - View System Error Notification
+As a: Clinician
+I want to: See a user-friendly error message if the trial search process fails
+So that I can: Understand that the search could not be completed and know whether to retry or seek support.
+AC:
+If the backend API returns an error status, the loading indicator (CTM-F02) is replaced by an error message (e.g., "Trial search failed. Please try again later.").
+The message does not expose technical details.
+Instructions on retrying or contacting support may be included.
+Non-Functional User Stories (Focus: System Qualities & Constraints):
+ID: CTM-NF01 - System Performance
+As a: Clinician
+I expect: The AI trial search results (or 'no results'/'error' notification) to be displayed within 60 seconds of initiating the search under typical load conditions
+So that: I don't experience significant workflow delays waiting for the system.
+Metric: End-to-end response time (button click to results display) measured via monitoring/testing .
+ID: CTM-NF02 - Data Security & Compliance
+As a: Healthcare Organization (and implicitly, the Clinician/Patient)
+I require: All patient data handling, transmission (React <> Python), and processing related to the trial matching feature to strictly adhere to HIPAA regulations and internal data security policies
+So that: Patient privacy is protected, and regulatory compliance is maintained.
+Verification: Security audits, code reviews focusing on data handling, penetration testing, adherence to encryption standards.
+ID: CTM-NF03 - UI Responsiveness & Clarity
+As a: Clinician
+I expect: The trial matching interface elements (button, loading indicator, results list) to render correctly and be easily usable on standard hospital/clinic workstation screen resolutions and browsers (specify supported ones, e.g., Chrome, Edge).
+So that: I can interact with the feature effectively without layout issues or confusion.
+Verification: Testing across target browsers/resolutions, usability reviews.
+ID: CTM-NF04 - Accuracy of Match Indication (Quality Gate)
+As a: Clinician & Organization
+I expect: The AI-identified matches presented in the UI to have a high degree of accuracy (e.g., >X% precision/recall in test datasets) in reflecting actual patient eligibility based on core criteria accessible to the AI.
+So that: Clinicians can trust the suggestions as a starting point for evaluation.
+Verification: Ongoing evaluation against curated test datasets, comparison with manual matching results, feedback mechanism for clinicians to report inaccuracies. (Note: Perfect accuracy isn't feasible, the goal is high reliability).
+ID: CTM-NF05 - Reliability & Availability
+As a: Clinician
+I expect: The clinical trial matching feature to be available and functioning reliably during primary clinic operating hours (e.g., >99.5% uptime).
+So that: I can depend on it as part of my regular workflow.
+Verification: System monitoring, uptime tracking, automated health checks on API endpoints and backend services.
+ID: CTM-NF06 - Integration Seamlessness
+As a: Clinician
+I expect: The trial matching feature (button, display area) to be integrated smoothly within my primary workflow application (EHR/dashboard) without requiring separate logins or disruptive context switching.
+So that: Using the feature feels natural and efficient.
+Verification: User acceptance testing (UAT) focusing on workflow integration, design review.
