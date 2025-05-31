@@ -1,11 +1,11 @@
-.trial-matcher {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-family: sans-serif;
-  }
+/*.trial-matcher {
+    /* max-width: 800px; */
+    /* margin: 20px auto; 
+    padding: 20px; /* You might still want padding if this class is on the root */
+    /* border: 1px solid #ccc; */ /* The dashboard has its own visual structure */
+    /* border-radius: 8px; 
+    font-family: sans-serif; /* MUI theme handles fonts, but this won't hurt 
+}*/
   
   .trial-matcher form {
     display: flex;
