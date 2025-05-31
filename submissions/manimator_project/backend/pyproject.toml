@@ -1,0 +1,28 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "agno>=1.4.5",
+    "duckdb>=1.2.2",
+    "duckduckgo-search>=8.0.2",
+    "fastapi>=0.115.12",
+    "ffmpeg-python>=0.2.0",
+    "firecrawl-py>=2.6.0",
+    "google-genai>=1.14.0",
+    "groq>=0.24.0",
+    "manim",
+    "openai>=1.79.0",
+    "pandas>=2.2.3",
+    "pillow>=11.2.1",
+    "pydub>=0.25.1",
+    "pytest>=8.3.5",
+    "python-dotenv>=1.1.0",
+    "requests>=2.32.3",
+    "scikit-learn>=1.6.1",
+    "streamlit>=1.45.0",
+    "tenacity>=9.1.2",
+    "uvicorn>=0.34.2",
+]
