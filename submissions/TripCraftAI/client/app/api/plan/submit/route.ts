@@ -77,12 +77,67 @@ export async function POST(request: NextRequest) {
 
     console.log('Trip plan saved to database:', savedTripPlan.id);
 
+    const requestBody = {
+      trip_plan_id: savedTripPlan.id,
+      travel_plan: {
+        name: tripData.name,
+        destination: tripData.destination,
+        starting_location: tripData.startingLocation,
+        travel_dates: {
+          start: tripData.travelDates.start,
+          end: tripData.travelDates.end || ""
+        },
+        date_input_type: tripData.dateInputType,
+        duration: tripData.duration,
+        traveling_with: tripData.travelingWith,
+        adults: tripData.adults,
+        children: tripData.children,
+        age_groups: tripData.ageGroups,
+        budget: tripData.budget,
+        budget_currency: tripData.budgetCurrency,
+        travel_style: tripData.travelStyle,
+        budget_flexible: tripData.budgetFlexible,
+        vibes: tripData.vibes,
+        priorities: tripData.priorities,
+        interests: tripData.interests || "",
+        rooms: tripData.rooms,
+        pace: tripData.pace,
+        been_there_before: tripData.beenThereBefore || "",
+        loved_places: tripData.lovedPlaces || "",
+        additional_info: tripData.additionalInfo || ""
+      }
+    }
+
+    console.log('Request body:', JSON.stringify(requestBody, null, 2));
+
+    // Call backend API to trigger trip planning
+    const backendResponse = await fetch(`${process.env.BACKEND_API_URL}/api/plan/trigger`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody)
+    });
+
+    if (!backendResponse.ok) {
+      console.error('Backend API error:', await backendResponse.text());
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Failed to trigger trip planning'
+        },
+        { status: 500 }
+      );
+    }
+
+    const responseData = await backendResponse.json();
+    console.log('Backend response:', JSON.stringify(responseData, null, 2));
+
     return NextResponse.json(
       {
         success: true,
-        message: 'Trip plan saved successfully!',
-        tripId: savedTripPlan.id,
-        tripPlan: savedTripPlan
+        message: 'Trip planning triggered successfully',
+        response: responseData
       },
       { status: 200 }
     );
