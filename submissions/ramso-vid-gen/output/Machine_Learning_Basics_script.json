@@ -1,0 +1,70 @@
+{
+  "title": "Machine Learning Basics: How Machines Learn",
+  "total_duration": 120.0,
+  "target_audience": "Beginners interested in technology concepts, high school students, anyone curious about AI",
+  "learning_objectives": [
+    "Understand the basic concept of machine learning and how it differs from traditional programming.",
+    "Learn about the role of data in machine learning.",
+    "Distinguish between the key types of machine learning: supervised, unsupervised, and reinforcement learning."
+  ],
+  "scenes": [
+    {
+      "scene_number": 1,
+      "duration_seconds": 20.0,
+      "title": "Opening Hook: An Intelligent Partner",
+      "narration": "Imagine if your computer could learn to recognize your favorite songs, or predict the weather, all on its own. How does it do that?",
+      "visual_description": "Show a montage of a computer evolving from displaying text to playing music and predicting weather, growing more intelligent.",
+      "key_concepts": [
+        "Introduction to machine learning"
+      ],
+      "animation_type": "conceptual"
+    },
+    {
+      "scene_number": 2,
+      "duration_seconds": 30.0,
+      "title": "What is Machine Learning?",
+      "narration": "At its core, machine learning is about teaching computers to learn from data, much like how humans learn from experience. Instead of programming every detail, we give it a framework to evolve.",
+      "visual_description": "Illustrate with a visual comparing traditional programming - step-by-step instructions - with machine learning, where data flows into a flexible model.",
+      "key_concepts": [
+        "Machine learning definition",
+        "Difference from traditional programming"
+      ],
+      "animation_type": "diagram"
+    },
+    {
+      "scene_number": 3,
+      "duration_seconds": 30.0,
+      "title": "Data: The Fuel for Learning",
+      "narration": "Data is the fuel for machine learning. The more data we have, the better our machine can learn and make predictions. Think of data as experiences that refine a machine's ability.",
+      "visual_description": "Visualize a brain made out of data points. Then, show a data stream being processed into improved predictions, like identifying images or music genres.",
+      "key_concepts": [
+        "Role of data in machine learning"
+      ],
+      "animation_type": "mathematical"
+    },
+    {
+      "scene_number": 4,
+      "duration_seconds": 30.0,
+      "title": "Types of Machine Learning",
+      "narration": "There are three main types: supervised learning, where the machine learns from labeled examples; unsupervised learning, where it finds patterns on its own; and reinforcement learning, where it learns by trial and error.",
+      "visual_description": "Animate a flowchart illustrating each type: labeled data sets guiding supervised learning, clusters forming in unsupervised learning, and a robot or game learning strategy via feedback.",
+      "key_concepts": [
+        "Supervised learning",
+        "Unsupervised learning",
+        "Reinforcement learning"
+      ],
+      "animation_type": "diagram"
+    },
+    {
+      "scene_number": 5,
+      "duration_seconds": 10.0,
+      "title": "Conclusion: A Glimpse into the Future",
+      "narration": "Machine learning is transforming our world, leading to smarter decisions and innovations. What's next for your machine-learning journey?",
+      "visual_description": "Show a future cityscape with elements representing smart technologies powered by machine learning.",
+      "key_concepts": [
+        "Future applications of machine learning"
+      ],
+      "animation_type": "conceptual"
+    }
+  ]
+}

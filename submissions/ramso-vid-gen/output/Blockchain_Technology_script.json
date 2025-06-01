@@ -1,0 +1,76 @@
+{
+  "title": "Breaking Down Blockchain: The Technology Behind Bitcoin",
+  "total_duration": 120.0,
+  "target_audience": "General audience with basic understanding of technology",
+  "learning_objectives": [
+    "Understand the core components of blockchain technology.",
+    "Learn how transactions are recorded in a blockchain.",
+    "Recognize the security features of blockchain."
+  ],
+  "scenes": [
+    {
+      "scene_number": 1,
+      "duration_seconds": 20.0,
+      "title": "What is Blockchain?",
+      "narration": "Imagine you have a digital notebook that everyone can use but no one can alter alone. This is blockchain\u2014a decentralized, digital ledger.",
+      "visual_description": "An animation of a digital notebook being accessed simultaneously by stick figure people around the world, with locks on each page.",
+      "key_concepts": [
+        "Introduction to blockchain",
+        "Decentralization",
+        "Digital ledger"
+      ],
+      "animation_type": "conceptual"
+    },
+    {
+      "scene_number": 2,
+      "duration_seconds": 30.0,
+      "title": "How Do Transactions Work?",
+      "narration": "In blockchain, whenever you make a transaction, imagine it's like adding a new page. But first, every computer, or 'node,' must verify and agree on that entry.",
+      "visual_description": "A transaction block appearing as a page being added to a ledger, with checkmarks showing agreement by multiple nodes represented by computers.",
+      "key_concepts": [
+        "Transaction approval",
+        "Consensus mechanism",
+        "Nodes"
+      ],
+      "animation_type": "mathematical"
+    },
+    {
+      "scene_number": 3,
+      "duration_seconds": 30.0,
+      "title": "The Chain: Linking Blocks",
+      "narration": "Now, think of each block as part of a chain that cannot be broken. Every block contains its data, a timestamp, and a link to the previous block, ensuring security.",
+      "visual_description": "Blocks chained together, each with a highlighted timestamp and a cryptographic hash linking to the previous block, forming a secure chain.",
+      "key_concepts": [
+        "Block structure",
+        "Timestamp",
+        "Cryptographic hash"
+      ],
+      "animation_type": "diagram"
+    },
+    {
+      "scene_number": 4,
+      "duration_seconds": 30.0,
+      "title": "The Security Factor",
+      "narration": "But what makes blockchain so secure? The more nodes verifying each transaction, the harder it is to tamper with. It's like convincing a massive team to agree to change a single entry.",
+      "visual_description": "Illustration of multiple locks and nodes checking a transaction, with a thief metaphorically blocked by the presence of many guards.",
+      "key_concepts": [
+        "Security",
+        "Decentralization",
+        "Resistance to tampering"
+      ],
+      "animation_type": "conceptual"
+    },
+    {
+      "scene_number": 5,
+      "duration_seconds": 10.0,
+      "title": "Conclusion: Blockchain's Impact",
+      "narration": "From financial systems to data security, blockchain is revolutionizing trust and transparency in digital transactions. How will you use it next?",
+      "visual_description": "A globe with digital lines representing blockchain networks connecting different industries like finance, healthcare, and logistics.",
+      "key_concepts": [
+        "Blockchain applications",
+        "Impact on industries"
+      ],
+      "animation_type": "text"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "title": "How Does Blockchain Work?",
+  "total_duration": 120.0,
+  "target_audience": "General audience interested in technology and financial innovations",
+  "learning_objectives": [
+    "Understand the basic structure and components of a blockchain",
+    "Identify the role of blocks and chains in ensuring data integrity",
+    "Grasp the concept of decentralization and its importance"
+  ],
+  "scenes": [
+    {
+      "scene_number": 1,
+      "duration_seconds": 20.0,
+      "title": "Introduction to Blockchain",
+      "narration": "Imagine a digital ledger, recording every transaction made and shared with everyone. That's the essence of blockchain. But how does it actually work?",
+      "visual_description": "Animation of a digital notebook being passed around a circle of people, illustrating the concept of shared ledgers.",
+      "key_concepts": [
+        "Blockchain as a digital ledger",
+        "Shared and transparent records"
+      ],
+      "animation_type": "conceptual"
+    },
+    {
+      "scene_number": 2,
+      "duration_seconds": 40.0,
+      "title": "The Anatomy of a Block",
+      "narration": "Each 'block' in a blockchain contains three basic elements: data, a unique hash, and the hash of the previous block. Think of it like a train\u2014each carriage holds cargo (data), its own identifier (hash), and a latch to the previous carriage (previous hash).",
+      "visual_description": "Show a train with labeled carriages, each containing cargo (data) and labeled with unique IDs (hashes). Connections between carriages show previous hashes.",
+      "key_concepts": [
+        "Block structure",
+        "Hashes and their role"
+      ],
+      "animation_type": "diagram"
+    },
+    {
+      "scene_number": 3,
+      "duration_seconds": 40.0,
+      "title": "Chains and Security",
+      "narration": "These blocks link together to form a chain. The beauty here is in security\u2014if someone tries to alter a block's data, its hash changes, breaking the chain. The network spots this and rejects the altered block. Imagine trying to sneak an extra carriage into the train\u2014immediately noticeable!",
+      "visual_description": "Visual of breaking a chain when one block is tampered with, followed by a red alert symbolizing rejection.",
+      "key_concepts": [
+        "Chain integrity",
+        "Security through hashing"
+      ],
+      "animation_type": "mathematical"
+    },
+    {
+      "scene_number": 4,
+      "duration_seconds": 20.0,
+      "title": "Decentralization: The Core",
+      "narration": "Instead of a single entity controlling the ledger, it's decentralized, meaning power is distributed among all participants. It reduces the risk of fraud and failure. Imagine everyone owning a copy of the train's schedule\u2014unity in transparency.",
+      "visual_description": "Participants holding identical copies of a document, representing decentralization.",
+      "key_concepts": [
+        "Decentralization",
+        "Role in preventing fraud"
+      ],
+      "animation_type": "conceptual"
+    }
+  ]
+}
