@@ -1,24 +1,20 @@
-from agno.agent import Agent, RunResponse
-from agno.models.groq import Groq
 from dotenv import load_dotenv
+from loguru import logger
 
+# Load environment variables
+logger.info("Loading environment variables")
 load_dotenv()
+logger.info("Environment variables loaded")
 
-def main():
+# Import and setup logging configuration
+from config.logger import setup_logging
 
-    agent = Agent(
-        model=Groq(
-            id="llama-3.3-70b-versatile",
-            temperature=0.1,
-            ),
-        markdown=True
+# Configure logging with loguru
+setup_logging(console_level="INFO")
 
-    )
-
-    # Print the response in the terminal
-    agent.print_response("Share a 2 sentence horror story.")
-
-
+from api.app import app
 
 if __name__ == "__main__":
-    main()
+    logger.info("Starting TripCraft AI API server")
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
