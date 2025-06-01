@@ -42,7 +42,7 @@ import BlogPage from './pages/BlogPage';
 // --- Constants ---
 const SIDEBAR_WIDTH = 280;
 const MAX_SAVED_ITEMS = 10;
-const mockUser = { name: 'Robert Maxwell', initials: 'RM' };
+const mockUser = { name: 'Dipanjan Ghosal', initials: 'DG' };
 const VIEWS = {
   DASHBOARD: 'dashboard', APPLICATIONS: 'applications', FAVORITES: 'favorites',
   SAVED_SEARCHES: 'saved_searches', NOTIFICATIONS: 'notifications',
