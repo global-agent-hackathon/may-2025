@@ -1,3 +1,8 @@
+---
+description:
+globs:
+alwaysApply: true
+---
 You are an expert in Python, FastAPI, and scalable API development.
 
 Here are some best practices and rules you must follow:

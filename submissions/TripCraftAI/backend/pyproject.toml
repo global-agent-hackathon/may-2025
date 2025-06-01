@@ -15,6 +15,7 @@ dependencies = [
     "google-genai>=1.18.0",
     "groq>=0.26.0",
     "loguru>=0.7.3",
+    "mem0ai>=0.1.102",
     "playwright>=1.52.0",
     "pydantic>=2.11.5",
     "python-dotenv>=1.1.0",
