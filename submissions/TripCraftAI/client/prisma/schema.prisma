@@ -9,7 +9,7 @@ datasource db {
 }
 
 model User {
-  id            String    @id
+  id            String     @id
   name          String
   email         String
   emailVerified Boolean
@@ -18,6 +18,7 @@ model User {
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
+  tripPlans     TripPlan[]
 
   @@unique([email])
   @@map("user")
@@ -75,4 +76,38 @@ model Jwks {
   createdAt  DateTime
 
   @@map("jwks")
+}
+
+model TripPlan {
+  id               String   @id @default(cuid())
+  name             String
+  destination      String
+  startingLocation String
+  travelDatesStart String
+  travelDatesEnd   String?
+  dateInputType    String   @default("picker")
+  duration         Int?
+  travelingWith    String
+  adults           Int      @default(1)
+  children         Int      @default(0)
+  ageGroups        String[] // Array of age group strings
+  budget           Float
+  budgetCurrency   String   @default("USD")
+  travelStyle      String
+  budgetFlexible   Boolean  @default(false)
+  vibes            String[] // Array of vibe strings
+  priorities       String[] // Array of priority strings
+  interests        String?
+  rooms            Int      @default(1)
+  pace             Int[] // Array representing pace slider value
+  planningStyle    String?
+  beenThereBefore  String?
+  lovedPlaces      String?
+  additionalInfo   String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  userId           String? // Optional user reference for future auth integration
+  user             User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("trip_plan")
 }

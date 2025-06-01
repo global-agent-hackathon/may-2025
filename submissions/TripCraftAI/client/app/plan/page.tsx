@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import {
   Card,
@@ -222,6 +223,7 @@ export default function Plan() {
   const [validationError, setValidationError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
+  const router = useRouter();
 
   const form = useForm<TripFormData>({
     defaultValues: {
@@ -270,8 +272,11 @@ export default function Plan() {
       if (result.success) {
         setSubmitMessage("🎉 Your trip plan has been submitted successfully!");
         console.log("Trip submitted with ID:", result.tripId);
-        // You could redirect to a results page here
-        // router.push(`/plan/results/${result.tripId}`);
+
+        // Show success message briefly, then redirect
+        setTimeout(() => {
+          router.push("/plans");
+        }, 2000);
       } else {
         setSubmitMessage("❌ Failed to submit trip plan. Please try again.");
       }

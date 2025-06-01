@@ -26,10 +26,12 @@
     "date-fns": "^4.1.0",
     "lucide-react": "^0.511.0",
     "next": "15.3.3",
+    "next-themes": "^0.4.6",
     "react": "^19.0.0",
     "react-day-picker": "8.10.1",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.56.4",
+    "sonner": "^2.0.4",
     "tailwind-merge": "^3.3.0",
     "zod": "^3.25.46"
   },
