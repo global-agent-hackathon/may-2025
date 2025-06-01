@@ -309,12 +309,12 @@ export default function Plan() {
 
       if (result.success) {
         setSubmitMessage("🎉 Your trip plan has been submitted successfully!");
-        console.log("Trip submitted with ID:", result.tripId);
+        console.log("Trip submitted with ID:", result.tripPlanId);
 
-        // Show success message briefly, then redirect
+        // Show success message briefly, then redirect to the plan details page
         setTimeout(() => {
-          router.push("/plans");
-        }, 2000);
+          router.push(`/plan/${result.tripPlanId}`);
+        }, 1500);
       } else {
         setSubmitMessage("❌ Failed to submit trip plan. Please try again.");
       }

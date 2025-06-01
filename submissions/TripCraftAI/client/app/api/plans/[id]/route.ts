@@ -1,6 +1,50 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+export async function GET(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const { id } = await params;
+
+    const tripPlan = await prisma.tripPlan.findUnique({
+      where: { id },
+      include: {
+        status: true,
+        output: true,
+      },
+    });
+
+    if (!tripPlan) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Trip plan not found'
+        },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(
+      {
+        success: true,
+        tripPlan
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error('Error fetching trip plan:', error);
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Failed to fetch trip plan'
+      },
+      { status: 500 }
+    );
+  }
+}
+
 export async function DELETE(
   request: Request,
   { params }: { params: { id: string } }

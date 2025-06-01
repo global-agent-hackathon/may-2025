@@ -137,7 +137,8 @@ export async function POST(request: NextRequest) {
       {
         success: true,
         message: 'Trip planning triggered successfully',
-        response: responseData
+        response: responseData,
+        tripPlanId: savedTripPlan.id
       },
       { status: 200 }
     );

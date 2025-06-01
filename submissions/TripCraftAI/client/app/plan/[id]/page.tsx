@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -26,13 +29,11 @@ import {
   Users,
   Heart,
   Home,
+  Loader2,
 } from "lucide-react";
 import Link from "next/link";
-import { PrismaClient } from "@/lib/generated/prisma";
 import { format } from "date-fns";
-
-// Initialize Prisma Client as a singleton
-const prisma = new PrismaClient();
+import { useParams } from "next/navigation";
 
 // Type Definitions
 interface DayPlan {
@@ -144,88 +145,6 @@ const getPaceDescription = (pace?: number[]) => {
   return descriptions[paceValue as keyof typeof descriptions] || "Balanced";
 };
 
-// Update getTripDetails to use the singleton prisma instance
-async function getTripDetails(tripId: string): Promise<TripDetails | null> {
-  try {
-    const tripPlan = await prisma.tripPlan.findUnique({
-      where: { id: tripId },
-      include: {
-        status: true,
-        output: true,
-      },
-    });
-
-    if (!tripPlan) {
-      return null;
-    }
-
-    // Map the database status to our TripDetails status
-    let status: TripDetails["status"] = "pending";
-    if (tripPlan.status) {
-      switch (tripPlan.status.status) {
-        case "completed":
-          status = "completed";
-          break;
-        case "processing":
-          status = "in-progress";
-          break;
-        case "failed":
-          status = "failed";
-          break;
-        default:
-          status = "pending";
-      }
-    }
-
-    // Parse the itinerary JSON if it exists
-    let itinerary: Itinerary | undefined;
-    if (tripPlan.output?.itinerary) {
-      try {
-        itinerary = JSON.parse(tripPlan.output.itinerary) as Itinerary;
-      } catch (e) {
-        console.error("Failed to parse itinerary JSON:", e);
-      }
-    }
-
-    return {
-      id: tripPlan.id,
-      name: tripPlan.name,
-      status,
-      itinerary,
-      // Input details
-      destination: tripPlan.destination,
-      startingLocation: tripPlan.startingLocation,
-      travelDatesStart: tripPlan.travelDatesStart
-        ? String(tripPlan.travelDatesStart)
-        : undefined,
-      travelDatesEnd: tripPlan.travelDatesEnd
-        ? String(tripPlan.travelDatesEnd)
-        : undefined,
-      dateInputType: tripPlan.dateInputType,
-      duration: tripPlan.duration ?? undefined,
-      travelingWith: tripPlan.travelingWith,
-      adults: tripPlan.adults,
-      children: tripPlan.children,
-      ageGroups: tripPlan.ageGroups as string[],
-      budget: tripPlan.budget,
-      budgetCurrency: tripPlan.budgetCurrency,
-      travelStyle: tripPlan.travelStyle,
-      budgetFlexible: tripPlan.budgetFlexible,
-      vibes: tripPlan.vibes as string[],
-      priorities: tripPlan.priorities as string[],
-      interests: tripPlan.interests ?? undefined,
-      rooms: tripPlan.rooms,
-      pace: tripPlan.pace as number[],
-      beenThereBefore: tripPlan.beenThereBefore ?? undefined,
-      lovedPlaces: tripPlan.lovedPlaces ?? undefined,
-      additionalInfo: tripPlan.additionalInfo ?? undefined,
-    };
-  } catch (error) {
-    console.error("Error fetching trip details:", error);
-    return null;
-  }
-}
-
 // Helper function to render status badge
 function StatusBadge({ status }: { status: TripDetails["status"] }) {
   let variant: "default" | "secondary" | "destructive" | "outline" = "default";
@@ -267,23 +186,160 @@ function StatusBadge({ status }: { status: TripDetails["status"] }) {
   );
 }
 
-export default async function TripDetailsPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const trip = await getTripDetails(params.id);
+export default function TripDetailsPage() {
+  const params = useParams<{ id: string }>();
+  const tripId = params.id;
 
-  if (!trip) {
+  const [trip, setTrip] = useState<TripDetails | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [polling, setPolling] = useState(false);
+
+  // Function to fetch trip details
+  const fetchTripDetails = async () => {
+    if (!tripId) return;
+
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/plans/${tripId}`);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to fetch trip details");
+      }
+
+      if (data.success && data.tripPlan) {
+        // Convert raw data to our TripDetails format
+        const tripPlan = data.tripPlan;
+
+        // Map the database status to our TripDetails status
+        let status: TripDetails["status"] = "pending";
+        if (tripPlan.status) {
+          switch (tripPlan.status.status) {
+            case "completed":
+              status = "completed";
+              break;
+            case "processing":
+              status = "in-progress";
+              break;
+            case "failed":
+              status = "failed";
+              break;
+            default:
+              status = "pending";
+          }
+        }
+
+        // Parse the itinerary JSON if it exists
+        let itinerary: Itinerary | undefined;
+        if (tripPlan.output?.itinerary) {
+          try {
+            itinerary = JSON.parse(tripPlan.output.itinerary) as Itinerary;
+          } catch (e) {
+            console.error("Failed to parse itinerary JSON:", e);
+          }
+        }
+
+        setTrip({
+          id: tripPlan.id,
+          name: tripPlan.name,
+          status,
+          itinerary,
+          // Input details
+          destination: tripPlan.destination,
+          startingLocation: tripPlan.startingLocation,
+          travelDatesStart: tripPlan.travelDatesStart
+            ? String(tripPlan.travelDatesStart)
+            : undefined,
+          travelDatesEnd: tripPlan.travelDatesEnd
+            ? String(tripPlan.travelDatesEnd)
+            : undefined,
+          dateInputType: tripPlan.dateInputType,
+          duration: tripPlan.duration ?? undefined,
+          travelingWith: tripPlan.travelingWith,
+          adults: tripPlan.adults,
+          children: tripPlan.children,
+          ageGroups: tripPlan.ageGroups as string[],
+          budget: tripPlan.budget,
+          budgetCurrency: tripPlan.budgetCurrency,
+          travelStyle: tripPlan.travelStyle,
+          budgetFlexible: tripPlan.budgetFlexible,
+          vibes: tripPlan.vibes as string[],
+          priorities: tripPlan.priorities as string[],
+          interests: tripPlan.interests ?? undefined,
+          rooms: tripPlan.rooms,
+          pace: tripPlan.pace as number[],
+          beenThereBefore: tripPlan.beenThereBefore ?? undefined,
+          lovedPlaces: tripPlan.lovedPlaces ?? undefined,
+          additionalInfo: tripPlan.additionalInfo ?? undefined,
+        });
+      } else {
+        setError("Trip plan not found");
+      }
+    } catch (err) {
+      console.error("Error fetching trip details:", err);
+      setError(
+        `Failed to fetch trip details: ${
+          err instanceof Error ? err.message : "Unknown error"
+        }`
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Initial fetch
+  useEffect(() => {
+    fetchTripDetails();
+  }, [tripId]);
+
+  // Setup polling
+  useEffect(() => {
+    if (!trip) return;
+
+    // Check if we should poll
+    const shouldPoll = trip.status !== "completed" && trip.status !== "failed";
+
+    if (shouldPoll) {
+      setPolling(true);
+      const pollInterval = setInterval(() => {
+        fetchTripDetails();
+      }, 5000);
+
+      return () => {
+        clearInterval(pollInterval);
+        setPolling(false);
+      };
+    } else {
+      setPolling(false);
+    }
+  }, [trip?.status, tripId]);
+
+  // Render loading state
+  if (loading && !trip) {
+    return (
+      <div className="container mx-auto p-4 flex flex-col items-center justify-center min-h-[calc(100vh-10rem)]">
+        <Loader2 size={48} className="animate-spin text-primary mb-4" />
+        <h1 className="text-2xl font-semibold mb-2">Loading Trip Details</h1>
+        <p className="text-muted-foreground text-center">
+          Fetching your trip plan...
+        </p>
+      </div>
+    );
+  }
+
+  // Render error state
+  if (error || !trip) {
     return (
       <div className="container mx-auto p-4 flex flex-col items-center justify-center min-h-[calc(100vh-10rem)]">
         <Landmark size={64} className="text-muted-foreground mb-4" />
         <h1 className="text-2xl font-semibold mb-2">Trip Not Found</h1>
         <p className="text-muted-foreground text-center">
-          The trip you are looking for does not exist or could not be loaded.
+          {error ||
+            "The trip you are looking for does not exist or could not be loaded."}
         </p>
-        <Link href="/" className="mt-4 text-primary hover:underline">
-          Go back to homepage
+        <Link href="/plans" className="mt-4 text-primary hover:underline">
+          Go to your trip plans
         </Link>
       </div>
     );
@@ -304,7 +360,15 @@ export default async function TripDetailsPage({
               <p className="text-xl text-muted-foreground mt-1">{trip.name}</p>
             )}
           </div>
-          <StatusBadge status={trip.status} />
+          <div className="flex items-center gap-2">
+            {polling && (
+              <div className="flex items-center text-sm text-muted-foreground">
+                <Loader2 className="h-3 w-3 animate-spin mr-1" />
+                Updating...
+              </div>
+            )}
+            <StatusBadge status={trip.status} />
+          </div>
         </div>
       </header>
 
@@ -573,7 +637,38 @@ export default async function TripDetailsPage({
         )}
       </section>
 
-      {trip.status === "completed" && trip.itinerary ? (
+      {/* Show loading message or itinerary based on status */}
+      {(trip.status === "pending" ||
+        trip.status === "in-progress" ||
+        trip.status === "failed") && (
+        <div className="text-center py-10 border rounded-lg">
+          <Info size={48} className="text-muted-foreground mx-auto mb-4" />
+          <h2 className="text-xl font-semibold mb-2">
+            {trip.status === "pending" && "Trip Plan in Progress"}
+            {trip.status === "in-progress" && "Trip Plan is Being Generated"}
+            {trip.status === "failed" && "Failed to Generate Trip Plan"}
+          </h2>
+          <p className="text-muted-foreground">
+            {trip.status === "pending" &&
+              "Your trip itinerary is currently being planned. Please wait as we create your personalized travel plan."}
+            {trip.status === "in-progress" &&
+              "We are working on your trip details. This might take a few moments. The page will automatically update when your plan is ready."}
+            {trip.status === "failed" &&
+              "Something went wrong while generating your trip plan. Please try again or contact support."}
+          </p>
+          {(trip.status === "pending" || trip.status === "in-progress") && (
+            <div className="flex justify-center mt-4">
+              <div className="flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Updating automatically...
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Show itinerary when completed */}
+      {trip.status === "completed" && trip.itinerary && (
         <div className="space-y-12">
           {/* Day-by-Day Plan Section */}
           <section>
@@ -847,33 +942,6 @@ export default async function TripDetailsPage({
                 </div>
               </section>
             )}
-        </div>
-      ) : (
-        <div className="text-center py-10">
-          <Info size={48} className="text-muted-foreground mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">
-            {trip.status === "pending" && "Trip Plan in Progress"}
-            {trip.status === "in-progress" && "Trip Plan is Being Generated"}
-            {trip.status === "failed" && "Failed to Generate Trip Plan"}
-            {trip.status !== "pending" &&
-              trip.status !== "in-progress" &&
-              trip.status !== "failed" &&
-              trip.status !== "completed" &&
-              "Trip Details Unavailable"}
-          </h2>
-          <p className="text-muted-foreground">
-            {trip.status === "pending" &&
-              "Your trip itinerary is currently being planned. Please check back later."}
-            {trip.status === "in-progress" &&
-              "We are working on your trip details. This might take a few moments."}
-            {trip.status === "failed" &&
-              "Something went wrong while generating your trip plan. Please try again or contact support."}
-            {trip.status !== "pending" &&
-              trip.status !== "in-progress" &&
-              trip.status !== "failed" &&
-              trip.status !== "completed" &&
-              "The details for this trip are not available in its current state."}
-          </p>
         </div>
       )}
     </div>

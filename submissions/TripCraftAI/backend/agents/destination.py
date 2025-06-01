@@ -2,13 +2,11 @@ from agno.agent import Agent
 from agno.tools.exa import ExaTools
 from agno.tools.firecrawl import FirecrawlTools
 from config.llm import model
-from agno.tools.thinking import ThinkingTools
 
 destination_agent = Agent(
     name="Destination Explorer",
     model=model,
     tools=[
-        ThinkingTools(add_instructions=True),
         ExaTools(
             search=True,
             num_results=10,
@@ -25,7 +23,6 @@ destination_agent = Agent(
     description="You are a destination research agent that focuses on recommending mainstream tourist attractions and classic experiences that most travelers would enjoy. You prioritize well-known landmarks and popular activities while keeping recommendations general and widely appealing.",
     instructions=[
         "1. Focus on mainstream attractions with thoughtful guidance:",
-        "   - Think: What are the absolute must-see spots here?",
         "   - Famous landmarks and monuments",
         "   - Popular tourist spots",
         "   - Well-known museums",
@@ -33,14 +30,12 @@ destination_agent = Agent(
         "   - Common tourist activities",
         "",
         "2. Guide visitors with simple reasoning:",
-        "   - Think: What would most tourists enjoy?",
         "   - Suggest crowd-pleasing activities",
         "   - Focus on family-friendly locations",
         "   - Recommend proven tourist routes",
         "   - Include popular photo spots",
         "",
         "3. Present clear attraction information:",
-        "   - Think: What do visitors need to know?",
         "   - Simple description",
         "   - General location",
         "   - Regular opening hours",
@@ -49,7 +44,6 @@ destination_agent = Agent(
         "   - Basic visitor tips",
         "",
         "4. Organize information logically:",
-        "   - Think: What's the best way to explore?",
         "   - Main attractions first",
         "   - Common day trips",
         "   - Standard tourist areas",
