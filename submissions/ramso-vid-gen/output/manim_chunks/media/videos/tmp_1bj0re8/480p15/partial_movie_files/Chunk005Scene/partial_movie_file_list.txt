@@ -1,6 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:/Users/vish/Developer/experiments/ramso/output/manim_chunks/media/videos/tmp_1bj0re8/480p15/partial_movie_files/Chunk005Scene/1185818338_438843384_223132457.mp4'
-file 'file:/Users/vish/Developer/experiments/ramso/output/manim_chunks/media/videos/tmp_1bj0re8/480p15/partial_movie_files/Chunk005Scene/624642324_4165094050_7566034.mp4'
-file 'file:/Users/vish/Developer/experiments/ramso/output/manim_chunks/media/videos/tmp_1bj0re8/480p15/partial_movie_files/Chunk005Scene/624642324_488604316_2866191984.mp4'
-file 'file:/Users/vish/Developer/experiments/ramso/output/manim_chunks/media/videos/tmp_1bj0re8/480p15/partial_movie_files/Chunk005Scene/624642324_3101319341_1655114350.mp4'
-file 'file:/Users/vish/Developer/experiments/ramso/output/manim_chunks/media/videos/tmp_1bj0re8/480p15/partial_movie_files/Chunk005Scene/624642324_1839128356_3925887188.mp4'
