@@ -43,6 +43,7 @@ Add mockups, diagrams, or sketches that demonstrate your idea or flow.
 - [ ] Best use of Mem0
 - [ ] Best use of Graphlit
 - [ ] Best use of Browser Use
+- [ ] Best use of Potpie
 - [ ] Best Overall Project
 
 ## Demo Video Link

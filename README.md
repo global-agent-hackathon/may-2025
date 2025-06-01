@@ -27,6 +27,8 @@ Projects showcasing the best use case of Agno will get following cash prizes:
 
 The $300, $500 and $1,000 prizes will be awarded on a rolling basis. The $2,000 and $5,000 prizes will be awarded at the end of the hackathon.
 
+Judges: Dirk Brand, Yash Solanky, Monali Dambre
+
 ### Best use of Browser Use ([see details](/resources/browser-use.md)):
 
 Projects showcasing the best use case of Browser Use will get following cash prizes:
@@ -35,6 +37,8 @@ Projects showcasing the best use case of Browser Use will get following cash pri
 - 🥈 10 winners: $150 each
 
 The $150 prizes will be awarded on a rolling basis. The $500 and $2,500 prizes will be awarded at the end of the hackathon.
+
+Judges: Larsen Cundric
 
 ### Best use of Potpie 🥧 ([see details](/resources/potpie.md)):
 
@@ -45,25 +49,31 @@ Projects showcasing the best use case of Potpie will get following cash prizes:
 
 All the prizes will be awarded at the end of the hackathon.
 
+Judges: Aditi
+
 ## Credits
 
 ### Browserbase - $1200 value:
 
 - Startup plan for free for a whole year to the best project built using Browserbase
 
+Judges: Lindsay Gilson
+
 ### Exa - Free $50 credits for everyone:
 
-Every participant gets free $50 Exa API credits! 
+Every participant gets free $50 Exa API credits!
 
 - To get the credits use the coupon code `EXA50API` by heading to the [Exa API Dashboard](https://dashboard.exa.ai/billing).
 
 ### Best use of Firecrawl:
 
-- Every one is entitled to 5k Firecrawl credits, enter the coupon code `hackathon5k` on the [Firecrawl Dashboard](https://www.firecrawl.dev/app/settings) 
+- Every one is entitled to 5k Firecrawl credits, enter the coupon code `hackathon5k` on the [Firecrawl Dashboard](https://www.firecrawl.dev/app/settings)
 
 ### Best use of Mem0:
 
 - Mem0 is offering pro plan for free for 3 months to the best project built using Mem0. ([details coming soon](/resources/mem0.md))
+
+Judges: Taranjeet Singh
 
 ### MCP Run:
 
@@ -88,6 +98,8 @@ Groq is the lowest cost inference provider with no tradeoffs on speed and they'r
 
 - The **top 5 projects** will be featured in the trending [Awesome LLM Apps repo](https://github.com/Shubhamsaboo/awesome-llm-apps), giving your work massive visibility in the AI community.
 
+Judges: Shubham Saboo
+
 ## 📚 Resources
 
 Resources for each sponsor are available in the [resources](/resources) folder.
@@ -95,7 +107,7 @@ Resources for each sponsor are available in the [resources](/resources) folder.
 ## ⏱️ Timeline
 
 - **April 15th** - Hackathon starts
-- **May 30th** - Hackathon ends
+- **June 1st** - Hackathon ends
 
 ## 🚀 How to Participate
 
