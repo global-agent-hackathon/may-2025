@@ -4,6 +4,7 @@ from loguru import logger
 from datetime import datetime
 from contextlib import asynccontextmanager
 from services.db_service import initialize_db_pool, close_db_pool
+from router.plan import router as plan_router
 
 router = APIRouter(prefix="/api")
 
@@ -49,4 +50,5 @@ app.add_middleware(
 
 
 app.include_router(router)
+app.include_router(plan_router)
 
