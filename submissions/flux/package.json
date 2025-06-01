@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@clerk/nextjs": "^6.19.2",
+    "@prisma/client": "^6.7.0",
+    "@radix-ui/react-scroll-area": "^1.2.8",
+    "next": "^15.3.2",
+    "react-markdown": "^10.1.0"
+  }
+}

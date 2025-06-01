@@ -1,0 +1,41 @@
+# Core API framework
+fastapi
+uvicorn[standard]
+
+# AI and ML libraries
+agno
+groq
+openai
+mem0ai
+
+# Database and data processing
+psycopg[binary]
+pandas
+sqlalchemy
+PyJWT
+cryptography
+
+# Web scraping and content processing
+firecrawl-py
+requests
+
+# Data validation and serialization
+pydantic
+pydantic-settings
+
+# Environment and configuration
+python-dotenv
+
+# Logging and monitoring
+structlog
+
+# Development and testing
+pytest
+pytest-asyncio
+black
+flake8
+watchdog
+
+# Additional utilities
+python-multipart
+jinja2 
