@@ -39,3 +39,19 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+
+# prisma
+/prisma/.env
+.env
+.env.*
+!.env.example
+prisma/generated/
+
+# Prisma generated client
+/lib/generated/prisma
+
+# Important: DO NOT ignore migration files as they're needed for production deployments
+!prisma/migrations/
+
+.vscode/
