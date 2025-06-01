@@ -194,6 +194,8 @@ async def generate_travel_plan(request: TravelPlanAgentRequest) -> str:
             {travel_request_md}
 
             Provide a very detailed research about the destination, its attractions, activities, and other relevant information that user might be interested in.
+
+            Give 10 attractions/activities that user might be interested in.
             """
         )
 
