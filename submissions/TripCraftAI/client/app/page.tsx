@@ -7,8 +7,6 @@ import {
   Calendar,
   Sparkles,
 } from "lucide-react";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,12 +15,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import Link from "next/link";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-background">
-      <Header />
-
       {/* Hero Section */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center">
@@ -39,10 +36,12 @@ export default function Home() {
             conversation about your perfect trip.
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
-            <Button size="lg" className="bg-primary hover:bg-primary/90">
-              <Plane className="w-4 h-4 mr-2" />
-              Plan My Trip
-            </Button>
+            <Link href="/plan">
+              <Button size="lg" className="bg-primary hover:bg-primary/90">
+                <Plane className="w-4 h-4 mr-2" />
+                Plan My Trip
+              </Button>
+            </Link>
             <Button variant="ghost" size="lg">
               See How It Works <span aria-hidden="true">→</span>
             </Button>
@@ -213,8 +212,6 @@ export default function Home() {
           </Button>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }
