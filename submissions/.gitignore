@@ -1,0 +1,4 @@
+.cache
+.env
+.local
+__pycache__
