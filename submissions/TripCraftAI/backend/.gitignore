@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Python cache
+__pycache__/
+
+*.pyc
 # C extensions
 *.so
 
@@ -181,3 +185,39 @@ cython_debug/
 .cursorindexingignore
 
 logs/
+
+# Additional entries for FastAPI project
+*.db
+*.sqlite
+
+# VS Code
+.vscode/
+*.code-workspace
+.history/
+
+# UV specific
+.uv/
+.venv/
+__uv/
+.uv.lock
+
+# FastAPI
+.fastapi_cache/
+
+# Additional logs
+*.log.*
+app.log
+error.log
+debug.log
+access.log
+
+# Local development
+local_config.py
+dev.env
+*.local
+
+# Temporary files
+*.swp
+*.swo
+*~
+.DS_Store

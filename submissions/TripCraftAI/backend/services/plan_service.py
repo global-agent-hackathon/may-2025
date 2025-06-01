@@ -1,6 +1,14 @@
 from datetime import datetime
-from models.travel_plan import TravelPlanAgentRequest, TravelPlanRequest
+from models.travel_plan import (
+    TravelPlanAgentRequest,
+    TravelPlanRequest,
+    TravelPlanTeamResponse,
+)
 from loguru import logger
+from agents.team import trip_planning_team
+import time
+from agents.structured_output import convert_to_model
+
 
 def travel_request_to_markdown(data: TravelPlanRequest) -> str:
     # Map of travel vibes to their descriptions
@@ -11,7 +19,7 @@ def travel_request_to_markdown(data: TravelPlanRequest) -> str:
         "cultural": "immersive experiences with local traditions, museums, and historical sites",
         "food-focused": "culinary experiences including cooking classes, food tours, and local cuisine",
         "nature": "outdoor experiences with national parks, wildlife, and scenic landscapes",
-        "photography": "photogenic locations with scenic viewpoints, cultural sites, and natural wonders"
+        "photography": "photogenic locations with scenic viewpoints, cultural sites, and natural wonders",
     }
 
     # Map of travel styles to their descriptions
@@ -19,7 +27,7 @@ def travel_request_to_markdown(data: TravelPlanRequest) -> str:
         "backpacker": "budget-friendly accommodations, local transportation, and authentic experiences",
         "comfort": "mid-range hotels, convenient transportation, and balanced comfort-value ratio",
         "luxury": "premium accommodations, private transfers, and exclusive experiences",
-        "eco-conscious": "sustainable accommodations, eco-friendly activities, and responsible tourism"
+        "eco-conscious": "sustainable accommodations, eco-friendly activities, and responsible tourism",
     }
 
     # Map of pace levels (0-5) to their descriptions
@@ -29,7 +37,7 @@ def travel_request_to_markdown(data: TravelPlanRequest) -> str:
         2: "3-4 activities per day with balanced activity and rest periods",
         3: "4-5 activities per day with moderate breaks between activities",
         4: "5-6 activities per day with minimal downtime",
-        5: "6+ activities per day with back-to-back scheduling"
+        5: "6+ activities per day with back-to-back scheduling",
     }
 
     def format_date(date_str: str, is_picker: bool) -> str:
@@ -38,7 +46,7 @@ def travel_request_to_markdown(data: TravelPlanRequest) -> str:
         if is_picker:
             try:
                 dt = datetime.fromisoformat(date_str.replace("Z", "+00:00"))
-                return dt.strftime('%B %d, %Y')
+                return dt.strftime("%B %d, %Y")
             except ValueError:
                 return date_str
         return date_str.strip()
@@ -47,7 +55,11 @@ def travel_request_to_markdown(data: TravelPlanRequest) -> str:
     is_picker = date_type == "picker"
     start_date = format_date(data.travel_dates.start, is_picker)
     end_date = format_date(data.travel_dates.end, is_picker)
-    date_range = f"between {start_date} and {end_date}" if end_date and end_date != "Not specified" else start_date
+    date_range = (
+        f"between {start_date} and {end_date}"
+        if end_date and end_date != "Not specified"
+        else start_date
+    )
 
     vibes = data.vibes
     vibes_descriptions = [travel_vibes.get(v, v) for v in vibes]
@@ -67,7 +79,7 @@ def travel_request_to_markdown(data: TravelPlanRequest) -> str:
         f"- **Rooms Needed:** {data.rooms or 'Not specified'}",
         "",
         "## 💰 Budget & Preferences",
-        f"- **Budget:** ₹{data.budget} {data.budget_currency} ({'Flexible' if data.budget_flexible else 'Fixed'})",
+        f"- **Budget per person:** ₹{data.budget} {data.budget_currency} ({'Flexible' if data.budget_flexible else 'Fixed'})",
         f"- **Travel Style:** {travel_styles.get(data.travel_style, data.travel_style or 'Not specified')}",
         f"- **Preferred Pace:** {', '.join([pace_levels.get(p, str(p)) for p in data.pace]) or 'Not specified'}",
         "",
@@ -86,22 +98,44 @@ def travel_request_to_markdown(data: TravelPlanRequest) -> str:
     if data.interests:
         lines.append(f"- **Interests:** {data.interests}")
 
-    lines.extend([
-        "",
-        "## 🗺️ Destination Context",
-        f"- **Previous Visit:** {data.been_there_before.capitalize() if data.been_there_before else 'Not specified'}",
-        f"- **Loved Places:** {data.loved_places or 'Not specified'}",
-        f"- **Additional Notes:** {data.additional_info or 'Not specified'}"
-    ])
+    lines.extend(
+        [
+            "",
+            "## 🗺️ Destination Context",
+            f"- **Previous Visit:** {data.been_there_before.capitalize() if data.been_there_before else 'Not specified'}",
+            f"- **Loved Places:** {data.loved_places or 'Not specified'}",
+            f"- **Additional Notes:** {data.additional_info or 'Not specified'}",
+        ]
+    )
 
     return "\n".join(lines)
+
 
 async def generate_travel_plan(request: TravelPlanAgentRequest) -> str:
     """Generate a travel plan based on the request."""
     try:
         travel_request = travel_request_to_markdown(request.travel_plan)
         logger.info(f"Travel request: {travel_request}")
-        return travel_request
+
+        prompt = f"""
+            Below is my travel plan request. Please generate a travel plan for the request.
+            {travel_request}
+        """
+
+        time_start = time.time()
+        response = await trip_planning_team.arun(prompt)
+        time_end = time.time()
+        logger.info(f"Time taken: {time_end - time_start} seconds")
+        logger.info(f"Full Travel Team Response: {response.content}")
+
+        last_response = response.messages[-1].content
+        logger.info(f"Last Response: {last_response}")
+
+        response = await convert_to_model(last_response, TravelPlanTeamResponse)
+        json_response = response.model_dump_json(indent=2)
+        logger.info(f"Converted Response: {json_response}")
+
+        return json_response
     except Exception as e:
         logger.error(f"Error generating travel plan: {str(e)}")
         raise

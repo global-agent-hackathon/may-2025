@@ -1,9 +1,12 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List
+from models.hotel import HotelResults
+
 
 class TravelDates(BaseModel):
     start: str = ""
     end: str = ""
+
 
 class TravelPlanRequest(BaseModel):
     name: str = ""
@@ -29,11 +32,62 @@ class TravelPlanRequest(BaseModel):
     loved_places: str = ""
     additional_info: str = ""
 
+
 class TravelPlanAgentRequest(BaseModel):
     trip_plan_id: str
     travel_plan: TravelPlanRequest
+
 
 class TravelPlanResponse(BaseModel):
     success: bool
     message: str
     trip_plan_id: str
+
+
+class DayByDayPlan(BaseModel):
+    day: int = Field(
+        default=0, description="The day number in the itinerary, starting from 0"
+    )
+    date: str = Field(
+        default="", description="The date for this day in YYYY-MM-DD format"
+    )
+    morning: str = Field(
+        default="", description="Description of morning activities and plans"
+    )
+    afternoon: str = Field(
+        default="", description="Description of afternoon activities and plans"
+    )
+    evening: str = Field(
+        default="", description="Description of evening activities and plans"
+    )
+    notes: str = Field(
+        default="",
+        description="Additional tips, reminders or important information for the day",
+    )
+
+
+class Attraction(BaseModel):
+    name: str = Field(default="", description="Name of the attraction")
+    description: str = Field(
+        default="", description="Detailed description of the attraction"
+    )
+    location: str = Field(
+        default="", description="Physical location/address of the attraction"
+    )
+    duration: int = Field(
+        default=0, description="Estimated time needed to visit in minutes"
+    )
+    price: int = Field(default=0, description="Entry fee or cost in the local currency")
+    url: str = Field(
+        default="", description="Website or booking URL for the attraction"
+    )
+
+
+class TravelPlanTeamResponse(BaseModel):
+    day_by_day_plan: List[DayByDayPlan] = Field(
+        description="A list of day-by-day plans for the trip"
+    )
+    hotels: HotelResults = Field(description="A list of hotels for the trip")
+    attractions: List[Attraction] = Field(
+        description="A list of attractions for the trip"
+    )
