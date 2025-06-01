@@ -71,11 +71,19 @@ interface Flight {
   stops?: number;
 }
 
+interface Restaurant {
+  name: string;
+  description?: string;
+  location?: string;
+  url?: string;
+}
+
 interface Itinerary {
   day_by_day_plan: DayPlan[];
   hotels: Hotel[];
   attractions: Attraction[];
   flights: Flight[];
+  restaurants?: Restaurant[];
 }
 
 interface TripDetails {
@@ -725,10 +733,10 @@ export default function TripDetailsPage() {
                     </div>
                   </CardContent>
                   {dayPlan.notes && (
-                    <div className="px-0">
-                      <div className="bg-yellow-100 p-4 flex items-start">
+                    <div className="px-6 py-3 bg-muted/10">
+                      <div className="flex items-start">
                         <Paperclip className="h-5 w-5 mr-2 mt-0.5 text-primary flex-shrink-0" />
-                        <p className="text-sm">
+                        <p className="text-sm text-muted-foreground">
                           <span className="font-medium">Note:</span>{" "}
                           {dayPlan.notes}
                         </p>
@@ -757,7 +765,7 @@ export default function TripDetailsPage() {
                       <CardTitle className="text-xl">
                         {hotel.hotel_name}
                       </CardTitle>
-                      {hotel.rating && (
+                      {hotel.rating && hotel.rating !== "N/A" && (
                         <div className="flex items-center text-sm text-muted-foreground mt-1">
                           <Star className="h-4 w-4 mr-1 text-yellow-400 fill-yellow-400" />{" "}
                           {hotel.rating}
@@ -790,7 +798,7 @@ export default function TripDetailsPage() {
                                 variant="outline"
                                 className="text-xs"
                               >
-                                {amenity === "Free WiFi" && (
+                                {amenity === "Free Wi-Fi" && (
                                   <Wifi className="h-3 w-3 mr-1" />
                                 )}
                                 {amenity}
@@ -800,7 +808,7 @@ export default function TripDetailsPage() {
                         </div>
                       )}
                     </CardContent>
-                    {hotel.url && (
+                    {hotel.url && hotel.url !== "[Insert Booking Link]" && (
                       <CardFooter className="bg-muted/30 border-t">
                         <a
                           href={hotel.url}
@@ -826,88 +834,147 @@ export default function TripDetailsPage() {
                 <Plane className="mr-3 h-6 w-6 text-primary" /> Flights
               </h2>
               <div className="space-y-6">
-                {trip.itinerary.flights.map((flight, index) => (
-                  <Card
-                    key={index}
-                    className="border-r-4 border-r-primary overflow-hidden"
-                  >
-                    <CardHeader className="bg-muted/30">
-                      <CardTitle className="text-xl flex items-center">
-                        <Plane className="h-5 w-5 mr-2 text-primary" />
-                        {flight.airline}
-                      </CardTitle>
-                      {flight.flight_number && (
-                        <CardDescription>
-                          Flight {flight.flight_number}
-                        </CardDescription>
-                      )}
-                    </CardHeader>
-                    <CardContent className="py-6">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                        <div className="bg-muted/20 p-3 rounded-lg">
-                          <p className="font-medium flex items-center">
-                            <Clock className="h-4 w-4 mr-2 text-primary" />
-                            Duration:
-                          </p>
-                          <p className="text-muted-foreground mt-1">
-                            {flight.duration}
-                          </p>
-                        </div>
-                        <div className="bg-muted/20 p-3 rounded-lg">
-                          <p className="font-medium flex items-center">
-                            <DollarSign className="h-4 w-4 mr-2 text-primary" />
-                            Price:
-                          </p>
-                          <p className="text-muted-foreground mt-1">
-                            {flight.price}
-                          </p>
-                        </div>
-                        <div className="bg-muted/20 p-3 rounded-lg">
-                          <p className="font-medium flex items-center">
-                            <Clock className="h-4 w-4 mr-2 text-green-500" />
-                            Departure:
-                          </p>
-                          <p className="text-muted-foreground mt-1">
-                            {flight.departure_time || "Not specified"}
-                          </p>
-                        </div>
-                        <div className="bg-muted/20 p-3 rounded-lg">
-                          <p className="font-medium flex items-center">
-                            <Clock className="h-4 w-4 mr-2 text-red-500" />
-                            Arrival:
-                          </p>
-                          <p className="text-muted-foreground mt-1">
-                            {flight.arrival_time || "Not specified"}
-                          </p>
-                        </div>
-                        {typeof flight.stops !== "undefined" && (
+                {trip.itinerary.flights
+                  .filter(
+                    (flight) =>
+                      flight.airline !== "TBD" &&
+                      flight.departure_time !== "TBD"
+                  )
+                  .map((flight, index) => (
+                    <Card
+                      key={index}
+                      className="border-r-4 border-r-primary overflow-hidden"
+                    >
+                      <CardHeader className="bg-muted/30">
+                        <CardTitle className="text-xl flex items-center">
+                          <Plane className="h-5 w-5 mr-2 text-primary" />
+                          {flight.airline}
+                        </CardTitle>
+                        {flight.flight_number &&
+                          flight.flight_number !== "N/A" &&
+                          flight.flight_number !== "TBD" && (
+                            <CardDescription>
+                              Flight {flight.flight_number}
+                            </CardDescription>
+                          )}
+                      </CardHeader>
+                      <CardContent className="py-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                           <div className="bg-muted/20 p-3 rounded-lg">
-                            <p className="font-medium">Stops:</p>
+                            <p className="font-medium flex items-center">
+                              <Clock className="h-4 w-4 mr-2 text-primary" />
+                              Duration:
+                            </p>
                             <p className="text-muted-foreground mt-1">
-                              {flight.stops}
+                              {flight.duration}
                             </p>
                           </div>
+                          <div className="bg-muted/20 p-3 rounded-lg">
+                            <p className="font-medium flex items-center">
+                              <DollarSign className="h-4 w-4 mr-2 text-primary" />
+                              Price:
+                            </p>
+                            <p className="text-muted-foreground mt-1">
+                              {flight.price}
+                            </p>
+                          </div>
+                          <div className="bg-muted/20 p-3 rounded-lg">
+                            <p className="font-medium flex items-center">
+                              <Clock className="h-4 w-4 mr-2 text-green-500" />
+                              Departure:
+                            </p>
+                            <p className="text-muted-foreground mt-1">
+                              {flight.departure_time || "Not specified"}
+                            </p>
+                          </div>
+                          <div className="bg-muted/20 p-3 rounded-lg">
+                            <p className="font-medium flex items-center">
+                              <Clock className="h-4 w-4 mr-2 text-red-500" />
+                              Arrival:
+                            </p>
+                            <p className="text-muted-foreground mt-1">
+                              {flight.arrival_time || "Not specified"}
+                            </p>
+                          </div>
+                          {typeof flight.stops !== "undefined" && (
+                            <div className="bg-muted/20 p-3 rounded-lg">
+                              <p className="font-medium">Stops:</p>
+                              <p className="text-muted-foreground mt-1">
+                                {flight.stops}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                      </CardContent>
+                      {flight.url &&
+                        flight.url !== "N/A" &&
+                        flight.url !== "TBD" && (
+                          <CardFooter className="bg-muted/30 border-t">
+                            <a
+                              href={flight.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-primary hover:underline text-sm flex items-center"
+                            >
+                              Book / View Flight{" "}
+                              <Globe className="h-4 w-4 ml-1.5" />
+                            </a>
+                          </CardFooter>
                         )}
-                      </div>
-                    </CardContent>
-                    {flight.url && (
-                      <CardFooter className="bg-muted/30 border-t">
-                        <a
-                          href={flight.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-primary hover:underline text-sm flex items-center"
-                        >
-                          Book / View Flight{" "}
-                          <Globe className="h-4 w-4 ml-1.5" />
-                        </a>
-                      </CardFooter>
-                    )}
-                  </Card>
-                ))}
+                    </Card>
+                  ))}
               </div>
             </section>
           )}
+
+          {/* Restaurants Section */}
+          {trip.itinerary.restaurants &&
+            trip.itinerary.restaurants.length > 0 && (
+              <section>
+                <h2 className="text-2xl font-semibold mb-6 flex items-center">
+                  <Landmark className="mr-3 h-6 w-6 text-primary" /> Restaurants
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {trip.itinerary.restaurants.map((restaurant, index) => (
+                    <Card
+                      key={index}
+                      className="group hover:shadow-md transition-all duration-300 border-b-4 border-b-transparent hover:border-b-primary"
+                    >
+                      <CardHeader>
+                        <CardTitle className="text-lg group-hover:text-primary transition-colors">
+                          {restaurant.name}
+                        </CardTitle>
+                        {restaurant.location && (
+                          <CardDescription className="flex items-center mt-1">
+                            <MapPin className="h-3.5 w-3.5 mr-1 text-muted-foreground" />
+                            {restaurant.location}
+                          </CardDescription>
+                        )}
+                      </CardHeader>
+                      {restaurant.description && (
+                        <CardContent>
+                          <p className="text-sm text-muted-foreground">
+                            {restaurant.description}
+                          </p>
+                        </CardContent>
+                      )}
+                      {restaurant.url && restaurant.url.trim() !== "" && (
+                        <CardFooter className="bg-muted/30 border-t">
+                          <a
+                            href={restaurant.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-primary hover:underline text-sm flex items-center"
+                          >
+                            Visit Website <Globe className="h-4 w-4 ml-1.5" />
+                          </a>
+                        </CardFooter>
+                      )}
+                    </Card>
+                  ))}
+                </div>
+              </section>
+            )}
 
           {/* Attractions Section */}
           {trip.itinerary.attractions &&
