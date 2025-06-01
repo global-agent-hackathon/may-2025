@@ -3,16 +3,14 @@ import logging
 import inspect
 from typing import Dict, Any, Callable
 from loguru import logger
+from pathlib import Path
 
 # Create logs directory if it doesn't exist
 # LOGS_DIR = Path("logs")
 # LOGS_DIR.mkdir(exist_ok=True)
 
 
-def configure_logger(
-    console_level: str = "INFO",
-    log_format: str = None
-) -> None:
+def configure_logger(console_level: str = "INFO", log_format: str = None) -> None:
     """Configure loguru logger with console and file outputs
 
     Args:
@@ -39,6 +37,12 @@ def configure_logger(
         diagnose=True,
     )
 
+    # # Add file handler
+    # logger.add(
+    #     LOGS_DIR / "app.log",
+    #     format=log_format,
+    #     level=console_level,
+    # )
 
 
 # Intercept standard library logging to loguru
@@ -75,20 +79,12 @@ def patch_std_logging():
         logging_logger.propagate = False
 
     # Update specific common libraries
-    for logger_name in (
-        "uvicorn",
-        "uvicorn.error",
-        "uvicorn.access",
-        "fastapi"
-    ):
+    for logger_name in ("uvicorn", "uvicorn.error", "uvicorn.access", "fastapi"):
         logging_logger = logging.getLogger(logger_name)
         logging_logger.handlers = [InterceptHandler()]
 
 
-def setup_logging(
-    console_level: str = "INFO",
-    intercept_stdlib: bool = True
-) -> None:
+def setup_logging(console_level: str = "INFO", intercept_stdlib: bool = True) -> None:
     """Setup logging for the entire application
 
     Args:
@@ -104,13 +100,10 @@ def setup_logging(
         patch_std_logging()
 
     # Add extra context to logger
-    logger.configure(
-        extra={
-            "app_name": "decipher-research-agent"
-        }
-    )
+    logger.configure(extra={"app_name": "decipher-research-agent"})
 
     logger.info("Logging configured successfully")
+
 
 def logger_hook(function_name: str, function_call: Callable, arguments: Dict[str, Any]):
     """Hook function that wraps the tool execution"""

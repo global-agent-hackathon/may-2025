@@ -47,7 +47,9 @@ async def trigger_trip_craft_agent(
                 # Update task status to in progress when service starts
                 await update_task_status(task.id, TaskStatus.in_progress)
                 logger.info(f"Task updated to in progress: {task.id}")
+
                 result = await generate_travel_plan(request)
+
                 # Update task with success status and output
                 await update_task_status(
                     task.id, TaskStatus.success, output_data={"travel_plan": result}

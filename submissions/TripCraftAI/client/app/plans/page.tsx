@@ -24,9 +24,12 @@ import {
   Plus,
   RefreshCw,
   AlertCircle,
+  Trash2,
+  Eye,
 } from "lucide-react";
 import { format } from "date-fns";
 import Link from "next/link";
+import { toast } from "sonner";
 
 interface TripPlan {
   id: string;
@@ -96,6 +99,7 @@ export default function Plans() {
   const [tripPlans, setTripPlans] = useState<TripPlan[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [deletingPlanId, setDeletingPlanId] = useState<string | null>(null);
 
   const fetchTripPlans = async () => {
     try {
@@ -114,6 +118,39 @@ export default function Plans() {
       setError("Failed to fetch trip plans");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const deleteTripPlan = async (planId: string) => {
+    try {
+      setDeletingPlanId(planId);
+      const response = await fetch(`/api/plans/${planId}`, {
+        method: "DELETE",
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        // Remove the plan from the local state
+        setTripPlans(tripPlans.filter((plan) => plan.id !== planId));
+        toast.success("Trip plan deleted successfully");
+      } else {
+        toast.error(data.message || "Failed to delete trip plan");
+      }
+    } catch (err) {
+      console.error("Error deleting trip plan:", err);
+      toast.error("Failed to delete trip plan");
+    } finally {
+      setDeletingPlanId(null);
+    }
+  };
+
+  const handleDeletePlan = (planId: string) => {
+    if (
+      window.confirm(
+        "Are you sure you want to delete this trip plan? This action cannot be undone."
+      )
+    ) {
+      deleteTripPlan(planId);
     }
   };
 
@@ -320,11 +357,25 @@ export default function Plans() {
 
                   {/* Actions */}
                   <div className="flex gap-2 pt-2">
-                    <Button variant="outline" size="sm" className="flex-1">
-                      View Details
-                    </Button>
-                    <Button variant="secondary" size="sm" className="flex-1">
-                      Edit Plan
+                    <Link href={`/plan/${plan.id}`} className="flex-1">
+                      <Button variant="outline" size="sm" className="w-full">
+                        <Eye className="w-4 h-4 mr-2" />
+                        View Details
+                      </Button>
+                    </Link>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      className="flex-1"
+                      onClick={() => handleDeletePlan(plan.id)}
+                      disabled={deletingPlanId === plan.id}
+                    >
+                      {deletingPlanId === plan.id ? (
+                        <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                      ) : (
+                        <Trash2 className="w-4 h-4 mr-2" />
+                      )}
+                      Delete
                     </Button>
                   </div>
                 </CardContent>

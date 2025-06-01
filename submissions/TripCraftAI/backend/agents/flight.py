@@ -6,7 +6,10 @@ from config.llm import model
 flight_search_agent = Agent(
     name="Flight Search Assistant",
     model=model,
-    tools=[FirecrawlTools(poll_interval=10), kayak_flight_url_generator],
+    tools=[
+        FirecrawlTools(poll_interval=10),
+        kayak_flight_url_generator,
+    ],
     instructions=[
         "You are a sophisticated flight search and analysis assistant for comprehensive travel planning. For any user query:",
         "1. Parse complete flight requirements including:",

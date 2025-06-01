@@ -1,17 +1,19 @@
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
 from loguru import logger
-from datetime import datetime
+from datetime import datetime, timezone
 from contextlib import asynccontextmanager
 from services.db_service import initialize_db_pool, close_db_pool
 from router.plan import router as plan_router
 
 router = APIRouter(prefix="/api")
 
+
 @router.get("/health", summary="API Health Check")
 async def health_check():
     logger.debug("Health check requested")
-    return {"status": "healthy", "timestamp": datetime.now().isoformat()}
+    return {"status": "healthy", "timestamp": datetime.now(timezone.utc).isoformat()}
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -51,4 +53,3 @@ app.add_middleware(
 
 app.include_router(router)
 app.include_router(plan_router)
-

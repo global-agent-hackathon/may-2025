@@ -6,11 +6,23 @@ from agents.hotel import hotel_search_agent
 from agents.food import dining_agent
 from agents.budget import budget_agent
 from agents.flight import flight_search_agent
+from loguru import logger
+from agno.tools.reasoning import ReasoningTools
+
+# def update_team_current_state(team: Team, state: str) -> str:
+#     """
+#     This function is used to set the current state of the team.
+#     """
+#     logger.info(f"The current state of the team is {state}")
+#     team.session_state["current_state"] = state
+#     return state
+
 
 trip_planning_team = Team(
     name="TripCraft AI Team",
     mode="coordinate",
     model=model,
+    tools=[ReasoningTools(add_instructions=True)],
     members=[
         destination_agent,
         hotel_search_agent,
@@ -92,5 +104,6 @@ trip_planning_team = Team(
     show_members_responses=True,
     add_datetime_to_instructions=True,
     add_member_tools_to_system_message=True,
-    debug_mode=True,
+    # debug_mode=True,
+    telemetry=False,
 )

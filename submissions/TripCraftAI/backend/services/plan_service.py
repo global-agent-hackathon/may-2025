@@ -1,4 +1,7 @@
-from datetime import datetime
+from datetime import datetime, timezone
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
+from models.trip_db import TripPlanStatus, TripPlanOutput
 from models.travel_plan import (
     TravelPlanAgentRequest,
     TravelPlanRequest,
@@ -8,6 +11,13 @@ from loguru import logger
 from agents.team import trip_planning_team
 import time
 from agents.structured_output import convert_to_model
+from repository.trip_plan_repository import (
+    create_trip_plan_status,
+    update_trip_plan_status,
+    get_trip_plan_status,
+    create_trip_plan_output,
+    delete_trip_plan_outputs,
+)
 
 
 def travel_request_to_markdown(data: TravelPlanRequest) -> str:
@@ -79,7 +89,7 @@ def travel_request_to_markdown(data: TravelPlanRequest) -> str:
         f"- **Rooms Needed:** {data.rooms or 'Not specified'}",
         "",
         "## 💰 Budget & Preferences",
-        f"- **Budget per person:** ₹{data.budget} {data.budget_currency} ({'Flexible' if data.budget_flexible else 'Fixed'})",
+        f"- **Budget per person:** {data.budget} {data.budget_currency} ({'Flexible' if data.budget_flexible else 'Fixed'})",
         f"- **Travel Style:** {travel_styles.get(data.travel_style, data.travel_style or 'Not specified')}",
         f"- **Preferred Pace:** {', '.join([pace_levels.get(p, str(p)) for p in data.pace]) or 'Not specified'}",
         "",
@@ -112,30 +122,92 @@ def travel_request_to_markdown(data: TravelPlanRequest) -> str:
 
 
 async def generate_travel_plan(request: TravelPlanAgentRequest) -> str:
-    """Generate a travel plan based on the request."""
+    """Generate a travel plan based on the request and log status/output to database."""
+    trip_plan_id = request.trip_plan_id
+    logger.info(f"Generating travel plan for tripPlanId: {trip_plan_id}")
+
+    # Get or create status entry using repository functions
+    status_entry = await get_trip_plan_status(trip_plan_id)
+    if not status_entry:
+        status_entry = await create_trip_plan_status(
+            trip_plan_id=trip_plan_id, status="pending"
+        )
+
+    # Update status to processing
+    status_entry = await update_trip_plan_status(
+        trip_plan_id=trip_plan_id,
+        status="processing",
+        current_step="Initializing travel plan generation",
+        started_at=datetime.now(timezone.utc),
+    )
+
     try:
-        travel_request = travel_request_to_markdown(request.travel_plan)
-        logger.info(f"Travel request: {travel_request}")
+        travel_request_md = travel_request_to_markdown(request.travel_plan)
+        logger.info(f"Travel request markdown: {travel_request_md}")
+
+        # Update status for AI team generation
+        await update_trip_plan_status(
+            trip_plan_id=trip_plan_id,
+            status="processing",
+            current_step="Generating plan with AI team",
+        )
 
         prompt = f"""
             Below is my travel plan request. Please generate a travel plan for the request.
-            {travel_request}
+            {travel_request_md}
         """
 
         time_start = time.time()
-        response = await trip_planning_team.arun(prompt)
+        ai_response = await trip_planning_team.arun(prompt)
         time_end = time.time()
-        logger.info(f"Time taken: {time_end - time_start} seconds")
-        logger.info(f"Full Travel Team Response: {response.content}")
+        logger.info(f"AI team processing time: {time_end - time_start:.2f} seconds")
 
-        last_response = response.messages[-1].content
-        logger.info(f"Last Response: {last_response}")
+        last_response_content = ai_response.messages[-1].content
+        logger.info(
+            f"Last AI Response for conversion: {last_response_content[:500]}..."
+        )
 
-        response = await convert_to_model(last_response, TravelPlanTeamResponse)
-        json_response = response.model_dump_json(indent=2)
-        logger.info(f"Converted Response: {json_response}")
+        # Update status for response conversion
+        await update_trip_plan_status(
+            trip_plan_id=trip_plan_id,
+            status="processing",
+            current_step="Converting AI response to structured output",
+        )
 
-        return json_response
+        structured_response_model = await convert_to_model(
+            last_response_content, TravelPlanTeamResponse
+        )
+        json_response_output = structured_response_model.model_dump_json(indent=2)
+        logger.info(f"Converted Structured Response: {json_response_output[:500]}...")
+
+        # Delete any existing output entries for this trip plan
+        await delete_trip_plan_outputs(trip_plan_id=trip_plan_id)
+
+        # Create new output entry
+        await create_trip_plan_output(
+            trip_plan_id=trip_plan_id,
+            itinerary=json_response_output,
+            summary="",
+        )
+
+        # Update status to completed
+        await update_trip_plan_status(
+            trip_plan_id=trip_plan_id,
+            status="completed",
+            current_step="Plan generated and saved",
+            completed_at=datetime.now(timezone.utc),
+        )
+
+        return json_response_output
     except Exception as e:
-        logger.error(f"Error generating travel plan: {str(e)}")
+        logger.error(
+            f"Error generating travel plan for {trip_plan_id}: {str(e)}", exc_info=True
+        )
+        # Update status to failed
+        await update_trip_plan_status(
+            trip_plan_id=trip_plan_id,
+            status="failed",
+            error=str(e),
+            completed_at=datetime.now(timezone.utc),
+        )
         raise

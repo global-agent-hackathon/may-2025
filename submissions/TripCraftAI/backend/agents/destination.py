@@ -2,13 +2,16 @@ from agno.agent import Agent
 from agno.tools.exa import ExaTools
 from agno.tools.firecrawl import FirecrawlTools
 from config.llm import model
+from agno.tools.thinking import ThinkingTools
 
 destination_agent = Agent(
     name="Destination Explorer",
     model=model,
     tools=[
+        ThinkingTools(add_instructions=True),
         ExaTools(
             search=True,
+            num_results=10,
             get_contents=False,
             find_similar=False,
             answer=False,
@@ -19,64 +22,57 @@ destination_agent = Agent(
             poll_interval=10,
         ),
     ],
-    description="You are a specialized destination research agent that gathers comprehensive lists of attractions, experiences, and tourist spots for any location while considering user preferences.",
+    description="You are a destination research agent that focuses on recommending mainstream tourist attractions and classic experiences that most travelers would enjoy. You prioritize well-known landmarks and popular activities while keeping recommendations general and widely appealing.",
     instructions=[
-        "1. Gather a complete list of attractions and experiences:",
-        "   - Major tourist attractions and landmarks",
-        "   - Popular tourist spots and must-visit places",
-        "   - Local hidden gems and off-the-beaten-path locations",
-        "   - Cultural and historical sites",
-        "   - Nature spots and outdoor activities",
-        "   - Entertainment venues and nightlife options",
+        "1. Focus on mainstream attractions with thoughtful guidance:",
+        "   - Think: What are the absolute must-see spots here?",
+        "   - Famous landmarks and monuments",
+        "   - Popular tourist spots",
+        "   - Well-known museums",
+        "   - Classic shopping areas",
+        "   - Common tourist activities",
         "",
-        "2. Filter and prioritize based on user preferences (if provided):",
-        "   - Travel interests (adventure, culture, food, etc.)",
-        "   - Physical activity preferences",
-        "   - Time availability",
-        "   - Group type (solo, couple, family, etc.)",
+        "2. Guide visitors with simple reasoning:",
+        "   - Think: What would most tourists enjoy?",
+        "   - Suggest crowd-pleasing activities",
+        "   - Focus on family-friendly locations",
+        "   - Recommend proven tourist routes",
+        "   - Include popular photo spots",
         "",
-        "3. For each attraction/spot, collect:",
-        "   - Brief description and highlights",
-        "   - Location and how to get there",
-        "   - Opening hours and entry fees",
-        "   - Best time to visit",
-        "   - Estimated time needed",
-        "   - Special tips or warnings",
+        "3. Present clear attraction information:",
+        "   - Think: What do visitors need to know?",
+        "   - Simple description",
+        "   - General location",
+        "   - Regular opening hours",
+        "   - Standard entrance fees",
+        "   - Typical visit duration",
+        "   - Basic visitor tips",
         "",
-        "4. Organize findings by:",
-        "   - Categories (landmarks, museums, parks, etc.)",
-        "   - Location/district",
-        "   - Must-see vs optional",
-        "   - Indoor vs outdoor activities",
+        "4. Organize information logically:",
+        "   - Think: What's the best way to explore?",
+        "   - Main attractions first",
+        "   - Common day trips",
+        "   - Standard tourist areas",
+        "   - Popular activities",
         "",
-        "Use Exa for broad attraction search and Firecrawl for detailed information from travel sites.",
-        "Present findings in a clear, structured format with practical details for trip planning.",
+        "Use tools to find and verify tourist information.",
+        "Keep suggestions general and widely appealing.",
     ],
     expected_output="""
-    # Destination Guide
-    ## Overview
-    Brief destination summary and key highlights
+    # Tourist Guide
+    ## Main Attractions
+    List of most popular tourist spots
 
-    ## Top Attractions
-    For each attraction:
-    - Name and Category
-    - Description
-    - Location & Access
-    - Hours & Pricing
-    - Visit Duration
-    - Tips & Notes
+    ## Common Activities
+    Standard tourist activities and experiences
 
-    ## Local Experiences
-    Categorized list of activities and experiences
+    ## Popular Areas
+    Well-known districts and neighborhoods
 
-    ## District Breakdown
-    Area-by-area attraction listings
-
-    ## Practical Information
-    - Best times to visit
-    - Weather considerations
-    - Local transport tips
-    - Safety notes
+    ## Basic Information
+    - General visiting tips
+    - Common transportation options
+    - Standard tourist advice
     """,
     markdown=True,
     show_tool_calls=True,

@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import List
-from models.hotel import HotelResults
+from models.hotel import HotelResult
 
 
 class TravelDates(BaseModel):
@@ -71,23 +71,27 @@ class Attraction(BaseModel):
     description: str = Field(
         default="", description="Detailed description of the attraction"
     )
-    location: str = Field(
-        default="", description="Physical location/address of the attraction"
+
+
+class FlightResult(BaseModel):
+    duration: str = Field(default="", description="Duration of the flight")
+    price: str = Field(
+        default="", description="Price of the flight in the local currency"
     )
-    duration: int = Field(
-        default=0, description="Estimated time needed to visit in minutes"
-    )
-    price: int = Field(default=0, description="Entry fee or cost in the local currency")
-    url: str = Field(
-        default="", description="Website or booking URL for the attraction"
-    )
+    departure_time: str = Field(default="", description="Departure time of the flight")
+    arrival_time: str = Field(default="", description="Arrival time of the flight")
+    airline: str = Field(default="", description="Airline of the flight")
+    flight_number: str = Field(default="", description="Flight number of the flight")
+    url: str = Field(default="", description="Website or booking URL for the flight")
+    stops: int = Field(default=0, description="Number of stops in the flight")
 
 
 class TravelPlanTeamResponse(BaseModel):
     day_by_day_plan: List[DayByDayPlan] = Field(
         description="A list of day-by-day plans for the trip"
     )
-    hotels: HotelResults = Field(description="A list of hotels for the trip")
+    hotels: List[HotelResult] = Field(description="A list of hotels for the trip")
     attractions: List[Attraction] = Field(
         description="A list of attractions for the trip"
     )
+    flights: List[FlightResult] = Field(description="A list of flights for the trip")
