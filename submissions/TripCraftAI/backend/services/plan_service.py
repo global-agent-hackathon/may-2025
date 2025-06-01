@@ -9,6 +9,7 @@ from models.travel_plan import (
 )
 from loguru import logger
 from agents.team import trip_planning_team
+import json
 import time
 from agents.structured_output import convert_to_model
 from repository.trip_plan_repository import (
@@ -18,6 +19,12 @@ from repository.trip_plan_repository import (
     create_trip_plan_output,
     delete_trip_plan_outputs,
 )
+from agents.destination import destination_agent
+from agents.itinerary import itinerary_agent
+from agents.flight import flight_search_agent
+from agents.hotel import hotel_search_agent
+from agents.food import dining_agent
+from agents.budget import budget_agent
 
 
 def travel_request_to_markdown(data: TravelPlanRequest) -> str:
@@ -152,20 +159,158 @@ async def generate_travel_plan(request: TravelPlanAgentRequest) -> str:
             current_step="Generating plan with AI team",
         )
 
-        prompt = f"""
-            Below is my travel plan request. Please generate a travel plan for the request.
+        last_response_content = ""
+        time_start = time.time()
+
+        # Team Collaboration
+        # prompt = f"""
+        #     Below is my travel plan request. Please generate a travel plan for the request.
+        #     {travel_request_md}
+        # """
+
+        # time_start = time.time()
+        # ai_response = await trip_planning_team.arun(prompt)
+        # time_end = time.time()
+        # logger.info(f"AI team processing time: {time_end - time_start:.2f} seconds")
+
+        # last_response_content = ai_response.messages[-1].content
+        # logger.info(
+        #     f"Last AI Response for conversion: {last_response_content[:500]}..."
+        # )
+
+        # Destination Research
+        destionation_research_response = await destination_agent.arun(
+            f"""
+            Please research about the destination {request.travel_plan.destination}
+
+            Below are user's travel request:
             {travel_request_md}
+
+            Provide a very detailed research about the destination, its attractions, activities, and other relevant information that user might be interested in.
+            """
+        )
+
+        logger.info(
+            f"Destination research response: {destionation_research_response.messages[-1].content}"
+        )
+
+        last_response_content = f"""
+        ## Destination Attractions:
+        ---
+        {destionation_research_response.messages[-1].content}
+        ---
+"""
+
+        # Flight Search
+        flight_search_response = await flight_search_agent.arun(
+            f"""
+            Please find flights according to the user's travel request:
+            {travel_request_md}
+
+            If user has not specified the exact flight date, please consider it by yourself based on the user's travel request.
+
+            Provide a very detailed research about the flights, its price, duration, and other relevant information that user might be interested in.
+
+            Give top 5 flights.
+            """
+        )
+
+        logger.info(
+            f"Flight search response: {flight_search_response.messages[-1].content}"
+        )
+
+        last_response_content += f"""
+        ## Flight recommendations:
+        ---
+        {flight_search_response.messages[-1].content}
+        ---
         """
 
-        time_start = time.time()
-        ai_response = await trip_planning_team.arun(prompt)
-        time_end = time.time()
-        logger.info(f"AI team processing time: {time_end - time_start:.2f} seconds")
+        # Hotel Search
+        hotel_search_response = await hotel_search_agent.arun(
+            f"""
+            Please find hotels according to the user's travel request:
+            {travel_request_md}
 
-        last_response_content = ai_response.messages[-1].content
-        logger.info(
-            f"Last AI Response for conversion: {last_response_content[:500]}..."
+            If user has not specified the exact hotel dates, please consider it by yourself based on the user's travel request.
+
+            Provide a very detailed research about the hotels, its price, amenities, and other relevant information that user might be interested in.
+
+            Give top 5 hotels.
+            """
         )
+
+        last_response_content += f"""
+        ## Hotel recommendations:
+        ---
+        {hotel_search_response.messages[-1].content}
+        ---
+        """
+
+        logger.info(
+            f"Hotel search response: {hotel_search_response.messages[-1].content}"
+        )
+
+        # Restaurant Search
+        restaurant_search_response = await dining_agent.arun(
+            f"""
+            Please find restaurants according to the user's travel request:
+            {travel_request_md}
+
+            If user has not specified the exact restaurant dates, please consider it by yourself based on the user's travel request.
+
+            Provide a very detailed research about the restaurants, its price, menu, and other relevant information that user might be interested in.
+
+            Give top 5 restaurants.
+            """
+        )
+
+        last_response_content += f"""
+        ## Restaurant recommendations:
+        ---
+        {restaurant_search_response.messages[-1].content}
+        ---
+        """
+
+        logger.info(
+            f"Restaurant search response: {restaurant_search_response.messages[-1].content}"
+        )
+
+        # Itinerary
+        itinerary_response = await itinerary_agent.arun(
+            f"""
+            Please create a detailed day-by-day itinerary for a trip to {request.travel_plan.destination}  for user's travel request:
+            {travel_request_md}
+
+            Based on the following information:
+            {last_response_content}
+            """
+        )
+
+        logger.info(f"Itinerary response: {itinerary_response.messages[-1].content}")
+
+        last_response_content += f"""
+        ## Day-by-day itinerary:
+        ---
+        {itinerary_response.messages[-1].content}
+        ---
+        """
+
+        # Budget
+        budget_response = await budget_agent.arun(
+            f"""
+            Please optimize the budget according to the user's travel request:
+            {travel_request_md}
+
+            Based on the following information:
+            {last_response_content}
+            """
+        )
+
+        logger.info(f"Budget response: {budget_response.messages[-1].content}")
+
+        time_end = time.time()
+        logger.info(f"Total time taken: {time_end - time_start:.2f} seconds")
 
         # Update status for response conversion
         await update_trip_plan_status(
@@ -174,19 +319,35 @@ async def generate_travel_plan(request: TravelPlanAgentRequest) -> str:
             current_step="Converting AI response to structured output",
         )
 
-        structured_response_model = await convert_to_model(
+        json_response_output = await convert_to_model(
             last_response_content, TravelPlanTeamResponse
         )
-        json_response_output = structured_response_model.model_dump_json(indent=2)
         logger.info(f"Converted Structured Response: {json_response_output[:500]}...")
 
         # Delete any existing output entries for this trip plan
         await delete_trip_plan_outputs(trip_plan_id=trip_plan_id)
 
+        final_response = json.dumps(
+            {
+                "itinerary": json_response_output,
+                "budget_agent_response": budget_response.messages[-1].content,
+                "destination_agent_response": destionation_research_response.messages[
+                    -1
+                ].content,
+                "flight_agent_response": flight_search_response.messages[-1].content,
+                "hotel_agent_response": hotel_search_response.messages[-1].content,
+                "restaurant_agent_response": restaurant_search_response.messages[
+                    -1
+                ].content,
+                "itinerary_agent_response": itinerary_response.messages[-1].content,
+            },
+            indent=2,
+        )
+
         # Create new output entry
         await create_trip_plan_output(
             trip_plan_id=trip_plan_id,
-            itinerary=json_response_output,
+            itinerary=final_response,
             summary="",
         )
 
@@ -198,7 +359,7 @@ async def generate_travel_plan(request: TravelPlanAgentRequest) -> str:
             completed_at=datetime.now(timezone.utc),
         )
 
-        return json_response_output
+        return final_response
     except Exception as e:
         logger.error(
             f"Error generating travel plan for {trip_plan_id}: {str(e)}", exc_info=True

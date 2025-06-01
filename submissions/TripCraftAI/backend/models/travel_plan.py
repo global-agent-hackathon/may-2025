@@ -107,3 +107,9 @@ class TravelPlanTeamResponse(BaseModel):
     restaurants: List[RestaurantResult] = Field(
         description="A list of recommended restaurants for the trip"
     )
+    budget_insights: List[str] = Field(
+        description="A list of budget insights for the trip"
+    )
+    tips: List[str] = Field(
+        description="A list of tips or recommendations for the trip"
+    )

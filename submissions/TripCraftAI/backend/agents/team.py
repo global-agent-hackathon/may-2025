@@ -6,6 +6,7 @@ from agents.hotel import hotel_search_agent
 from agents.food import dining_agent
 from agents.budget import budget_agent
 from agents.flight import flight_search_agent
+from agents.itinerary import itinerary_agent
 from loguru import logger
 from agno.tools.reasoning import ReasoningTools
 
@@ -29,6 +30,7 @@ trip_planning_team = Team(
         dining_agent,
         budget_agent,
         flight_search_agent,
+        itinerary_agent,
     ],
     show_tool_calls=True,
     markdown=True,

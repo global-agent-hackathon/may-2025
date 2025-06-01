@@ -8,9 +8,7 @@ hotel_search_agent = Agent(
     name="Hotel Search Assistant",
     model=model,
     tools=[
-        FirecrawlTools(
-            poll_interval=10,
-        ),
+        FirecrawlTools(poll_interval=10, formats=["markdown"]),
         kayak_hotel_url_generator,
     ],
     instructions=[

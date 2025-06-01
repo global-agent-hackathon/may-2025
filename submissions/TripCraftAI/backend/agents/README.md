@@ -56,6 +56,17 @@ The system is orchestrated by the "TripCraft AI Team", which coordinates multipl
      - Connection planning
      - Airport transfer coordination
 
+6. **Itinerary Specialist**
+   - Primary role: Creates detailed day-by-day travel schedules
+   - Expertise:
+     - Hour-by-hour activity planning
+     - Optimized timing for attractions
+     - Transportation scheduling
+     - Realistic travel times
+     - Buffer time management
+     - Weather-adaptive scheduling
+     - Traveler-specific pacing
+
 ## Team Coordination
 
 The team works together through a sophisticated coordination system that:
