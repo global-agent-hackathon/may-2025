@@ -1,6 +1,6 @@
 from agno.agent import Agent
-from agno.tools.firecrawl import FirecrawlTools
 from tools.kayak_hotel import kayak_hotel_url_generator
+from tools.scrape import scrape_website
 from config.llm import model
 from models.hotel import HotelResult, HotelResults
 
@@ -8,7 +8,7 @@ hotel_search_agent = Agent(
     name="Hotel Search Assistant",
     model=model,
     tools=[
-        FirecrawlTools(poll_interval=10, formats=["markdown"]),
+        scrape_website,
         kayak_hotel_url_generator,
     ],
     instructions=[
@@ -62,11 +62,6 @@ hotel_search_agent = Agent(
         "- Sort results by relevance to user preferences",
         "- Include direct booking links",
         "",
-        "## Task 6: Cleanup & Error Handling",
-        "- Close browser session",
-        "- Handle exceptions gracefully",
-        "- Implement retry logic",
-        "- Log errors for debugging",
     ],
     expected_output="""
       List of hotels with the following fields for each hotel:

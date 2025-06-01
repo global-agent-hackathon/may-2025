@@ -821,13 +821,15 @@ export default function TripDetailsPage() {
             <TabsTrigger value="guide" className="flex items-center">
               <Lightbulb className="h-4 w-4 mr-2" /> Destination Guide
             </TabsTrigger>
+            <TabsTrigger value="hotels" className="flex items-center">
+              <Home className="h-4 w-4 mr-2" /> Hotels
+            </TabsTrigger>
             <TabsTrigger value="flights" className="flex items-center">
               <Plane className="h-4 w-4 mr-2" /> Flights
             </TabsTrigger>
             <TabsTrigger value="dining" className="flex items-center">
               <Utensils className="h-4 w-4 mr-2" /> Dining
             </TabsTrigger>
-
             <TabsTrigger value="budget" className="flex items-center">
               <Receipt className="h-4 w-4 mr-2" /> Budget
             </TabsTrigger>
@@ -1011,6 +1013,128 @@ export default function TripDetailsPage() {
                 </h2>
                 <p className="text-muted-foreground">
                   Destination guide information is not available for this trip.
+                </p>
+              </div>
+            )}
+          </TabsContent>
+
+          {/* Hotels Tab Content */}
+          <TabsContent value="hotels" className="space-y-8">
+            {trip.itinerary &&
+            trip.itinerary.hotels &&
+            trip.itinerary.hotels.length > 0 ? (
+              <section>
+                <h2 className="text-2xl font-semibold mb-6 flex items-center">
+                  <Home className="mr-3 h-6 w-6 text-primary" /> Recommended
+                  Accommodations
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {trip.itinerary.hotels.map((hotel, index) => (
+                    <Card
+                      key={index}
+                      className="overflow-hidden border-l-4 border-l-primary"
+                    >
+                      <CardHeader className="bg-muted/30">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <CardTitle className="text-lg">
+                              {hotel.hotel_name}
+                            </CardTitle>
+                            {hotel.rating && (
+                              <CardDescription className="flex items-center mt-1">
+                                <span className="text-yellow-500 flex items-center">
+                                  {Array(Math.floor(Number(hotel.rating) || 0))
+                                    .fill(0)
+                                    .map((_, i) => (
+                                      <svg
+                                        key={i}
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor"
+                                        className="w-4 h-4"
+                                      >
+                                        <path
+                                          fillRule="evenodd"
+                                          d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z"
+                                          clipRule="evenodd"
+                                        />
+                                      </svg>
+                                    ))}
+                                </span>
+                                <span className="ml-1">{hotel.rating}</span>
+                              </CardDescription>
+                            )}
+                          </div>
+                          <Badge variant="outline" className="font-medium">
+                            {hotel.price}
+                          </Badge>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="pt-6">
+                        <div className="space-y-4">
+                          <div className="flex items-start">
+                            <MapPin className="h-5 w-5 mr-2 mt-0.5 text-primary flex-shrink-0" />
+                            <p className="text-sm text-muted-foreground">
+                              {hotel.address}
+                            </p>
+                          </div>
+
+                          {hotel.description && (
+                            <div className="mt-4">
+                              <p className="text-sm text-muted-foreground whitespace-pre-line">
+                                {hotel.description}
+                              </p>
+                            </div>
+                          )}
+
+                          {hotel.amenities && hotel.amenities.length > 0 && (
+                            <div className="mt-4">
+                              <h3 className="text-sm font-medium mb-2">
+                                Amenities:
+                              </h3>
+                              <div className="flex flex-wrap gap-1.5">
+                                {hotel.amenities.map((amenity, i) => (
+                                  <Badge
+                                    key={i}
+                                    variant="secondary"
+                                    className="text-xs"
+                                  >
+                                    {amenity}
+                                  </Badge>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </CardContent>
+                      {hotel.url && (
+                        <CardFooter className="bg-muted/30 border-t">
+                          <a
+                            href={hotel.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-primary hover:underline text-sm flex items-center"
+                          >
+                            View Hotel / Book{" "}
+                            <Globe className="h-4 w-4 ml-1.5" />
+                          </a>
+                        </CardFooter>
+                      )}
+                    </Card>
+                  ))}
+                </div>
+              </section>
+            ) : (
+              <div className="text-center py-10 border rounded-lg">
+                <Info
+                  size={48}
+                  className="text-muted-foreground mx-auto mb-4"
+                />
+                <h2 className="text-xl font-semibold mb-2">
+                  Hotel Information Not Available
+                </h2>
+                <p className="text-muted-foreground">
+                  Hotel recommendations are not available for this trip.
                 </p>
               </div>
             )}
