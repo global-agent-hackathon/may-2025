@@ -10,9 +10,10 @@ This project demonstrates a modern web application leveraging AI agents (orchest
 ---
 
 ## ✨ Demo ✨
-[![Watch the video](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=GJOKZyBOF00)
 
-*Caption: Example showing patient ID entry, loading state, and ranked trial matches with rationale.*
+![Screenshot 2025-06-01 032813](https://github.com/user-attachments/assets/c1b9c443-19d7-49eb-bbc8-10a648a4a4d6)
+[![Watch the video]](https://www.youtube.com/watch?v=GJOKZyBOF00)
+*Example showing patient ID entry, loading state, and ranked trial matches with rationale.*
 
 ---
 
