@@ -156,7 +156,7 @@ async def generate_travel_plan(request: TravelPlanAgentRequest) -> str:
         await update_trip_plan_status(
             trip_plan_id=trip_plan_id,
             status="processing",
-            current_step="Generating plan with AI team",
+            current_step="Generating plan with TripCraft AI agents",
         )
 
         last_response_content = ""
@@ -177,6 +177,13 @@ async def generate_travel_plan(request: TravelPlanAgentRequest) -> str:
         # logger.info(
         #     f"Last AI Response for conversion: {last_response_content[:500]}..."
         # )
+
+        # Update status for AI team generation
+        await update_trip_plan_status(
+            trip_plan_id=trip_plan_id,
+            status="processing",
+            current_step="Researching about the destination",
+        )
 
         # Destination Research
         destionation_research_response = await destination_agent.arun(
@@ -201,6 +208,12 @@ async def generate_travel_plan(request: TravelPlanAgentRequest) -> str:
         ---
 """
 
+        # Update status for AI team generation
+        await update_trip_plan_status(
+            trip_plan_id=trip_plan_id,
+            status="processing",
+            current_step="Searching for the best flights",
+        )
         # Flight Search
         flight_search_response = await flight_search_agent.arun(
             f"""
@@ -226,6 +239,12 @@ async def generate_travel_plan(request: TravelPlanAgentRequest) -> str:
         ---
         """
 
+        # Update status for AI team generation
+        await update_trip_plan_status(
+            trip_plan_id=trip_plan_id,
+            status="processing",
+            current_step="Searching for the best hotels",
+        )
         # Hotel Search
         hotel_search_response = await hotel_search_agent.arun(
             f"""
@@ -251,6 +270,12 @@ async def generate_travel_plan(request: TravelPlanAgentRequest) -> str:
             f"Hotel search response: {hotel_search_response.messages[-1].content}"
         )
 
+        # Update status for AI team generation
+        await update_trip_plan_status(
+            trip_plan_id=trip_plan_id,
+            status="processing",
+            current_step="Searching for the best restaurants",
+        )
         # Restaurant Search
         restaurant_search_response = await dining_agent.arun(
             f"""
@@ -276,6 +301,12 @@ async def generate_travel_plan(request: TravelPlanAgentRequest) -> str:
             f"Restaurant search response: {restaurant_search_response.messages[-1].content}"
         )
 
+        # Update status for AI team generation
+        await update_trip_plan_status(
+            trip_plan_id=trip_plan_id,
+            status="processing",
+            current_step="Creating the day-by-day itinerary",
+        )
         # Itinerary
         itinerary_response = await itinerary_agent.arun(
             f"""
@@ -296,6 +327,12 @@ async def generate_travel_plan(request: TravelPlanAgentRequest) -> str:
         ---
         """
 
+        # Update status for AI team generation
+        await update_trip_plan_status(
+            trip_plan_id=trip_plan_id,
+            status="processing",
+            current_step="Optimizing the budget",
+        )
         # Budget
         budget_response = await budget_agent.arun(
             f"""
