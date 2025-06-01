@@ -353,7 +353,7 @@ async def generate_travel_plan(request: TravelPlanAgentRequest) -> str:
         await update_trip_plan_status(
             trip_plan_id=trip_plan_id,
             status="processing",
-            current_step="Converting AI response to structured output",
+            current_step="Adding finishing touches",
         )
 
         json_response_output = await convert_to_model(

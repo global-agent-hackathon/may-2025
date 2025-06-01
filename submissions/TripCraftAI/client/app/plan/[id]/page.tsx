@@ -103,6 +103,7 @@ interface TripDetails {
   flight_agent_response?: string;
   restaurant_agent_response?: string;
   itinerary_agent_response?: string;
+  current_step?: string;
   // Input details
   destination?: string;
   startingLocation?: string;
@@ -214,6 +215,7 @@ export default function TripDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [polling, setPolling] = useState(false);
+  const [retryLoading, setRetryLoading] = useState(false);
 
   // Function to fetch trip details
   const fetchTripDetails = useCallback(async () => {
@@ -297,6 +299,8 @@ export default function TripDetailsPage() {
           name: tripPlan.name,
           status,
           itinerary,
+          // Extract current step from status if available
+          current_step: tripPlan.status?.currentStep || undefined,
           // Raw agent responses
           budget_agent_response,
           destination_agent_response,
@@ -348,6 +352,39 @@ export default function TripDetailsPage() {
       setLoading(false);
     }
   }, [tripId]);
+
+  // Function to retry a failed trip plan
+  const retryTripPlan = async () => {
+    if (!tripId) return;
+
+    try {
+      setRetryLoading(true);
+      const response = await fetch(`/api/plans/${tripId}/retry`, {
+        method: "POST",
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Failed to retry trip plan");
+      }
+
+      // Refresh trip details after retry
+      await fetchTripDetails();
+
+      // Start polling again
+      setPolling(true);
+    } catch (err) {
+      console.error("Error retrying trip plan:", err);
+      setError(
+        `Failed to retry trip plan: ${
+          err instanceof Error ? err.message : "Unknown error"
+        }`
+      );
+    } finally {
+      setRetryLoading(false);
+    }
+  };
 
   // Initial fetch
   useEffect(() => {
@@ -715,12 +752,60 @@ export default function TripDetailsPage() {
             {trip.status === "failed" &&
               "Something went wrong while generating your trip plan. Please try again or contact support."}
           </p>
+
+          {/* Show current step when available */}
+          {(trip.status === "pending" || trip.status === "in-progress") &&
+            trip.current_step && (
+              <div className="mt-4 bg-muted/30 p-4 rounded-lg max-w-md mx-auto">
+                <h3 className="font-medium text-sm mb-1">Current Progress:</h3>
+                <p className="text-primary font-medium">{trip.current_step}</p>
+              </div>
+            )}
+
           {(trip.status === "pending" || trip.status === "in-progress") && (
             <div className="flex justify-center mt-4">
               <div className="flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full">
                 <Loader2 className="h-4 w-4 animate-spin" />
                 Updating automatically...
               </div>
+            </div>
+          )}
+
+          {/* Add retry button for failed plans */}
+          {trip.status === "failed" && (
+            <div className="flex justify-center mt-6">
+              <button
+                onClick={retryTripPlan}
+                disabled={retryLoading}
+                className="flex items-center gap-2 bg-primary text-primary-foreground px-6 py-2 rounded-md hover:bg-primary/90 transition-colors"
+              >
+                {retryLoading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Retrying...
+                  </>
+                ) : (
+                  <>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M21 2v6h-6"></path>
+                      <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
+                      <path d="M3 22v-6h6"></path>
+                      <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
+                    </svg>
+                    Retry Plan Generation
+                  </>
+                )}
+              </button>
             </div>
           )}
         </div>
@@ -1116,7 +1201,7 @@ export default function TripDetailsPage() {
                             </CardHeader>
                             {restaurant.description && (
                               <CardContent>
-                                <p className="text-sm text-muted-foreground">
+                                <p className="text-sm text-muted-foreground whitespace-pre-line">
                                   {restaurant.description}
                                 </p>
                               </CardContent>
