@@ -1,5 +1,4 @@
 from agno.tools.exa import ExaTools
-from agno.tools.firecrawl import FirecrawlTools
 from config.llm import model
 from agno.agent import Agent
 
@@ -7,19 +6,7 @@ dining_agent = Agent(
     name="Culinary Guide",
     role="Research dining and food experiences when asked by team leader",
     model=model,
-    tools=[
-        ExaTools(
-            search=True,
-            get_contents=False,
-            find_similar=False,
-            answer=False,
-            text=False,
-            highlights=False,
-        ),
-        FirecrawlTools(
-            poll_interval=10,
-        ),
-    ],
+    tools=[ExaTools()],
     description="You research restaurants, food markets, culinary experiences, and dining options when assigned by the team leader.",
     instructions=[
         "# Culinary Research and Recommendation Assistant",

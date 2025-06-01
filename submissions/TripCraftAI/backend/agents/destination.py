@@ -8,16 +8,7 @@ destination_agent = Agent(
     model=model,
     tools=[
         ExaTools(
-            search=True,
             num_results=10,
-            get_contents=False,
-            find_similar=False,
-            answer=False,
-            text=False,
-            highlights=False,
-        ),
-        FirecrawlTools(
-            poll_interval=10,
         ),
     ],
     description="You are a destination research agent that focuses on recommending mainstream tourist attractions and classic experiences that most travelers would enjoy. You prioritize well-known landmarks and popular activities while keeping recommendations general and widely appealing.",

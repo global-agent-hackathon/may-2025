@@ -802,7 +802,7 @@ export default function TripDetailsPage() {
                     </CardContent>
                     {hotel.url && (
                       <CardFooter className="bg-muted/30 border-t">
-                        <Link
+                        <a
                           href={hotel.url}
                           target="_blank"
                           rel="noopener noreferrer"
@@ -810,7 +810,7 @@ export default function TripDetailsPage() {
                         >
                           Visit Hotel Website{" "}
                           <Globe className="h-4 w-4 ml-1.5" />
-                        </Link>
+                        </a>
                       </CardFooter>
                     )}
                   </Card>
@@ -892,7 +892,7 @@ export default function TripDetailsPage() {
                     </CardContent>
                     {flight.url && (
                       <CardFooter className="bg-muted/30 border-t">
-                        <Link
+                        <a
                           href={flight.url}
                           target="_blank"
                           rel="noopener noreferrer"
@@ -900,7 +900,7 @@ export default function TripDetailsPage() {
                         >
                           Book / View Flight{" "}
                           <Globe className="h-4 w-4 ml-1.5" />
-                        </Link>
+                        </a>
                       </CardFooter>
                     )}
                   </Card>

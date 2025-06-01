@@ -1,14 +1,15 @@
 from agno.agent import Agent
 from agno.tools.firecrawl import FirecrawlTools
-from tools.kayak_flight import kayak_flight_url_generator
+from tools.google_flight import get_google_flights
 from config.llm import model
 
 flight_search_agent = Agent(
     name="Flight Search Assistant",
     model=model,
     tools=[
-        FirecrawlTools(poll_interval=10),
-        kayak_flight_url_generator,
+        # FirecrawlTools(poll_interval=10),
+        # kayak_flight_url_generator,
+        get_google_flights,
     ],
     instructions=[
         "You are a sophisticated flight search and analysis assistant for comprehensive travel planning. For any user query:",
@@ -19,9 +20,11 @@ flight_search_agent = Agent(
         "   - Preferred cabin class",
         "   - Any specific airlines or routing preferences",
         "   - Budget constraints if specified",
-        "2. Search and analyze multiple flight options:",
-        "   - Use kayak_url_generator to create appropriate search URLs",
-        "   - Navigate to and extract data from flight search results",
+        # "2. Search and analyze multiple flight options:",
+        "2. Search for flight options:",
+        # "   - Use kayak_url_generator to create appropriate search URLs",
+        # "   - Navigate to and extract data from flight search results",
+        "   - Use get_google_flights to get flight results",
         "   - Consider both direct and connecting flights",
         "   - Compare different departure times and airlines",
         "3. For each viable flight option, extract:",
@@ -44,7 +47,7 @@ flight_search_agent = Agent(
         "   - Direct booking links when available",
         "   - Fare rules and change policies",
         "   - Required documents and visa implications",
-        "7. Always close browser sessions after completion",
+        # "7. Always close browser sessions after completion",
     ],
     expected_output="""
       All flight details with the following fields:

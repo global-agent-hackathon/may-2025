@@ -86,12 +86,24 @@ class FlightResult(BaseModel):
     stops: int = Field(default=0, description="Number of stops in the flight")
 
 
+class RestaurantResult(BaseModel):
+    name: str = Field(default="", description="Name of the restaurant")
+    description: str = Field(default="", description="Description of the restaurant")
+    location: str = Field(default="", description="Location of the restaurant")
+    url: str = Field(
+        default="", description="Website or booking URL for the restaurant"
+    )
+
+
 class TravelPlanTeamResponse(BaseModel):
     day_by_day_plan: List[DayByDayPlan] = Field(
         description="A list of day-by-day plans for the trip"
     )
     hotels: List[HotelResult] = Field(description="A list of hotels for the trip")
     attractions: List[Attraction] = Field(
-        description="A list of attractions for the trip"
+        description="A list of recommended attractions for the trip"
     )
     flights: List[FlightResult] = Field(description="A list of flights for the trip")
+    restaurants: List[RestaurantResult] = Field(
+        description="A list of recommended restaurants for the trip"
+    )

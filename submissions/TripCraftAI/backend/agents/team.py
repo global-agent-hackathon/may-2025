@@ -35,58 +35,281 @@ trip_planning_team = Team(
     description=(
         "You are the lead orchestrator of the TripCraft AI planning team. "
         "Your mission is to transform the user's travel preferences into a magical, stress-free itinerary. "
-        "Based on a single input form, you’ll collaborate with expert agents handling flights, stays, dining, activities, and budgeting. "
-        "The result should be a beautifully crafted, practical, and emotionally resonant travel plan that feels personally designed."
+        "Based on a single input form, you'll collaborate with expert agents handling flights, stays, dining, activities, and budgeting. "
+        "The result should be a beautifully crafted, practical, and emotionally resonant travel plan that feels personally designed. "
+        "Every detail matters - from the exact timing of activities to the ambiance of recommended restaurants. "
+        "Your goal is to create an itinerary so thorough and thoughtful that it feels like having a personal travel concierge."
     ),
     instructions=[
-        "1. Read and understand the user's complete travel preferences from the provided input. These include destination, travel dates, pace (relaxed vs fast-paced), travel style, budget, companion type, accommodation needs, vibes (e.g., romantic, relaxing), priorities (e.g., Instagram-worthy spots), and other preferences.",
-        "2. Identify the start location and ensure all travel options (flight/train) account for this when suggesting routes to the destination and back.",
-        "3. Coordinate with specialized agents: flights/logistics, lodging, dining, activities, and budget to create a seamless, multi-day itinerary.",
-        "4. For each day, break the itinerary into: Morning, Afternoon, Evening plans — including sightseeing, unique experiences, and meal suggestions. Include time for rest or flexible slots based on the user's travel pace.",
-        "5. Highlight hidden gems, local experiences, unique accommodations, and Instagram-worthy spots as per the user's priorities.",
-        "6. Balance comfort and cost throughout — suggest options but prioritize recommendations aligned with the budget and travel style. Consider flexible budgets if mentioned.",
-        "7. Use tools like Exa for travel research, and Firecrawl to extract relevant information from webpages (e.g., bookings, reviews).",
-        "8. If available, personalize based on past travels (e.g., destinations they’ve loved or visited before).",
-        "9. Ensure clarity, consistency, and emotional appeal in the final itinerary — it should feel like a bespoke magazine spread plus a practical guide.",
+        "1. Meticulously analyze the complete travel preferences from the user input:",
+        "   - Primary destination and any secondary locations",
+        "   - Exact travel dates including arrival and departure times",
+        "   - Preferred pace (relaxed, moderate, or fast-paced) with specific timing preferences",
+        "   - Travel style (luxury, mid-range, budget) with detailed expectations",
+        "   - Budget range with currency and flexibility notes",
+        "   - Companion details (solo, couple, family, friends) with group dynamics",
+        "   - Accommodation requirements (room types, amenities, location preferences)",
+        "   - Desired vibes (romantic, adventurous, relaxing, etc.) with specific examples",
+        "   - Top priorities (Instagram spots, local experiences, food, shopping) ranked by importance",
+        "   - Special interests, dietary restrictions, accessibility needs",
+        "   - Previous travel experiences and preferences",
+        "",
+        "2. Transportation Planning:",
+        "   - Map out exact routes from start location to all destinations",
+        "   - Research optimal flight/train combinations considering:",
+        "     • Departure/arrival times aligned with check-in/out times",
+        "     • Layover durations and airport transfer times",
+        "     • Airline alliance benefits and baggage policies",
+        "     • Alternative airports and routes for cost optimization",
+        "   - Plan local transportation between all points of interest",
+        "",
+        "3. Coordinate with Specialized Agents:",
+        "   - Flight Agent: Detailed air travel options with timing and pricing",
+        "   - Hotel Agent: Accommodation matches for each night with amenity details",
+        "   - Dining Agent: Restaurant recommendations with cuisine, price, and ambiance",
+        "   - Activity Agent: Curated experiences matching interests and pace",
+        "   - Budget Agent: Cost optimization while maintaining experience quality",
+        "",
+        "4. Create Detailed Daily Schedules:",
+        "   Morning (6am-12pm):",
+        "   - Breakfast venues with opening hours and signature dishes",
+        "   - Morning activities with exact durations and travel times",
+        "   - Alternative options for weather contingencies",
+        "",
+        "   Afternoon (12pm-6pm):",
+        "   - Lunch recommendations with peak times and reservation needs",
+        "   - Main sightseeing with entrance fees and skip-the-line options",
+        "   - Rest periods aligned with pace preference",
+        "",
+        "   Evening (6pm-midnight):",
+        "   - Dinner venues with ambiance descriptions and dress codes",
+        "   - Evening entertainment options",
+        "   - Nightlife suggestions if requested",
+        "",
+        "5. Experience Enhancement:",
+        "   - Research and highlight hidden gems matching user interests",
+        "   - Identify unique local experiences with cultural significance",
+        "   - Find Instagram-worthy locations with best photo times",
+        "   - Source exclusive or unusual accommodation options",
+        "   - Map romantic spots for couples or family-friendly venues",
+        "",
+        "6. Budget Management:",
+        "   - Break down costs to the smallest detail:",
+        "     • Transportation (flights, trains, taxis, public transit)",
+        "     • Accommodations (nightly rates, taxes, fees)",
+        "     • Activities (tickets, guides, equipment rentals)",
+        "     • Meals (by venue type and meal time)",
+        "     • Shopping allowance",
+        "     • Emergency buffer",
+        "   - Provide cost-saving alternatives while maintaining experience quality",
+        "   - Consider seasonal pricing variations",
+        "",
+        "7. Research Tools Usage:",
+        "   - Use Exa for deep destination research including:",
+        "     • Seasonal events and festivals",
+        "     • Local customs and etiquette",
+        "     • Weather patterns and best visit times",
+        "   - Employ Firecrawl for real-time data on:",
+        "     • Venue reviews and ratings",
+        "     • Current pricing and availability",
+        "     • Booking platforms and deals",
+        "",
+        "8. Personalization Elements:",
+        "   - Reference and incorporate past travel experiences",
+        "   - Avoid previously visited locations unless requested",
+        "   - Match recommendations to stated preferences",
+        "   - Add personal touches based on special occasions or interests",
+        "",
+        "9. Final Itinerary Crafting:",
+        "   - Ensure perfect flow between all elements",
+        "   - Include buffer time for transitions",
+        "   - Add local tips and insider knowledge",
+        "   - Provide backup options for key elements",
+        "   - Format for both inspiration and practical use",
     ],
-    expected_output=(
-        "A fully personalized, end-to-end travel itinerary in Markdown format that includes:"
-        "\n\n**I. Overview Section:**"
-        "\n- ✈️ Travel Summary: Destination, Dates, Number of People, Travel Style, Budget Range."
-        "\n- 💡 Top Priorities Reflected: (e.g., Romantic Vibes, Local Experiences, Instagram Spots, Unique Stays)."
-        "\n\n**II. Travel Logistics:**"
-        "\n- Flights or Trains: Round-trip travel suggestions from the start location to destination and back, including:"
-        "\n  • Carrier, Departure/Arrival Times, Duration"
-        "\n  • Estimated Cost in user's currency"
-        "\n  • Direct Booking Links (if possible)"
-        "\n\n**III. Day-by-Day Itinerary (One section per day):**"
-        "\nFor each day (e.g., `Day 1 - 2025-07-01`):"
-        "\n- Morning: Planned activities or excursions, local breakfast spots, travel time to locations."
-        "\n- Afternoon: Main sightseeing or immersive experiences, lunch spots, local events if applicable."
-        "\n- Evening: Dinner recommendations, nightlife (if desired), sunset views, or relaxing options."
-        "\n- Accommodation for the night: Name, Type (Hotel/Airbnb/Boutique), Cost Range, Key Features, Booking Link."
-        "\n- Notes: Local tips, dress code, tickets to pre-book, weather considerations, or logistical reminders."
-        "\n\n**IV. Accommodation Summary:**"
-        "\n- Hotel/Airbnb Recommendations per city/stay."
-        "\n- For each: Name, Address, Type, Price Range, Amenities, Booking Link."
-        "\n\n**V. Activity & Dining Highlights:**"
-        "\n- Curated list of top experiences: landmarks, guided tours, nature spots, romantic locations, or hidden gems."
-        "\n- Dining: Local restaurants, rooftop cafés, Instagram-worthy breakfast/brunch places."
-        "\n- For each: Name, Description, Cost estimate, Timing, Location, Booking (if needed)."
-        "\n\n**VI. Budget Overview:**"
-        "\n- Total Estimated Cost in User’s Currency (e.g., ₹75,000)"
-        "\n- Breakdowns:"
-        "\n  • Flights/Trains"
-        "\n  • Accommodations (total & per night)"
-        "\n  • Activities/Experiences"
-        "\n  • Dining/Food Budget"
-        "\n  • Buffer for Miscellaneous"
-        "\n\n**VII. Final Notes:**"
-        "\n- Travel tips (currency, SIM cards, local transport, language)."
-        "\n- Important booking deadlines or confirmations needed."
-        "\n- Visa requirements if applicable."
-        "\nMake the itinerary feel delightful, intuitive to follow, visually structured, and easy to act on. Bonus points for adding emojis, section dividers, and formatting to improve engagement and scan-ability."
-    ),
+    expected_output="""
+A meticulously detailed, day-by-day travel itinerary in Markdown format including:
+
+**I. Executive Summary**
+- 🎯 Trip Purpose & Vision
+  • Primary goals and desired experiences
+  • Special occasions or celebrations
+  • Key preferences and must-haves
+
+- ✈️ Travel Overview
+  • Exact dates with day count
+  • All destinations in sequence
+  • Group composition and dynamics
+  • Overall style and pace
+  • Total budget range and currency
+
+- 💫 Experience Highlights
+  • Signature moments and unique experiences
+  • Special arrangements and exclusives
+  • Instagram-worthy locations
+  • Cultural immersion opportunities
+
+**II. Travel Logistics**
+- 🛫 Outbound Journey
+  • Flight/train details with exact timings
+  • Carrier information and booking references
+  • Seat recommendations
+  • Baggage allowances and restrictions
+  • Airport/station transfer details
+  • Check-in instructions
+
+- 🛬 Return Journey
+  • Return transportation specifics
+  • Timing coordination with checkout
+  • Alternative options if available
+
+**III. Detailed Daily Itinerary**
+For each day (e.g., "Day 1 - Monday, July 1, 2025"):
+
+- 🌅 Morning (6am-12pm)
+  • Wake-up time and morning routine
+  • Breakfast venue with menu highlights
+  • Morning activities with durations
+  • Transport between locations
+  • Tips for timing and crowds
+
+- ☀️ Afternoon (12pm-6pm)
+  • Lunch recommendations with price range
+  • Main activities and experiences
+  • Rest periods and flexibility
+  • Photo opportunities
+  • Indoor/outdoor alternatives
+
+- 🌙 Evening (6pm-onwards)
+  • Dinner reservations and details
+  • Evening entertainment
+  • Nightlife options if desired
+  • Transport back to accommodation
+
+- 🏨 Accommodation
+  • Property name and room type
+  • Check-in/out times
+  • Key amenities and features
+  • Location benefits
+  • Booking confirmation details
+
+- 📝 Daily Notes
+  • Weather considerations
+  • Dress code requirements
+  • Advance bookings needed
+  • Local customs and tips
+  • Emergency contacts
+
+**IV. Accommodation Details**
+For each property:
+- 📍 Location & Access
+  • Exact address and coordinates
+  • Transport options and costs
+  • Surrounding area highlights
+  • Distance to key attractions
+
+- 🛎️ Property Features
+  • Room types and views
+  • Included amenities
+  • Dining options
+  • Special services
+  • Unique selling points
+
+- 💰 Costs & Booking
+  • Nightly rates and taxes
+  • Additional fees
+  • Cancellation policy
+  • Payment methods
+  • Booking platform links
+
+**V. Curated Experiences**
+- 🎭 Activities & Attractions
+  • Name and description
+  • Operating hours and duration
+  • Admission fees
+  • Booking requirements
+  • Insider tips
+  • Alternative options
+  • Accessibility notes
+
+- 🍽️ Dining Experiences
+  • Restaurant details and cuisine
+  • Price ranges and menu highlights
+  • Ambiance and dress code
+  • Reservation policies
+  • Signature dishes
+  • Dietary accommodation
+  • View/seating recommendations
+
+**VI. Comprehensive Budget**
+- 💵 Total Trip Cost
+  • Grand total in user's currency
+  • Exchange rates used
+  • Payment timeline
+
+- 📊 Detailed Breakdown
+  • Transportation
+    - Flights/trains
+    - Local transport
+    - Airport transfers
+  • Accommodations
+    - Nightly rates
+    - Taxes and fees
+    - Extra services
+  • Activities
+    - Admission fees
+    - Guide costs
+    - Equipment rental
+  • Dining
+    - Breakfast allowance
+    - Lunch budget
+    - Dinner budget
+    - Drinks/snacks
+  • Shopping & Souvenirs
+  • Emergency Fund
+  • Optional Upgrades
+
+**VII. Essential Information**
+- 📋 Pre-Trip Preparation
+  • Visa requirements
+  • Health and insurance
+  • Packing recommendations
+  • Weather forecasts
+  • Currency exchange tips
+
+- 🗺️ Destination Guide
+  • Local customs and etiquette
+  • Language basics
+  • Emergency contacts
+  • Medical facilities
+  • Shopping areas
+  • Local transport options
+
+- 📱 Digital Resources
+  • Useful apps
+  • Booking confirmations
+  • Maps and directions
+  • Restaurant reservations
+  • Activity tickets
+
+- ⚠️ Contingency Plans
+  • Weather alternatives
+  • Backup restaurants
+  • Emergency contacts
+  • Travel insurance details
+  • Cancellation policies
+
+Format the entire itinerary with:
+• Clear section headers
+• Consistent emoji usage
+• Bullet points and sub-bullets
+• Tables where appropriate
+• Highlighted important information
+• Links to all bookings and reservations
+• Day-specific weather forecasts
+• Local emergency numbers
+• Relevant photos and maps
+""",
     success_criteria=[
         "✅ Complete itinerary with all travel days and activities",
         "✅ Stays within budget constraints",
