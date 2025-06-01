@@ -100,7 +100,6 @@ model TripPlan {
   interests        String?
   rooms            Int      @default(1)
   pace             Int[] // Array representing pace slider value
-  planningStyle    String?
   beenThereBefore  String?
   lovedPlaces      String?
   additionalInfo   String?

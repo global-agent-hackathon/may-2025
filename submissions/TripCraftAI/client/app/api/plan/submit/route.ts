@@ -21,7 +21,6 @@ interface TripFormData {
   interests?: string;
   rooms: number;
   pace: number[];
-  planningStyle?: string;
   beenThereBefore?: string;
   lovedPlaces?: string;
   additionalInfo?: string;
@@ -68,7 +67,6 @@ export async function POST(request: NextRequest) {
         interests: tripData.interests || null,
         rooms: tripData.rooms || 1,
         pace: tripData.pace || [3],
-        planningStyle: tripData.planningStyle || null,
         beenThereBefore: tripData.beenThereBefore || null,
         lovedPlaces: tripData.lovedPlaces || null,
         additionalInfo: tripData.additionalInfo || null,

@@ -50,7 +50,6 @@ interface TripPlan {
   interests?: string;
   rooms: number;
   pace: number[];
-  planningStyle?: string;
   beenThereBefore?: string;
   lovedPlaces?: string;
   additionalInfo?: string;
