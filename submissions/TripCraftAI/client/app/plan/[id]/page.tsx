@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -196,7 +196,7 @@ export default function TripDetailsPage() {
   const [polling, setPolling] = useState(false);
 
   // Function to fetch trip details
-  const fetchTripDetails = async () => {
+  const fetchTripDetails = useCallback(async () => {
     if (!tripId) return;
 
     try {
@@ -286,12 +286,12 @@ export default function TripDetailsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [tripId]);
 
   // Initial fetch
   useEffect(() => {
     fetchTripDetails();
-  }, [tripId]);
+  }, [fetchTripDetails]);
 
   // Setup polling
   useEffect(() => {
@@ -302,9 +302,7 @@ export default function TripDetailsPage() {
 
     if (shouldPoll) {
       setPolling(true);
-      const pollInterval = setInterval(() => {
-        fetchTripDetails();
-      }, 5000);
+      const pollInterval = setInterval(fetchTripDetails, 5000);
 
       return () => {
         clearInterval(pollInterval);
@@ -313,7 +311,7 @@ export default function TripDetailsPage() {
     } else {
       setPolling(false);
     }
-  }, [trip?.status, tripId]);
+  }, [trip, trip?.status, tripId, fetchTripDetails]);
 
   // Render loading state
   if (loading && !trip) {
