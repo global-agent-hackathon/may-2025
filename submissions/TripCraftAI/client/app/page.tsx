@@ -1,6 +1,14 @@
 import { Heart, Star, Users } from "lucide-react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function Home() {
   return (
@@ -18,55 +26,59 @@ export default function Home() {
             our AI-powered platform.
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
-            <button className="rounded-md bg-primary px-3.5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-primary/90">
-              Get Started
-            </button>
-            <button className="text-sm font-semibold leading-6 text-primary">
+            <Button size="lg">Get Started</Button>
+            <Button variant="ghost" size="lg">
               Learn More <span aria-hidden="true">→</span>
-            </button>
+            </Button>
           </div>
         </div>
 
         {/* Feature Cards */}
         <div className="mt-20 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="bg-card rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
-            <div className="flex items-center justify-center w-12 h-12 bg-secondary rounded-lg mb-4">
-              <Star className="w-6 h-6 text-secondary-foreground" />
-            </div>
-            <h3 className="text-lg font-semibold text-primary mb-2">
-              Premium Quality
-            </h3>
-            <p className="text-secondary-foreground">
-              Experience the best with our carefully curated selection of
-              premium features and services.
-            </p>
-          </div>
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <div className="flex items-center justify-center w-12 h-12 bg-secondary rounded-lg mb-4">
+                <Star className="w-6 h-6 text-secondary-foreground" />
+              </div>
+              <CardTitle className="text-lg">Premium Quality</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription>
+                Experience the best with our carefully curated selection of
+                premium features and services.
+              </CardDescription>
+            </CardContent>
+          </Card>
 
-          <div className="bg-card rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
-            <div className="flex items-center justify-center w-12 h-12 bg-secondary rounded-lg mb-4">
-              <Users className="w-6 h-6 text-secondary-foreground" />
-            </div>
-            <h3 className="text-lg font-semibold text-primary mb-2">
-              Community Driven
-            </h3>
-            <p className="text-secondary-foreground">
-              Join a vibrant community of like-minded individuals sharing
-              experiences and insights.
-            </p>
-          </div>
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <div className="flex items-center justify-center w-12 h-12 bg-secondary rounded-lg mb-4">
+                <Users className="w-6 h-6 text-secondary-foreground" />
+              </div>
+              <CardTitle className="text-lg">Community Driven</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription>
+                Join a vibrant community of like-minded individuals sharing
+                experiences and insights.
+              </CardDescription>
+            </CardContent>
+          </Card>
 
-          <div className="bg-card rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
-            <div className="flex items-center justify-center w-12 h-12 bg-secondary rounded-lg mb-4">
-              <Heart className="w-6 h-6 text-secondary-foreground" />
-            </div>
-            <h3 className="text-lg font-semibold text-primary mb-2">
-              Made with Love
-            </h3>
-            <p className="text-secondary-foreground">
-              Every detail is crafted with care to provide you with the best
-              possible experience.
-            </p>
-          </div>
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <div className="flex items-center justify-center w-12 h-12 bg-secondary rounded-lg mb-4">
+                <Heart className="w-6 h-6 text-secondary-foreground" />
+              </div>
+              <CardTitle className="text-lg">Made with Love</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription>
+                Every detail is crafted with care to provide you with the best
+                possible experience.
+              </CardDescription>
+            </CardContent>
+          </Card>
         </div>
       </main>
 
