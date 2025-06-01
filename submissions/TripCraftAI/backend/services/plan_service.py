@@ -97,6 +97,7 @@ def travel_request_to_markdown(data: TravelPlanRequest) -> str:
     return "\n".join(lines)
 
 async def generate_travel_plan(request: TravelPlanAgentRequest) -> str:
+    """Generate a travel plan based on the request."""
     try:
         travel_request = travel_request_to_markdown(request.travel_plan)
         logger.info(f"Travel request: {travel_request}")
