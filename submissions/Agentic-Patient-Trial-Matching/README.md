@@ -139,10 +139,7 @@ python -m venv venv
 # Install dependencies
 pip install -r requirements.txt
 
-# Configure Environment Variables (Optional for Mock)
-# Create a .env file (copy from .env.example if provided)
-# For real LLM integration, you would add:
-# OPENAI_API_KEY="your_openai_api_key_here" # Or key for other LLM
+# Configure Environment Variables using instructions in the Environment Setup section below
 
 # Deactivate virtual environment when done (optional)
 # deactivate
