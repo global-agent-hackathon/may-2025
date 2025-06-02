@@ -45,7 +45,7 @@ Pygments==2.19.1
 PyMuPDF==1.25.5
 python-dotenv==1.1.0
 python-multipart==0.0.20
-pywin32==310
+pywin32==310; platform_system=="Windows"
 PyYAML==6.0.2
 regex==2024.11.6
 requests==2.32.3
