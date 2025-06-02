@@ -1,0 +1,44 @@
+# Requires Python 3.9+
+
+# Core Dependencies
+click>=8.1.7  # Required for CLI
+asyncio>=3.4.3  # Required for async operations
+
+# API and Web Framework
+fastapi>=0.68.0
+uvicorn>=0.15.0
+websockets>=10.0
+pydantic>=2.8.0  # Updated to match MCP requirements
+pydantic-settings>=2.6.1  # Updated to match MCP requirements
+
+# Data Processing and Visualization
+networkx==3.2.1
+numpy==1.26.2
+python-dateutil==2.8.2
+
+# Authentication and Security
+python-multipart>=0.0.5
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-dotenv>=0.19.0
+termcolor>=2.4.0  # Required by aztp-client
+cryptography>=3.4.7
+
+# Monitoring and Logging
+prometheus-client==0.19.0
+structlog==23.1.0
+python-json-logger==2.0.7
+
+# AI and MCP Dependencies
+openai>=1.12.0  # Added OpenAI SDK
+mcp-python-client>=0.1.8  # Updated to use the Python client SDK
+mem0ai>=0.1.102  # Required for immutable audit logging
+
+# Testing and Development
+pytest>=8.0.0  # Required for testing
+pytest-asyncio>=0.23.5  # Required for async tests
+pytest-cov>=4.1.0  # Required for test coverage
+
+# Additional dependencies
+pyjwt>=2.1.0
+aiofiles>=0.7.0 

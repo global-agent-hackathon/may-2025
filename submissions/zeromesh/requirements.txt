@@ -1,0 +1,50 @@
+# Core dependencies
+fastapi==0.95.2
+uvicorn==0.22.0
+pydantic==1.10.7
+python-jose[cryptography]>=3.3.0
+python-multipart>=0.0.5
+python-dotenv>=0.19.0
+python-dateutil==2.8.2
+
+# Authentication & Security
+PyJWT>=2.3.0
+cryptography>=37.0.0
+passlib>=1.7.4
+bcrypt>=3.2.0
+
+# Graph & Network
+networkx>=2.6.3
+matplotlib>=3.4.3  # For graph visualization
+
+# Database & Storage
+sqlalchemy>=1.4.23
+alembic>=1.7.3
+aiosqlite>=0.17.0
+
+# Async utilities
+aiohttp>=3.8.1
+asyncio>=3.4.3
+websockets==11.0.3
+
+# Testing
+pytest>=6.2.5
+pytest-asyncio>=0.15.1
+pytest-cov>=2.12.1
+httpx>=0.18.2
+
+# Logging & Monitoring
+structlog>=21.1.0
+prometheus-client>=0.11.0
+
+# Development
+black>=21.7b0
+isort>=5.9.3
+flake8>=3.9.2
+mypy>=0.910
+
+# Added from the code block
+streamlit>=1.31.0
+pandas>=2.0.0
+plotly>=5.18.0
+numpy>=1.24.0 
