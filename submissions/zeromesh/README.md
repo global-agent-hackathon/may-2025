@@ -7,6 +7,11 @@ Built using **Agno** for agent orchestration and **Mem0** for immutable audit lo
 
 ---
 
+## System Architecture
+
+![System arch](https://github.com/user-attachments/assets/2052daea-7f11-465b-9e59-193e9ce70f0c)
+
+
 ## 🤖 Agents at Work
 
 ZeroMesh uses Agno-powered agents — each with a focused responsibility, working in sync under the zero-trust model.
@@ -67,31 +72,75 @@ Powered by Streamlit for smooth UX:
 
 ---
 
-## 🧪 Setup Guide  
+## 🚀 Quick Start Guide
 
-### ✅ Prerequisites  
-- Python 3.9+  
-- pip (Python package installer)
-
-### 🚀 Installation Steps  
+### One-Time Setup
 ```bash
+# Clone and set up an environment
 git clone https://github.com/yourusername/zeromesh.git
 cd zeromesh
 python -m venv venv
 
-# Activate the virtual environment
-# On Windows:
-venv\Scripts\activate
-# On Mac/Linux:
-source venv/bin/activate
+# Activate venv (Choose your OS)
+source venv/bin/activate  # Linux/Mac
+.\venv\Scripts\activate   # Windows
 
+# Install everything you need
 pip install -r requirements.txt
-streamlit run dashboard.py
+
+### Environment Variables 🔑
+Set up your .env file in the /core folder
+```env
+# Mem0 Configuration
+MEM0_API_KEY=<your-api-key>
+MEM0_ENDPOINT=https://api.mem0.ai/v1  # Default endpoint, can be changed
+
+# Server Configuration
+MCP_HOST=localhost
+MCP_PORT=8000
+
+# AZTP Security
+AZTP_CERT_PATH=./certs/aztp.crt
+AZTP_KEY_PATH=./certs/aztp.key
+
 ```
 
+### Running ZeroMesh
+```bash
+# 1. Start everything with one command
+python start.py
+
+# OR start services individually:
+
+# 2a. Start core services
+python init_zeromesh.py
+
+# 2b. Launch dashboard
+streamlit run dashboard.py
+```
 Open your browser and go to: [http://localhost:8501](http://localhost:8501)
 
----
+### Try Demo Mode 🎮
+```bash
+# Run full security demo
+python -m core.demo.security_demo
+
+# Or try with sample agents
+python -m core.demo.agno_simulation
+```
+
+### Useful Commands
+```bash
+# View logs
+tail -f logs/zeromesh.log
+
+# Run tests
+python -m pytest
+
+# Clear dashboard cache
+streamlit cache clear
+```
+--- 
 
 ## 🗂️ Project Structure  
 ```
@@ -106,34 +155,6 @@ zeromesh/
 ```
 
 ---
-
-## 📁 Environment Variables
-
-Before running the dashboard, make sure to create a `.env` file in the `/core ` directory of the project with the following fields:
-
-```bash
-# MEM0 API
-MEM0_API_KEY=<your-api-key>
-MEM0_ENDPOINT=https://api.mem0.ai/v1
-MEM0_COLLECTION=<collection-name>
-MEM0_BATCH_SIZE=50
-MEM0_FLUSH_INTERVAL=60
-
-# OpenAI API
-OPENAI_API_KEY=<your-api-key>
-
-# Server Configuration
-MCP_HOST=localhost
-MCP_PORT=8000
-
-# Security Configuration
-AZTP_CERT_PATH=./certs/aztp.crt
-AZTP_KEY_PATH=./certs/aztp.key
-```
-
-Make sure to keep your API keys safe and do not commit the `.env` file to version control. 🚫🔑
-
-
 ## ⚙️ Configuration Options  
 
 You can configure all key system parameters directly from the dashboard:  
@@ -174,37 +195,6 @@ You can configure all key system parameters directly from the dashboard:
 - **Mem0** ensures all logs are immutable and audit-ready 🪵  
 
 ZeroMesh brings together trustless design + secure logging, so you can sleep better knowing your agents are behaving 😌💻
-
----
-
-## 🤝 Contributions
-
-We welcome contributions from developers passionate about security, agents, and zero-trust systems! Whether you're fixing a bug, suggesting an enhancement, or building a new feature — we’d love your help.
-
-### 🛠️ How to Contribute
-
-1. **Fork the repo** and create your branch:  
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-
-2. **Write clear, well-documented code**  
-   - Follow existing naming conventions  
-   - Keep functions modular and readable  
-   - Add docstrings and comments where needed  
-
-3. **Add tests if applicable**  
-   - Ensure your changes don't break existing functionality  
-   - Tests are located in `core/tests/`
-
-4. **Commit with meaningful messages**  
-   ```bash
-   git commit -m "Add: trust score normalization method"
-   ```
-
-5. **Push to your fork and open a Pull Request**  
-   - Describe what your PR does and why it matters  
-   - Link to related issues (if any)
 
 ---
 
