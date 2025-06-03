@@ -7,11 +7,14 @@ import logging
 from datetime import datetime
 import random
 import json
+import os
+from pathlib import Path
 
 from ..services.audit import AuditService, AuditEvent
 from ..services.agent_manager import AgentManager
 from ..services.trust import TrustService
-from ..config import ZeroMeshConfig, SSLConfig, MCPConfig, TrustConfig, Mem0Config, AuditConfig
+from ..config import ZeroMeshConfig
+from ..aztp.protocol import AZTPConfig
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -144,37 +147,32 @@ async def run_security_demo():
     """Run the security demonstration"""
     # Create configuration
     config = ZeroMeshConfig(
-        ssl=SSLConfig(
-            cert_path="certs/test.crt",
-            key_path="certs/test.key"
+        aztp_config=AZTPConfig(
+            key_dir="./certs",
+            token_expiry=3600,
+            min_key_size=2048
         ),
-        mcp=MCPConfig(
-            host="localhost",
-            port=8000,
-            api_key="test"
-        ),
-        trust=TrustConfig(
-            score_threshold=0.7,
-            decay_rate=0.1,
-            quarantine_threshold=0.3
-        ),
-        audit=AuditConfig(
-            log_dir="logs",
-            batch_size=100,
-            flush_interval=60
-        ),
-        mem0=Mem0Config(
-            api_key=os.getenv("MEM0_API_KEY", "")
-        )
+        min_trust_score=0.3,  # This is our quarantine threshold
+        max_trust_score=1.0,
+        default_trust_score=0.5,
+        trust_decay_rate=0.1,
+        trust_update_interval=3600,
+        log_dir="./logs",
+        log_level="INFO"
     )
 
     # Initialize services
-    audit_service = AuditService(config)
-    trust_service = TrustService(config)
-    agent_manager = AgentManager(config, trust_service, audit_service)
+    audit_service = AuditService()
+    audit_service.log_dir = Path(config.log_dir)  # Set log directory
+    trust_service = TrustService()
 
-    await audit_service.initialize()
-    await trust_service.initialize()
+    # Initialize basic services
+    registry = {"config": config}
+    await audit_service.initialize(registry)
+    await trust_service.initialize(registry)
+
+    # Initialize agent manager with dependencies
+    agent_manager = AgentManager(config, trust_service, audit_service)
     await agent_manager.initialize()
 
     try:
@@ -198,63 +196,28 @@ async def run_security_demo():
             logger.info(f"\n=== Round {round_num} ===")
             
             for agent in agents:
-                # Skip if agent is blocked/quarantined
-                if agent.blocked or agent.quarantined:
-                    continue
+                if not agent.blocked and not agent.quarantined:
+                    # Perform action and get trust score
+                    await agent.perform_action(audit_service, trust_service)
+                    trust_score = await trust_service.get_trust_score(agent.agent_id)
+                    logger.info(f"Agent {agent.agent_id} trust score: {trust_score:.2f}")
 
-                # Perform action
-                await agent.perform_action(audit_service, trust_service)
-                
-                # Check trust score and update status
-                trust_score = await trust_service.get_trust_score(agent.agent_id)
-                logger.info(f"Agent {agent.agent_id} trust score: {trust_score:.2f}")
-                
-                if trust_score < config.trust.quarantine_threshold:
-                    if not agent.quarantined:
+                    # Check if agent should be quarantined
+                    if trust_score < config.min_trust_score:  # Use min_trust_score instead of trust.quarantine_threshold
                         await agent_manager.quarantine_agent(
                             agent.agent_id,
-                            f"Trust score below threshold: {trust_score:.2f}"
+                            f"Trust score too low: {trust_score:.2f}"
                         )
                         agent.quarantined = True
-                elif trust_score < 0:
-                    if not agent.blocked:
-                        await agent_manager.block_agent(
-                            agent.agent_id,
-                            f"Negative trust score: {trust_score:.2f}"
-                        )
-                        agent.blocked = True
 
-            # Small delay between rounds
-            await asyncio.sleep(2)
-
-        # Print final summary
-        logger.info("\n=== Security Demo Summary ===")
-        for agent in agents:
-            trust_score = await trust_service.get_trust_score(agent.agent_id)
-            status = "active"
-            if agent.blocked:
-                status = "blocked"
-            elif agent.quarantined:
-                status = "quarantined"
-            
-            logger.info(f"Agent: {agent.agent_id}")
-            logger.info(f"Status: {status}")
-            logger.info(f"Final Trust Score: {trust_score:.2f}")
-            
-            # Get audit events
-            events = await audit_service.get_agent_events(agent.agent_id)
-            logger.info(f"Total Events: {len(events)}")
-            if events:
-                logger.info("Last Event:")
-                logger.info(json.dumps(events[-1], indent=2))
-            logger.info("")
+            # Sleep between rounds
+            await asyncio.sleep(1)
 
     finally:
-        # Cleanup
+        # Clean up
         await audit_service.cleanup()
         await trust_service.cleanup()
         await agent_manager.cleanup()
 
 if __name__ == "__main__":
-    import os
     asyncio.run(run_security_demo()) 
