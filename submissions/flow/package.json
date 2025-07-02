@@ -1,0 +1,22 @@
+{
+  "name": "flow",
+  "version": "1.0.0",
+  "description": "FLOW is a powerful browser extension that enhances your web browsing experience with AI-powered features. This extension provides various tools for content generation, analysis, and learning.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint FRONTEND/**/*.js",
+    "lint:fix": "eslint FRONTEND/**/*.js --fix"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.27.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-promise": "^7.2.1",
+    "eslint-plugin-unicorn": "^59.0.1",
+    "globals": "^16.2.0"
+  }
+}

@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="popup.css">
+    <link rel="stylesheet" href="tab5.css">
+
+    <title>Design</title>
+    <style>
+        .sub-button {
+            padding: 8px 16px;
+            border: #e8e8e8 0.5px solid;
+            border-radius: 20px;
+            margin: 4px;
+            cursor: pointer;
+            background-color: white;
+            transition: all 0.3s ease;
+        }
+        .sub-button.selected {
+            background-color: #0a5ecb;
+            color: white;
+            border-color: #0a5ecb;
+        }
+        #capture-container .tab-button {
+            padding: 8px 16px;
+            border: #e8e8e8 0.5px solid;
+            border-radius: 20px;
+            margin: 4px;
+            cursor: pointer;
+            background-color: white;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        #capture-container .tab-button.active {
+            background-color: #0a5ecb !important;
+            color: white !important;
+            border-color: #0a5ecb !important;
+        }
+        #capture-container .tab-button.active svg {
+            color: white !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="popup-container">
+
+    <div id="header" style="padding: 5px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); margin-bottom: 10px; display: flex; justify-content: center; align-items: center; height: 40px;">
+        <img src="/images/logo.png" width="auto" height="30px"/> 
+    </div>
+
+
+    <!-- Tab Navigation -->
+    <div id="tab-container" style="display: flex; justify-content: center; margin-bottom: 20px;">
+        <button id="tab1Btn" class="tab-button"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+            <path fill-rule="evenodd" d="M11.293 3.293a1 1 0 0 1 1.414 0l6 6 2 2a1 1 0 0 1-1.414 1.414L19 12.414V19a2 2 0 0 1-2 2h-3a1 1 0 0 1-1-1v-3h-2v3a1 1 0 0 1-1 1H7a2 2 0 0 1-2-2v-6.586l-.293.293a1 1 0 0 1-1.414-1.414l2-2 6-6Z" clip-rule="evenodd"/>
+          </svg>
+          </button>
+        <button id="tab2Btn" class="tab-button"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7h.01m3.486 1.513h.01m-6.978 0h.01M6.99 12H7m9 4h2.706a1.957 1.957 0 0 0 1.883-1.325A9 9 0 1 0 3.043 12.89 9.1 9.1 0 0 0 8.2 20.1a8.62 8.62 0 0 0 3.769.9 2.013 2.013 0 0 0 2.03-2v-.857A2.036 2.036 0 0 1 16 16Z"/>
+          </svg>
+          </button>
+        <button id="tab3Btn" class="tab-button"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20H5.5c-.27614 0-.5-.2239-.5-.5v-3c0-.2761.22386-.5.5-.5h13c.2761 0 .5.2239.5.5v3c0 .2761-.2239.5-.5.5H18m-6-1 1.42 1.8933c.04.0534.12.0534.16 0L15 19m-7-6 3.9072-9.76789c.0335-.08381.1521-.08381.1856 0L16 13m-8 0H7m1 0h1.5m6.5 0h-1.5m1.5 0h1m-7-3.00001h4"/>
+          </svg>
+          </button>
+        <button id="tab5Btn" class="tab-button"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 17.345a4.76 4.76 0 0 0 2.558 1.618c2.274.589 4.512-.446 4.999-2.31.487-1.866-1.273-3.9-3.546-4.49-2.273-.59-4.034-2.623-3.547-4.488.486-1.865 2.724-2.899 4.998-2.31.982.236 1.87.793 2.538 1.592m-3.879 12.171V21m0-18v2.2"/>
+          </svg>
+          </button>
+        <button id="tab6Btn" class="tab-button"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.5 16.5h5m-5-4h5m-5-4h5M5 20.118v-7.07c0-1.882.58-3.718 1.67-5.25l1.243-1.85A3.5 3.5 0 0 1 10.607 4h2.786a3.5 3.5 0 0 1 2.694 1.938l1.243 1.85A7.5 7.5 0 0 1 19 13.048v7.07M5 20.118c0 .618.504 1.118 1.125 1.118h11.75c.621 0 1.125-.5 1.125-1.118M5 20.118c0-.618.504-1.118 1.125-1.118h11.75c.621 0 1.125.5 1.125 1.118"/>
+          </svg>
+          </button>
+        <button id="tab7Btn" class="tab-button"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2m-6 9 2 2 4-4"/>
+          </svg>
+          </button>
+    </div>
+
+    
+
+    <!-- Tab Content Container -->
+    <div id="tab-content">
+        <!-- Tab 1 (Empty) -->
+        <div id="tab1" class="tab-content">
+            <div style="margin: 10px;">
+                <img src="/images/home.png" width="100%">
+            </div>
+            
+        </div>
+
+        <!-- Tab 2 (Capture, Generate, Saved Buttons) -->
+        <div id="tab2" class="tab-content">
+            <div id="capture-container" style="display: flex; justify-content: center; height: auto; margin-top: 0;">
+                <button id="captureBtn" class="tab-button" style="display: flex; margin: 4px; align-items: center; gap: 4px; border: #e8e8e8 0.5px solid; border-radius: 20px;">Capture Colors <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" d="M7.5 4.586A2 2 0 0 1 8.914 4h6.172a2 2 0 0 1 1.414.586L17.914 6H19a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h1.086L7.5 4.586ZM10 12a2 2 0 1 1 4 0 2 2 0 0 1-4 0Zm2-4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z" clip-rule="evenodd"/>
+                  </svg>
+                  </button>
+                <button id="aiBtn" class="tab-button" style="display: flex; margin: 4px; align-items: center; gap: 4px; border: #e8e8e8 0.5px solid; border-radius: 20px;">Generate <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" d="M20.337 3.664c.213.212.354.486.404.782.294 1.711.657 5.195-.906 6.76-1.77 1.768-8.485 5.517-10.611 6.683a.987.987 0 0 1-1.176-.173l-.882-.88-.877-.884a.988.988 0 0 1-.173-1.177c1.165-2.126 4.913-8.841 6.682-10.611 1.562-1.563 5.046-1.198 6.757-.904.296.05.57.191.782.404ZM5.407 7.576l4-.341-2.69 4.48-2.857-.334a.996.996 0 0 1-.565-1.694l2.112-2.111Zm11.357 7.02-.34 4-2.111 2.113a.996.996 0 0 1-1.69-.565l-.422-2.807 4.563-2.74Zm.84-6.21a1.99 1.99 0 1 1-3.98 0 1.99 1.99 0 0 1 3.98 0Z" clip-rule="evenodd"/>
+                  </svg>
+                  
+                  </button>
+                <button id="savedPaletteBtn" class="tab-button" style="display: flex; margin: 4px; align-items: center; gap: 4px; border: #e8e8e8 0.5px solid; border-radius: 20px;">Saved <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M7.833 2c-.507 0-.98.216-1.318.576A1.92 1.92 0 0 0 6 3.89V21a1 1 0 0 0 1.625.78L12 18.28l4.375 3.5A1 1 0 0 0 18 21V3.889c0-.481-.178-.954-.515-1.313A1.808 1.808 0 0 0 16.167 2H7.833Z"/>
+                  </svg>
+                  </button>
+            </div>
+
+            <div id="saved-palettes-container" style="display: none; margin: 20px;">
+                <h3>Saved Palettes</h3>
+                <div id="savedPalettes"></div> <!-- This will hold the saved palettes -->
+            </div>
+
+            <!-- Hidden Input Form for Generate Palette -->
+            <div id="generate-palette-form" style="display: none; margin-top: 10px; margin-bottom: 10px; ">
+                <input 
+                type="text" 
+                id="paletteInput" 
+                placeholder="Enter your Thought" 
+                style="
+                    width: calc(75% - 10px); 
+                    padding: 8px; 
+                    margin-left: 10px; 
+                    color: #0e0e0e; /* Light grey text color */
+                    background-color: #ebebeb; /* Dark grey background */
+                    border: none; /* Subtle border for modern look */
+                    border-radius: 1rem; 
+                    display: inline-block; 
+                    font-family: 'Arial', sans-serif; /* Modern, clean font */
+                    font-size: 14px;
+                    outline: none; /* Remove blue outline */
+                    transition: all 0.3s ease; /* Smooth transition */
+                "
+            >
+            
+                <button id="submitPalette" 
+                        style="padding: 8px 16px; border: none; border-radius: 5px; border: #e8e8e8 0.5px solid; border-radius: 20px; margin: 4px; cursor: pointer; display: inline-block;">
+                        ✨
+                </button>
+            </div>
+
+            <!-- Loading message -->
+            <div id="loading-message" style="display: none; text-align: center; padding: 20px;">
+                <div style="
+                    border: 4px solid #f3f3f3;
+                    border-top: 4px solid #0a5ecb;
+                    border-radius: 50%;
+                    width: 40px;
+                    height: 40px;
+                    animation: spin 1s linear infinite;
+                    margin: 10px auto;
+                "></div>
+                <p style="color: #666; margin-top: 10px;">Loading...</p>
+                <style>
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                </style>
+            </div>
+
+            <!-- Streaming output text will display here -->
+            <div id="streamed-text" style="display: none; padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin-top: 10px; background-color: #f5f5f5; "></div>
+
+            <div id="copied-message" style="display: none; margin: 10px; color:#0a5ecb; font-weight: bold;"></div>
+            <div id="saved-message" style="display: none; margin: 10px; color:#0a5ecb; font-weight: bold;">Saved</div>
+
+            <div id="palette-card" style="margin: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 1rem; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); margin-top: 10px; margin-bottom: 10px; display: none;">
+                <h3>COLOR PALETTE</h3>
+                <div id="palette-container" style="display: flex; flex-wrap: wrap;"></div>
+                <button id="morePaletteBtn" style="margin-top: 10px; padding: 8px 16px; border: #e8e8e8 0.5px solid; border-radius: 20px; color: rgb(0, 0, 0); cursor: pointer;">
+                    More
+                </button>
+                <button id="savePaletteBtn" style="margin-top: 10px; padding: 8px 16px; border: #e8e8e8 0.5px solid; border-radius: 20px; color: rgb(0, 0, 0); cursor: pointer;">
+                    Save
+                </button>
+                <button id="editPaletteBtn" style="margin-top: 10px; padding: 8px 16px; border: #e8e8e8 0.5px solid; border-radius: 20px;  color: rgb(0, 0, 0); cursor: pointer;">
+                    Edit 
+                </button>
+            </div>
+
+            <!-- New Nested Tabs Container -->
+            <div id="screen-info-card" style="padding: 15px; border: 1px solid #ccc; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); margin-top: 10px; display: none;">
+                <div id="screen-info-card" style="display: flex; justify-content: center; margin-bottom: 10px;">
+                    <button id="nestedTab1Btn" class="tab-button active">Insights</button>
+                    <button id="nestedTab2Btn" class="tab-button">Usages</button>
+                    <button id="nestedTab3Btn" class="tab-button">Accessibility</button>
+                </div>
+
+                <div id="nested-tab-content" style="display: none;">
+                    <div id="nestedTab1" style="display: none;">
+                        <button id="runAiBtn1" class="sub-button">Mood</button>
+                        <button id="runAiBtn2" class="sub-button">Industry</button>
+                        <button id="runAiBtn4" class="sub-button">Cultural</button>
+                    </div>
+                    <div id="nestedTab2" style="display: none;">
+                        <button id="runAiBtn5" class="sub-button">Logo</button>
+                        <button id="runAiBtn6" class="sub-button">Web</button>
+                        <button id="runAiBtn7" class="sub-button">Print Materials</button>
+                        <button id="runAiBtn8" class="sub-button">Interior</button>
+                    </div>
+                    <div id="nestedTab3" style="display: none;">
+                        <button id="runAiBtn9" class="sub-button">Contrast</button>
+                        <button id="runAiBtn10" class="sub-button">Blindness Simulation</button>
+                        <button id="runAiBtn11" class="sub-button">Accessible Color</button>
+                    </div>
+
+                     <!-- Loading Message -->
+                    <div id="loading-message2" style="display: none; text-align: center; padding: 20px;">
+                        <div style="
+                            border: 4px solid #f3f3f3;
+                            border-top: 4px solid #0a5ecb;
+                            border-radius: 50%;
+                            width: 40px;
+                            height: 40px;
+                            animation: spin 1s linear infinite;
+                            margin: 10px auto;
+                        "></div>
+                        <p style="color: #666; margin-top: 10px;">Analyzing colors...</p>
+                        <style>
+                            @keyframes spin {
+                                0% { transform: rotate(0deg); }
+                                100% { transform: rotate(360deg); }
+                            }
+                        </style>
+                    </div>
+
+                    <!-- Card to display AI result -->
+                    <div id="resultCard">
+                        <p id="aiResponseText"></p>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <!-- Tab 3 (Combined Font and Vector Content) -->
+<div id="tab3" class="tab-content">
+    <div id="capture-container" style="display: flex; justify-content: center; height: auto; margin-top: 0;">
+        <!-- Font Generate Button -->
+        <button id="fontBtn" style="display: flex; align-items: center; gap: 4px; border: #e8e8e8 0.5px solid; border-radius: 20px; margin: 4px;">Generate Font
+            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M9 20H5.5c-.27614 0-.5-.2239-.5-.5v-3c0-.2761.22386-.5.5-.5h13c.2761 0 .5.2239.5.5v3c0 .2761-.2239.5-.5.5H18m-6-1 1.42 1.8933c.04.0534.12.0534.16 0L15 19m-7-6 3.9072-9.76789c.0335-.08381.1521-.08381.1856 0L16 13m-8 0H7m1 0h1.5m6.5 0h-1.5m1.5 0h1m-7-3.00001h4"/>
+            </svg>
+        </button>
+                <!-- Vector Button -->
+                <button id="VectorBtn" style="display: flex; align-items: center; gap: 4px; border: #e8e8e8 0.5px solid; border-radius: 20px; margin: 4px;">Vector<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M8.737 8.737a21.49 21.49 0 0 1 3.308-2.724m0 0c3.063-2.026 5.99-2.641 7.331-1.3 1.827 1.828.026 6.591-4.023 10.64-4.049 4.049-8.812 5.85-10.64 4.023-1.33-1.33-.736-4.218 1.249-7.253m6.083-6.11c-3.063-2.026-5.99-2.641-7.331-1.3-1.827 1.828-.026 6.591 4.023 10.64m3.308-9.34a21.497 21.497 0 0 1 3.308 2.724m2.775 3.386c1.985 3.035 2.579 5.923 1.248 7.253-1.336 1.337-4.245.732-7.295-1.275M14 12a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"/>
+            </svg>
+        </button>
+    </div>
+
+            <!-- Font Generation Form -->
+    <div id="generate-font-form" style="display: none; margin-top: 10px; margin-bottom: 10px;">
+        <input type="text" id="fontInput" placeholder="What are you Designing ?"
+               style="
+                    width: calc(75% - 10px);
+                    padding: 8px;
+                    margin-left: 10px;
+                            color: #0e0e0e;
+                            background-color: #ebebeb;
+                            border: none;
+                    border-radius: 1rem;
+                    display: inline-block;
+                            font-family: 'Arial', sans-serif;
+                    font-size: 14px;
+                            outline: none;
+                            transition: all 0.3s ease;
+                "
+        >
+        <button id="submitFont"
+                style="padding: 8px 16px; border: none; border-radius: 5px; border: #e8e8e8 0.5px solid; border-radius: 20px; margin: 4px; cursor: pointer; display: inline-block;">
+            ✨
+        </button>
+    </div>
+
+            <!-- Loading Message for Font -->
+            <div id="loading-message4" style="display: none; text-align: center; padding: 20px;">
+                <div style="
+                    border: 4px solid #f3f3f3;
+                    border-top: 4px solid #0a5ecb;
+                    border-radius: 50%;
+                    width: 40px;
+                    height: 40px;
+                    animation: spin 1s linear infinite;
+                    margin: 10px auto;
+                "></div>
+                <p style="color: #666; margin-top: 10px;">Generating fonts...</p>
+                <style>
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                </style>
+            </div>
+
+    <!-- Font Analysis Output Container -->
+    <div id="analysisOutput1" style="display: none; margin-top: 10px; color: #333; font-style: italic; padding: 10px; background-color: #fff; font-size: medium;"></div>
+
+            <!-- Success Icon -->
+            <div id="successIcon" style="display: none; margin: 10px; color: green; text-align: center;">
+                ✅ Image Captured
+            </div>
+
+            <!-- Loading Message for Vector -->
+            <div id="loadingMessage" style="display: none; margin-top: 10px; color: blue; text-align: center; padding-bottom: 20px;">
+                Loading... Please wait.
+            </div>
+
+            <!-- Output Container -->
+            <div id="analysisOutput" style="display: none; margin: 20px auto; border: 1px solid #ccc; padding: 20px; border-radius: 5px; max-width: 90%; text-align: center; padding-bottom: 30px;">
+                <!-- Analysis results will be displayed here -->
+            </div>
+
+            <!-- Vector Generation Form -->
+            <div id="generate-icon-form" style="display: none; margin-top: 10px; margin-bottom: 10px; text-align: center; padding-bottom: 20px;">
+                <input type="text" id="fontInput2" placeholder="Think & Describe an Icon" 
+                style="
+                width: calc(75% - 10px); 
+                padding: 8px; 
+                margin-left: 10px; 
+                margin-right: 5px;
+                color: #0e0e0e;
+                background-color: #ebebeb;
+                border: none;
+                border-radius: 1rem; 
+                display: inline-block; 
+                font-family: 'Arial', sans-serif;
+                font-size: 14px;
+                outline: none;
+                transition: all 0.3s ease;
+            "
+        >
+                <button id="submitIcon" 
+                        style="padding: 8px 16px; border: none; border-radius: 5px; border: #e8e8e8 0.5px solid; border-radius: 20px; margin: 4px; cursor: pointer; display: inline-block;">
+                        ✨
+                </button>
+        </div>
+
+            <!-- Loading message for Vector -->
+        <div id="loading-message3" style="display: none; color: gray; font-style: italic; margin: 10px;">Loading...</div>
+        <div id="downloaded-message" style="display: none; margin: 10px; color:#0a5ecb; font-weight: bold;">SVG File Downloaded</div>
+        <div id="copiedSvg-message" style="display: none; margin: 10px; color:#0a5ecb; font-weight: bold;">Copied SVG Code</div>
+
+            <!-- SVG Display Container -->
+        <div id="svgDisplayContainer">
+            <div style="text-align: center;">
+                <div id="svgContainer" style="padding: 20px; margin: auto; display: none;"></div>
+            </div>
+            
+                        <div style="display: flex; flex-wrap: wrap; align-items: center;">
+                <button id="showCodeButton" style="display: none;"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 8-4 4 4 4m8 0 4-4-4-4m-2-3-4 14"/>
+                  </svg>
+                  </button>
+                <button id="copyCodeButton" style="display: none;"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" d="M18 3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1V9a4 4 0 0 0-4-4h-3a1.99 1.99 0 0 0-1 .267V5a2 2 0 0 1 2-2h7Z" clip-rule="evenodd"/>
+                    <path fill-rule="evenodd" d="M8 7.054V11H4.2a2 2 0 0 1 .281-.432l2.46-2.87A2 2 0 0 1 8 7.054ZM10 7v4a2 2 0 0 1-2 2H4v6a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3Z" clip-rule="evenodd"/>
+                  </svg>
+                  </button>
+                <button id="saveSvgButton" style="display: none;"><svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" d="M13 11.15V4a1 1 0 1 0-2 0v7.15L8.78 8.374a1 1 0 1 0-1.56 1.25l4 5a1 1 0 0 0 1.56 0l4-5a1 1 0 1 0-1.56-1.25L13 11.15Z" clip-rule="evenodd"/>
+                    <path fill-rule="evenodd" d="M9.657 15.874 7.358 13H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2h-2.358l-2.3 2.874a3 3 0 0 1-4.685 0ZM17 16a1 1 0 1 0 0 2h.01a1 1 0 1 0 0-2H17Z" clip-rule="evenodd"/>
+                  </svg>
+                  </button>
+            </div>
+         
+            <pre id="svgCodeDisplay" style="display: none;"></pre>
+        </div>
+        </div>
+
+        <div id="tab5" class="tab-content">
+            <div id="capture-container" style="display: flex; flex-direction: column; align-items: center; height: auto; margin-top: 0;">
+                <!-- Tab navigation -->
+                <div class="tab-nav" style="display: flex; flex-direction: row; gap: 5px; margin-top: 5px; margin-bottom: 5px;">
+                    <button class="tab-button active" id="sendPaymentTabBtn" style="display: flex; align-items: center; gap: 4px; border: #e8e8e8 0.5px solid; border-radius: 20px;">Send Payment<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16.153 19 21 12l-4.847-7H3l4.848 7L3 19h13.153Z"/>
+                      </svg>
+                      
+                      </button>
+                    <button class="tab-button" id="trackPaymentTabBtn" style="display: flex; align-items: center; gap: 4px; border: #e8e8e8 0.5px solid; border-radius: 20px;">Track<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 20V7m0 13-4-4m4 4 4-4m4-12v13m0-13 4 4m-4-4-4 4"/>
+                      </svg>
+                      </button>
+                    <button class="tab-button" id="settingsTabBtn" style="display: flex; align-items: center; gap: 4px; border: #e8e8e8 0.5px solid; border-radius: 20px;">Settings<svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="square" stroke-linejoin="round" stroke-width="2" d="M10 19H5a1 1 0 0 1-1-1v-1a3 3 0 0 1 3-3h2m10 1a3 3 0 0 1-3 3m3-3a3 3 0 0 0-3-3m3 3h1m-4 3a3 3 0 0 1-3-3m3 3v1m-3-4a3 3 0 0 1 3-3m-3 3h-1m4-3v-1m-2.121 1.879-.707-.707m5.656 5.656-.707-.707m-4.242 0-.707.707m5.656-5.656-.707.707M12 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                      </svg>
+                      </button>
+                </div>
+            </div>
+            
+            <!-- Tab content for each section -->
+            <div id="sendPaymentTab" class="tab-panel active" style="display: flex; flex-direction: column; align-items: center; height: auto; margin-top: 0; padding: 10px;">
+                <!-- Send Payment Link Form -->
+                <div class="form-container">
+                    <input type="text" id="nameInput" placeholder="Enter Name" class="input-field">
+                    <input type="email" id="emailInput" placeholder="Enter Customer Email" class="input-field">
+                    <input type="text" id="descriptionInput" placeholder="Enter Description" class="input-field">
+                    <input type="number" id="amountInput" placeholder="Enter Amount (in INR)" class="input-field">
+                    <button id="sendPaymentLinkBtn" class="btn primary-btn">Send Payment Link</button>
+                </div>
+                <div class="status-container">
+                    <span id="statusMessage"></span> <!-- This is where the status message will be displayed -->
+                </div>
+                
+                
+            </div>
+        
+            <div id="trackPaymentTab" class="tab-panel" style="display: none;">
+                <!-- Show the list of payment links directly -->
+                <div id="paymentLinksContainer" class="payment-links-container"></div>
+            </div>
+            
+        
+            <div id="settingsTab" class="tab-panel" style="display: flex; flex-direction: column; align-items: center; height: auto; margin-top: 0; padding: 10px;">
+                <!-- Settings Form -->
+                <div class="form-container">
+                    <button id="settingsBtn" class="btn secondary-btn">Settings</button>
+                    <div id="settingsForm" style="display: none; margin-top: 20px;">
+                        <input type="text" id="apiKey" placeholder="Enter Razorpay API Key" class="input-field">
+                        <input type="text" id="secretKey" placeholder="Enter Razorpay Secret Key" class="input-field">
+                        <button id="saveSettingsBtn" class="btn success-btn">Save Settings</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tab 6 (AI Content Generation) -->
+        <div id="tab6" class="tab-content">
+            <div id="capture-container" style="display: flex; justify-content: center; height: auto; margin-top: 0;">
+                <button id="contentBtn" class="tab-button" style="display: flex; align-items: center; gap: 4px; border: #e8e8e8 0.5px solid; border-radius: 20px; margin: 4px;">Content Generation
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                    </svg>
+                </button>
+                <button id="analyzeBtn" class="tab-button" style="display: flex; align-items: center; gap: 4px; border: #e8e8e8 0.5px solid; border-radius: 20px; margin: 4px;">Content Analysis
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2Z"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Content Generation Form -->
+            <div id="generate-content-form" style="display: none; margin-top: 10px; margin-bottom: 10px;">
+                <select id="contentType" style="
+                    width: calc(75% - 10px);
+                    padding: 8px;
+                    margin-left: 10px;
+                    color: #0e0e0e;
+                    background-color: #ebebeb;
+                    border: none;
+                    border-radius: 1rem;
+                    display: inline-block;
+                    font-family: 'Arial', sans-serif;
+                    font-size: 14px;
+                    outline: none;
+                    transition: all 0.3s ease;
+                ">
+                    <optgroup label="Content Writing">
+                        <option value="blog">Blog Post</option>
+                        <option value="article">Article</option>
+                        <option value="newsletter">Newsletter</option>
+                        <option value="social">Social Media Post</option>
+                    </optgroup>
+                    <optgroup label="Business Writing">
+                        <option value="email">Email</option>
+                        <option value="proposal">Business Proposal</option>
+                        <option value="product">Product Description</option>
+                        <option value="case-study">Case Study</option>
+                    </optgroup>
+                    <optgroup label="Creative Writing">
+                        <option value="story">Short Story</option>
+                        <option value="script">Video Script</option>
+                        <option value="poem">Poem</option>
+                        <option value="dialogue">Dialogue</option>
+                    </optgroup>
+                    <optgroup label="Professional">
+                        <option value="resume">Resume Summary</option>
+                        <option value="cover-letter">Cover Letter</option>
+                        <option value="bio">Professional Bio</option>
+                        <option value="portfolio">Portfolio Description</option>
+                    </optgroup>
+                </select>
+                <input type="text" id="contentInput" placeholder="Enter your topic or description"
+                       style="
+                            width: calc(75% - 10px);
+                            padding: 8px;
+                            margin-left: 10px;
+                            margin-top: 10px;
+                            color: #0e0e0e;
+                            background-color: #ebebeb;
+                            border: none;
+                            border-radius: 1rem;
+                            display: inline-block;
+                            font-family: 'Arial', sans-serif;
+                            font-size: 14px;
+                            outline: none;
+                            transition: all 0.3s ease;
+                        "
+                >
+                <button id="submitContent"
+                        style="padding: 8px 16px; border: none; border-radius: 5px; border: #e8e8e8 0.5px solid; border-radius: 20px; margin: 4px; cursor: pointer; display: inline-block;">
+                    ✨
+                </button>
+            </div>
+
+            <!-- Content Analysis Form -->
+            <div id="analyze-content-form" style="display: none; margin-top: 10px; margin-bottom: 10px;">
+                <select id="analysisType" style="
+                    width: calc(75% - 10px);
+                    padding: 8px;
+                    margin-left: 10px;
+                    color: #0e0e0e;
+                    background-color: #ebebeb;
+                    border: none;
+                    border-radius: 1rem;
+                    display: inline-block;
+                    font-family: 'Arial', sans-serif;
+                    font-size: 14px;
+                    outline: none;
+                    transition: all 0.3s ease;
+                ">
+                    <optgroup label="Content Analysis">
+                        <option value="sentiment">Sentiment Analysis</option>
+                        <option value="keywords">Keyword Extraction</option>
+                        <option value="summary">Content Summary</option>
+                        <option value="grammar">Grammar Check</option>
+                    </optgroup>
+                    <optgroup label="SEO & Marketing">
+                        <option value="seo">SEO Analysis</option>
+                        <option value="readability">Readability Score</option>
+                        <option value="engagement">Engagement Prediction</option>
+                        <option value="competitor">Competitor Analysis</option>
+                    </optgroup>
+                    <optgroup label="Writing Enhancement">
+                        <option value="tone">Tone Analysis</option>
+                        <option value="style">Writing Style Check</option>
+                        <option value="plagiarism">Plagiarism Check</option>
+                        <option value="improve">Content Improvement</option>
+                    </optgroup>
+                    <optgroup label="Business Metrics">
+                        <option value="conversion">Conversion Optimization</option>
+                        <option value="audience">Audience Analysis</option>
+                        <option value="trend">Trend Analysis</option>
+                        <option value="roi">ROI Prediction</option>
+                    </optgroup>
+                </select>
+                <textarea id="analyzeInput" placeholder="Paste your content here"
+                       style="
+                            width: calc(75% - 10px);
+                            padding: 8px;
+                            margin-left: 10px;
+                            margin-top: 10px;
+                            color: #0e0e0e;
+                            background-color: #ebebeb;
+                            border: none;
+                            border-radius: 1rem;
+                            display: inline-block;
+                            font-family: 'Arial', sans-serif;
+                            font-size: 14px;
+                            outline: none;
+                            transition: all 0.3s ease;
+                            min-height: 100px;
+                            resize: vertical;
+                        "
+                ></textarea>
+                <button id="submitAnalysis"
+                        style="padding: 8px 16px; border: none; border-radius: 5px; border: #e8e8e8 0.5px solid; border-radius: 20px; margin: 4px; cursor: pointer; display: inline-block;">
+                    ✨
+                </button>
+            </div>
+
+            <!-- Loading Message -->
+            <div id="loading-message6" style="display: none; margin: 10px; text-align: center;">
+                <div class="spinner" style="
+                    width: 40px;
+                    height: 40px;
+                    margin: 0 auto;
+                    border: 4px solid #f3f3f3;
+                    border-top: 4px solid #0a5ecb;
+                    border-radius: 50%;
+                    animation: spin 1s linear infinite;
+                "></div>
+                <style>
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                </style>
+                <div style="margin-top: 10px; color: #0a5ecb;">Processing...</div>
+            </div>
+
+            <!-- Output Container -->
+            <div id="contentOutput" style="display: none; margin-top: 10px; color: #333; padding: 10px; background-color: #fff; font-size: medium; border: 1px solid #e0e0e0; border-radius: 8px;">
+                <div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+                    <button id="copyContentBtn" style="
+                        padding: 4px 8px;
+                        border: #e8e8e8 0.5px solid;
+                        border-radius: 20px;
+                        background: white;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        gap: 4px;
+                    ">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd" d="M18 3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1V9a4 4 0 0 0-4-4h-3a1.99 1.99 0 0 0-1 .267V5a2 2 0 0 1 2-2h7Z" clip-rule="evenodd"/>
+                            <path fill-rule="evenodd" d="M8 7.054V11H4.2a2 2 0 0 1 .281-.432l2.46-2.87A2 2 0 0 1 8 7.054ZM10 7v4a2 2 0 0 1-2 2H4v6a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3Z" clip-rule="evenodd"/>
+                        </svg>
+                        Copy
+                    </button>
+                </div>
+                <div id="contentOutputText"></div>
+                <style>
+                    #contentOutput h1 {
+                        font-size: 24px;
+                        margin: 16px 0;
+                        color: #1a1a1a;
+                    }
+                    #contentOutput h2 {
+                        font-size: 20px;
+                        margin: 14px 0;
+                        color: #2a2a2a;
+                    }
+                    #contentOutput h3 {
+                        font-size: 18px;
+                        margin: 12px 0;
+                        color: #3a3a3a;
+                    }
+                    #contentOutput p {
+                        margin: 8px 0;
+                        line-height: 1.5;
+                    }
+                    #contentOutput ul, #contentOutput ol {
+                        margin: 8px 0;
+                        padding-left: 24px;
+                    }
+                    #contentOutput li {
+                        margin: 4px 0;
+                    }
+                    #contentOutput a {
+                        color: #0a5ecb;
+                        text-decoration: none;
+                    }
+                    #contentOutput a:hover {
+                        text-decoration: underline;
+                    }
+                    #contentOutput strong {
+                        font-weight: 600;
+                    }
+                    #contentOutput em {
+                        font-style: italic;
+                    }
+                </style>
+            </div>
+        </div>
+
+        <!-- Add new tab content before closing div#tab-content -->
+        <div id="tab7" class="tab-content">
+            <div id="capture-container" style="display: flex; justify-content: center; height: auto; margin-top: 0;">
+                <button id="flashcardBtn" class="tab-button" style="display: flex; align-items: center; gap: 4px; border: #e8e8e8 0.5px solid; border-radius: 20px; margin: 4px;">Generate Flashcards
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2m-6 9 2 2 4-4"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Flashcard Generation Form -->
+            <div id="generate-flashcard-form" style="display: none; margin-top: 10px; margin-bottom: 10px;">
+                <input type="url" id="urlInput" placeholder="Enter URL to generate flashcards from"
+                       style="
+                            width: calc(75% - 10px);
+                            padding: 8px;
+                            margin-left: 10px;
+                            color: #0e0e0e;
+                            background-color: #ebebeb;
+                            border: none;
+                            border-radius: 1rem;
+                            display: inline-block;
+                            font-family: 'Arial', sans-serif;
+                            font-size: 14px;
+                            outline: none;
+                            transition: all 0.3s ease;
+                        "
+                >
+                <button id="submitFlashcard"
+                        style="padding: 8px 16px; border: none; border-radius: 5px; border: #e8e8e8 0.5px solid; border-radius: 20px; margin: 4px; cursor: pointer; display: inline-block;">
+                    ✨
+                </button>
+            </div>
+
+            <!-- Loading Message -->
+            <div id="loading-message7" style="display: none; margin: 10px; text-align: center;">
+                <div class="spinner" style="
+                    width: 40px;
+                    height: 40px;
+                    margin: 0 auto;
+                    border: 4px solid #f3f3f3;
+                    border-top: 4px solid #0a5ecb;
+                    border-radius: 50%;
+                    animation: spin 1s linear infinite;
+                "></div>
+                <div style="margin-top: 10px; color: #0a5ecb;">Generating Flashcards...</div>
+            </div>
+
+            <!-- Flashcard Output Container -->
+            <div id="flashcardOutput" style="display: none; margin-top: 10px; color: #333; padding: 20px; background-color: #fff; font-size: medium; border: 1px solid #e0e0e0; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <button id="prevFlashcardBtn" style="
+                        padding: 8px 16px;
+                        border: none;
+                        border-radius: 20px;
+                        background: #f0f4ff;
+                        color: #0a5ecb;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        transition: all 0.3s ease;
+                        font-weight: 500;
+                    ">
+                        <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19-7-7 7-7"/>
+                        </svg>
+                        Previous
+                    </button>
+                    <button id="copyFlashcardBtn" style="
+                        padding: 8px 16px;
+                        border: none;
+                        border-radius: 20px;
+                        background: #f0f4ff;
+                        color: #0a5ecb;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        transition: all 0.3s ease;
+                        font-weight: 500;
+                    ">
+                        <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                            <path fill-rule="evenodd" d="M18 3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-1V9a4 4 0 0 0-4-4h-3a1.99 1.99 0 0 0-1 .267V5a2 2 0 0 1 2-2h7Z" clip-rule="evenodd"/>
+                            <path fill-rule="evenodd" d="M8 7.054V11H4.2a2 2 0 0 1 .281-.432l2.46-2.87A2 2 0 0 1 8 7.054ZM10 7v4a2 2 0 0 1-2 2H4v6a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3Z" clip-rule="evenodd"/>
+                        </svg>
+                        Copy
+                    </button>
+                    <button id="nextFlashcardBtn" style="
+                        padding: 8px 16px;
+                        border: none;
+                        border-radius: 20px;
+                        background: #f0f4ff;
+                        color: #0a5ecb;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        transition: all 0.3s ease;
+                        font-weight: 500;
+                    ">
+                        Next
+                        <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
+                        </svg>
+                    </button>
+                </div>
+                <div id="flashcardCounter" style="text-align: center; margin-bottom: 15px; color: #666; font-size: 14px; font-weight: 500;">Card 1 of 1</div>
+                <div id="flashcardOutputText" style="
+                    perspective: 1000px;
+                    min-height: 300px;
+                    position: relative;
+                    margin: 0 auto;
+                    max-width: 600px;
+                ">
+                    <div id="flashcardInner" style="
+                        position: relative;
+                        width: 100%;
+                        height: 100%;
+                        text-align: center;
+                        transition: transform 0.8s;
+                        transform-style: preserve-3d;
+                        cursor: pointer;
+                    ">
+                        <div id="flashcardFront" style="
+                            position: absolute;
+                            width: 100%;
+                            height: 100%;
+                            backface-visibility: hidden;
+                            background: linear-gradient(135deg, #f0f4ff 0%, #e6eeff 100%);
+                            border: 2px solid #0a5ecb;
+                            border-radius: 16px;
+                            padding: 30px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 20px;
+                            font-weight: 600;
+                            color: #0a5ecb;
+                            box-shadow: 0 4px 6px rgba(10, 94, 203, 0.1);
+                        "></div>
+                        <div id="flashcardBack" style="
+                            position: absolute;
+                            width: 100%;
+                            height: 100%;
+                            backface-visibility: hidden;
+                            background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+                            border: 2px solid #0a5ecb;
+                            border-radius: 16px;
+                            padding: 30px;
+                            transform: rotateY(180deg);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 18px;
+                            color: #495057;
+                            box-shadow: 0 4px 6px rgba(10, 94, 203, 0.1);
+                        "></div>
+                    </div>
+                </div>
+                <style>
+                    #flashcardOutput button:hover {
+                        background: #0a5ecb !important;
+                        color: white !important;
+                    }
+                    #flashcardOutput button:disabled {
+                        background: #f0f4ff !important;
+                        color: #a0a0a0 !important;
+                        cursor: not-allowed;
+                    }
+                    #flashcardOutput h1 {
+                        font-size: 24px;
+                        margin: 16px 0;
+                        color: #1a1a1a;
+                    }
+                    #flashcardOutput h2 {
+                        font-size: 20px;
+                        margin: 14px 0;
+                        color: #2a2a2a;
+                    }
+                    #flashcardOutput h3 {
+                        font-size: 18px;
+                        margin: 12px 0;
+                        color: #3a3a3a;
+                    }
+                    #flashcardOutput .flashcard {
+                        background: #f8f9fa;
+                        border: 1px solid #e9ecef;
+                        border-radius: 8px;
+                        padding: 16px;
+                        margin: 12px 0;
+                    }
+                    #flashcardOutput .flashcard-front {
+                        font-weight: bold;
+                        margin-bottom: 8px;
+                        color: #0a5ecb;
+                    }
+                    #flashcardOutput .flashcard-back {
+                        color: #495057;
+                    }
+                    #flashcardOutput .flashcard-example {
+                        font-style: italic;
+                        color: #6c757d;
+                        margin-top: 8px;
+                        padding-left: 16px;
+                        border-left: 3px solid #0a5ecb;
+                    }
+                </style>
+            </div>
+        </div>
+    </div>
+
+    
+    <script type="module" src="popup.js"></script>
+    <script type="module" src="savedPalette.js"></script>
+    <script type="module" src="tab5.js"></script>
+    <script type="module" src="tab2.js"></script>
+    <script type="module" src="tab3.js"></script>
+
+
+
+</div>
+</body>
+</html>

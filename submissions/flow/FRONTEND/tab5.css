@@ -1,0 +1,180 @@
+/* General Styling */
+
+/* Page Title */
+.page-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    color: #333;
+}
+
+
+.input-field {
+    width: calc(90%); 
+    padding: 8px; 
+    margin-bottom: 10px;
+    margin-left: 10px; 
+    margin-right: 5px;
+    color: #0e0e0e; /* Light grey text color */
+    background-color: #ebebeb; /* Dark grey background */
+    border: none; /* Subtle border for modern look */
+    border-radius: 1rem; 
+    display: inline-block; 
+    font-family: 'Arial', sans-serif; /* Modern, clean font */
+    font-size: 14px;
+    outline: none; /* Remove blue outline */
+    transition: all 0.3s ease; /* Smooth transition */
+}
+
+.input-field:focus {
+    border-color: #0a5ecb;
+    outline: none;
+}
+
+/* Buttons */
+.btn {
+    padding: 12px 25px;
+    border-radius: 30px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.primary-btn {
+    background-color: #0a5ecb;
+    color: white;
+}
+
+.primary-btn:hover {
+    background-color: #0077cc;
+}
+
+.secondary-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.secondary-btn:hover {
+    background-color: #218838;
+}
+
+.success-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.success-btn:hover {
+    background-color: #218838;
+}
+
+/* Payment Status */
+.status-text {
+    margin-top: 15px;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.payment-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.payment-table th, .payment-table td {
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.status-badge.created {
+    background-color: #d0e5fd;
+    color: #2563eb;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+}
+
+.status-badge.paid {
+    background-color: #d1fae5;
+    color: #059669;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+}
+
+
+/* Style for the payment links container */
+#paymentLinksContainer {
+    display: flex;
+    flex-wrap: wrap;          /* Allow wrapping of cards */
+    justify-content: center;  /* Center cards horizontally */
+    gap: 20px;                /* Space between cards */
+    margin-top: 20px;         /* Optional, add space from the top */
+}
+
+/* Style for individual payment cards */
+.payment-card {
+    width: 300px;             /* Set a fixed width for cards */
+    padding: 20px;            /* Padding inside the card */
+    border-radius: 8px;       /* Rounded corners */
+    border: 1px solid #ddd;  /* Light border */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    background-color: #fff;   /* White background */
+    text-align: center;       /* Center text inside the card */
+}
+
+/* Add some hover effect to the card */
+.payment-card:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* Button style inside the card */
+.payment-card .btn {
+    background-color: #4CAF50; /* Green background for buttons */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none; /* Remove underline */
+    display: inline-block; /* Make it behave like a block element */
+    margin-top: 15px;
+}
+
+/* Hover effect for the button */
+.payment-card .btn:hover {
+    background-color: #45a049;
+}
+
+/* Badge styles for the payment status */
+.payment-card .status-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-weight: bold;
+    color: white;
+    margin-top: 10px;
+}
+
+/* Color for 'paid' status */
+.payment-card .status-badge.paid {
+    background-color: #28a745; /* Green for paid */
+}
+
+/* Color for 'created' status */
+.payment-card .status-badge.created {
+    background-color: #ffc107; /* Yellow for created */
+}
+
+/* Color for 'failed' status */
+.payment-card .status-badge.failed {
+    background-color: #dc3545; /* Red for failed */
+}
+
+/* Color for 'cancelled' status */
+.payment-card .status-badge.cancelled {
+    background-color: #6c757d; /* Gray for cancelled */
+}

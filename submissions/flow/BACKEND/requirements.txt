@@ -1,0 +1,12 @@
+flask
+flask-cors
+python-dotenv
+requests
+gunicorn
+agno
+openai
+lancedb
+duckduckgo-search
+resend
+langchain-openai
+browser-use
