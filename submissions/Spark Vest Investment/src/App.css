@@ -1,0 +1,35 @@
+/* import { useState } from "react";
+
+export default function App() {
+  const [isDark, setIsDark] = useState(false);
+
+  return (
+    <div className={`${isDark ? "dark" : ""} min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-6`}>
+      <button
+        onClick={() => setIsDark(!isDark)}
+        className="mb-6 px-4 py-2 bg-primary text-primary-foreground rounded-lg shadow-md transition-all hover:bg-secondary"
+      >
+        Toggle Dark Mode
+      </button>
+
+      <div className="relative flex flex-col items-center">
+        <img
+          src="/vite.svg"
+          className="logo transition-all duration-300 hover:drop-shadow-[0_0_2em_var(--primary)]"
+          alt="Vite logo"
+        />
+        <img
+          src="/react.svg"
+          className="logo react transition-all duration-300 hover:drop-shadow-[0_0_2em_var(--accent)]"
+          alt="React logo"
+        />
+      </div>
+
+      <div className="card bg-card text-card-foreground p-6 rounded-lg shadow-lg mt-6">
+        <p className="text-lg font-semibold">Edit <code className="bg-muted px-2 py-1 rounded">src/App.tsx</code> and save to test HMR</p>
+      </div>
+
+      <p className="read-the-docs text-secondary mt-6">Click on the Vite and React logos to learn more</p>
+    </div>
+  );
+} */

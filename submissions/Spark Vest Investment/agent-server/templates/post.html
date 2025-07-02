@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sparkvest API - {{ route_path }}</title>
+    <style>
+        :root {
+            --bg-color: #000000;
+            --text-color: #0cfa37;
+            --highlight-color: #fa0c0c;
+            --secondary-color: #ffffff;
+            --border-color: #0cfa37;
+            --success-color: #2e736d;
+            --font-family: 'Courier New', Courier, monospace;
+        }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-family);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .terminal {
+            max-width: 900px;
+            margin: 0 auto;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(139, 30, 234, 0.2);
+        }
+
+        .endpoint {
+            margin-bottom: 20px;
+            border-bottom: 1px dotted var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .endpoint h2 {
+            color: var(--highlight-color);
+            margin-top: 0;
+        }
+
+        .method {
+            background-color: #1e1e1e;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            color: var(--success-color);
+        }
+
+        .request-body {
+            background-color: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            color: var(--text-color);
+            resize:none;
+        }
+
+        .request-body pre {
+            margin: 0;
+            white-space: pre-wrap;
+            resize: none;
+        }
+
+        .param {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #1a1a1a;
+            border-radius: 5px;
+        }
+
+        .param-header {
+            color: var(--highlight-color);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .param-details {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 10px;
+            margin-left: 15px;
+        }
+
+        .param-label {
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        .param-value {
+            color: var(--text-color);
+        }
+
+        .try-it {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #1a1a1a;
+            border-radius: 5px;
+        }
+
+        .try-it h3 {
+            color: var(--highlight-color);
+            margin-top: 0;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--secondary-color);
+        }
+
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 8px;
+            background-color: #2a2a2a;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: 3px;
+            font-family: var(--font-family);
+        }
+
+        .submit-btn {
+            background-color: var(--success-color);
+            color: var(--bg-color);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+        }
+
+        .response-preview {
+            margin-top: 15px;
+            display: none;
+            background-color: #1a1a1a;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .response-preview h4 {
+            color: var(--highlight-color);
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .response-preview pre {
+            margin: 0;
+            white-space: pre-wrap;
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            color: var(--secondary-color);
+        }
+
+        .response-preview code {
+            font-family: var(--font-family);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Add a loading indicator */
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 10px 0;
+            color: var(--highlight-color);
+        }
+
+        .loading::after {
+            content: "⏳";
+            animation: loading-spin 1s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes loading-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.8em;
+            color: var(--secondary-color);
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        a {
+            color: var(--highlight-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .terminal-input {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .prompt {
+            color: var(--highlight-color);
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .blink {
+            animation: blink-animation 1s steps(2, start) infinite;
+        }
+
+        @keyframes blink-animation {
+            to {
+                visibility: hidden;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <div class="terminal-input">
+            <span class="prompt">sparkvest@api:~$</span>
+            <span id="command-text">{{ route_path }} <span class="blink">_</span></span>
+        </div>
+        <div class="endpoint">
+            <h2>{{ route_path }}</h2>
+            <p><span class="method">POST</span> {{ full_path }}</p>
+            <p>{{ description }}</p>
+
+            {% if request_body %}
+            <h3>Request Body</h3>
+            <div class="request-body">
+                <pre><code>{{ request_body }}</code></pre>
+            </div>
+            {% endif %}
+
+            {% if parameters %}
+            <h3>Parameters</h3>
+            <div class="params-container">
+                {% for param in parameters %}
+                <div class="param">
+                    <div class="param-header">{{ param.name }}</div>
+                    <div class="param-details">
+                        <span class="param-label">Type:</span>
+                        <span class="param-value">{{ param.type }}</span>
+                        <span class="param-label">Description:</span>
+                        <span class="param-value">{{ param.description }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="try-it">
+                <h3>Try it out</h3>
+                <form id="api-form" onsubmit="return sendRequest(event)">
+                    <div class="input-group">
+                        <label for="request-body">Request Body (JSON):</label>
+                        <p>
+                            <small>Example: <code>{ "query": "Should I invest in index funds?" }</code></small>
+                            <br>
+                        </p>
+                        <textarea id="request-body" rows="5" style="resize: none; width: 100%;"></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Send Request</button>
+                </form>
+                <div id="loading" class="loading">Processing request...</div>
+                <div id="response-preview" class="response-preview">
+                    <h4>Response</h4>
+                    <pre><code id="response-content"></code></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>sparkvest API &copy; {{ current_year }} | <a href="/">Home</a> | <a href="/docs">Documentation</a></p>
+    </footer>
+
+    <script>
+        async function sendRequest(event) {
+            event.preventDefault();
+            
+            const form = document.getElementById('api-form');
+            const responsePreview = document.getElementById('response-preview');
+            const responseContent = document.getElementById('response-content');
+            const loading = document.getElementById('loading');
+            const submitBtn = document.querySelector('.submit-btn');
+            
+            // Hide previous response and show loading
+            responsePreview.style.display = 'none';
+            loading.style.display = 'block';
+            submitBtn.disabled = true;
+            
+            try {
+                const requestBody = document.getElementById('request-body').value;
+                const response = await fetch('{{ full_path }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: requestBody
+                });
+                
+                const data = await response.json();
+                responseContent.textContent = JSON.stringify(data, null, 4);
+                responsePreview.style.display = 'block';
+            } catch (error) {
+                responseContent.textContent = `Error: ${error.message}`;
+                responsePreview.style.display = 'block';
+            } finally {
+                loading.style.display = 'none';
+                submitBtn.disabled = false;
+            }
+            
+            return false;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
+    
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    
+    --secondary: 222.2 47.4% 11.2%;
+    --secondary-foreground: 210 40% 98%;
+    
+    --muted: 223 47% 11%;
+    --muted-foreground: 215.4 16.3% 56.9%;
+    
+    --accent: 216 34% 17%;
+    --accent-foreground: 210 40% 98%;
+    
+    --popover: 224 71% 4%;
+    --popover-foreground: 215 20.2% 65.1%;
+    
+    --card: 224 71% 4%;
+    --card-foreground: 213 31% 91%;
+    
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+    
+    --border: 216 34% 17%;
+    --input: 216 34% 17%;
+    --ring: 216 34% 17%;
+    
+    --radius: 0.75rem;
+  }
+
+  [data-theme='squid-game'] {
+    --background: 0 0% 100%;
+    --foreground: 334 86% 52%;
+    
+    --primary: 334 86% 52%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 181 64% 38%;
+    --secondary-foreground: 0 0% 100%;
+    
+    --muted: 181 64% 38%;
+    --muted-foreground: 334 86% 52%;
+    
+    --accent: 181 64% 38%;
+    --accent-foreground: 0 0% 100%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 334 86% 52%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 334 86% 52%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 334 86% 52%;
+    --input: 334 86% 52%;
+    --ring: 334 86% 52%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-inter antialiased;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-black/20 backdrop-blur-lg border border-white/10;
+  }
+  
+  .glass-effect {
+    @apply backdrop-blur-lg bg-black/40 border border-white/10;
+  }
+  
+  .hover-effect {
+    @apply transition-all duration-300 ease-in-out hover:scale-[1.02];
+  }
+
+  .theme-toggle {
+    @apply fixed bottom-4 right-4 p-2 rounded-full bg-primary text-primary-foreground 
+           hover:bg-secondary transition-colors duration-200 z-50;
+  }
+}
+
+.text-gradient {
+  @apply bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tradingview-widget-container {
+  height: 30rem !important;
+  width: 100% !important;
+}
+
+[data-theme='squid-game'] {
+  /* Make headings with a deeper, more readable pink */
+  h1, h2, h3, h4, h5, h6 {
+    color: #d81560 !important;
+  }
+  
+  /* Make regular text darker teal for better readability */
+  p, span, div {
+    color: #025853;
+  }
+  
+  /* Links with better contrast and interaction states */
+  a:not([class*="button"]) {
+    color: #d81560;
+    transition: color 0.2s ease;
+  }
+  
+  a:not([class*="button"]):hover {
+    color: #025853;
+    text-decoration: underline;
+  }
+  
+  /* Form elements with softer colors */
+  input, textarea, select {
+    color: #d81560 !important;
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+  
+  /* More visible placeholder text */
+  ::placeholder {
+    color: #468885 !important;
+    opacity: 0.8;
+  }
+  
+  /* Muted text with better contrast */
+  .text-muted-foreground {
+    color: #d81560 !important;
+    opacity: 0.85;
+  }
+  
+  /* Card elements with enhanced contrast */
+  .card-title {
+    color: #025853 !important;
+    font-weight: 600;
+  }
+  
+  .card-content {
+    color: #025853 !important;
+    opacity: 0.9;
+  }
+}
