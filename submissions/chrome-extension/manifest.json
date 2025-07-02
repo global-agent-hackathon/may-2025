@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "TubeWarden",
+  "version": "1.0.0",
+  "description": "AI-Powered YouTube Protection, Driven by Your Choices",
+  "permissions": ["storage", "webNavigation", "tabs"],
+  "host_permissions": ["*://www.youtube.com/*"],
+  "background": {
+    "service_worker": "src/js/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://www.youtube.com/*"],
+      "js": ["src/js/content.js"],
+      "css": ["src/css/styles.css"]
+    }
+  ],
+  "action": {
+    "default_popup": "public/popup.html",
+    "default_icon": "src/images/icon.png"
+  },
+  "icons": {
+    "128": "src/images/icon.png"
+  }
+}

@@ -1,0 +1,7 @@
+[flake8]
+max-line-length = 88
+# E203 and W503 are commonly ignored to be compatible with Black.
+extend-ignore = E203, W503
+exclude = .git,.venv,__pycache__,build,dist,chrome-extension
+per-file-ignores =
+     backend/agent/agent.py: E501

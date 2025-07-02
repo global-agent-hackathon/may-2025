@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TubeWarden</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>TubeWarden</h1>
+    </header>
+    
+    <main>
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="config">Settings</button>
+        <button class="tab-btn" data-tab="log">Log</button>
+      </div>
+      
+      <div class="tab-content active" id="config-tab">
+        <section class="config-section">
+          <h2>Server settings</h2>
+          <div class="form-group">
+            <label for="serverUrl">REST Server URL:</label>
+            <input type="text" id="serverUrl" placeholder="http://localhost:3000">
+          </div>
+          <div class="form-group">
+            <label for="wsUrl">WebSocket URL:</label>
+            <input type="text" id="wsUrl" placeholder="ws://localhost:3000/ws">
+          </div>
+        </section>
+        
+        <section class="config-section">
+          <h2>Evaluation categories</h2>
+          <div class="categories-grid">
+            <div class="category-item">
+              <input type="checkbox" id="cat-hatred">
+              <label for="cat-hatred">Hatred</label>
+            </div>
+            <div class="category-item">
+              <input type="checkbox" id="cat-misinformation">
+              <label for="cat-misinformation">Misinformation</label>
+            </div>
+            <div class="category-item">
+              <input type="checkbox" id="cat-violence">
+              <label for="cat-violence">Violence</label>
+            </div>
+            <div class="category-item">
+              <input type="checkbox" id="cat-fraud">
+              <label for="cat-fraud">Fraud</label>
+            </div>
+            <div class="category-item">
+              <input type="checkbox" id="cat-educational">
+              <label for="cat-educational">Educational</label>
+            </div>
+            <div class="category-item">
+              <input type="checkbox" id="cat-relevance">
+              <label for="cat-relevance">Relevance</label>
+            </div>
+            <div class="category-item">
+              <input type="checkbox" id="cat-integrity">
+              <label for="cat-integrity">Integrity</label>
+            </div>
+            <div class="category-item">
+              <input type="checkbox" id="cat-clarity">
+              <label for="cat-clarity">Clarity</label>
+            </div>
+          </div>
+        </section>
+        
+        <section class="config-section">
+          <h2>Score Thresholds</h2>
+          <div class="form-group">
+            <label for="threshold-hide">Hide videos below:</label>
+            <input type="number" id="threshold-hide" min="0" max="10" step="0.5">
+          </div>
+          <div class="form-group">
+            <label for="threshold-warning">Show warning below:</label>
+            <input type="number" id="threshold-warning" min="0" max="10" step="0.5">
+          </div>
+        </section>
+        
+        <section class="config-section">
+          <h2>Automatic Actions</h2>
+          <div class="form-group">
+            <input type="checkbox" id="action-hide">
+            <label for="action-hide">Automatically hide low-quality videos</label>
+          </div>
+          <div class="form-group">
+            <input type="checkbox" id="action-warning">
+            <label for="action-warning">Show warnings on medium-quality videos</label>
+          </div>
+          <div class="form-group">
+            <input type="checkbox" id="action-notinterested">
+            <label for="action-notinterested">Use “Not interested” on poor-quality videos</label>
+          </div>
+        </section>
+        
+        <section class="config-section">
+          <h2>Custom Prompts</h2>
+          <div class="form-group">
+            <textarea id="custom-prompts" placeholder="Add custom prompts, one per line"></textarea>
+            <small>Example: remove football videos</small>
+          </div>
+        </section>
+        
+        <div class="form-actions">
+          <button id="save-config" class="btn primary">Save settings</button>
+          <button id="reset-config" class="btn secondary">Reset values</button>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="log-tab">
+        <div class="log-controls">
+          <button id="clear-log" class="btn secondary">Clear log</button>
+          <div class="form-group">
+            <input type="checkbox" id="enable-logging" checked>
+            <label for="enable-logging">Log actions</label>
+          </div>
+        </div>
+        
+        <div class="log-entries">
+          <!-- Log entries will be added dynamically here -->
+          <div class="empty-log">No actions logged</div>
+        </div>
+      </div>
+    </main>
+    
+    <footer>
+      <div class="status">
+        <span id="connection-status">Disconnected</span>
+      </div>
+    </footer>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

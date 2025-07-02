@@ -1,0 +1,272 @@
+/* Styles for TubeWarden popup */
+
+:root {
+  --primary-color: #3498db;
+  --secondary-color: #2ecc71;
+  --danger-color: #e74c3c;
+  --warning-color: #f39c18;
+  --text-color: #333;
+  --light-text: #777;
+  --border-color: #ddd;
+  --bg-color: #fff;
+  --hover-color: #f5f5f5;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 14px;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  width: 380px;
+  overflow-x: hidden;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+}
+
+header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: var(--primary-color);
+}
+
+main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 15px;
+}
+
+footer {
+  padding: 10px 15px;
+  border-top: 1px solid var(--border-color);
+  font-size: 12px;
+  color: var(--light-text);
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  margin-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.tab-btn {
+  padding: 8px 15px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  font-size: 14px;
+  color: var(--light-text);
+  border-bottom: 3px solid transparent;
+}
+
+.tab-btn.active {
+  color: var(--primary-color);
+  border-bottom: 3px solid var(--primary-color);
+  font-weight: 600;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Form elements */
+.config-section {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.config-section:last-child {
+  border-bottom: none;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--text-color);
+}
+
+input[type="checkbox"] + label {
+  display: inline;
+  margin-left: 8px;
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+small {
+  display: block;
+  color: var(--light-text);
+  margin-top: 5px;
+  font-style: italic;
+}
+
+/* Categories grid */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.category-item {
+  display: flex;
+  align-items: center;
+}
+
+/* Buttons */
+.btn {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn.primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn.secondary {
+  background-color: #eee;
+  color: var(--text-color);
+}
+
+.btn.danger {
+  background-color: var(--danger-color);
+  color: white;
+}
+
+.btn.primary:hover {
+  background-color: #2980b9;
+}
+
+.btn.secondary:hover {
+  background-color: #ddd;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+/* Log tab */
+.log-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.log-entries {
+  max-height: 350px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.log-entry {
+  padding: 8px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 13px;
+}
+
+.log-entry:last-child {
+  border-bottom: none;
+}
+
+.log-entry .timestamp {
+  color: var(--light-text);
+  font-size: 11px;
+  margin-bottom: 3px;
+}
+
+.log-entry .action {
+  font-weight: 600;
+}
+
+.log-entry.videoScored {
+  color: var(--primary-color);
+}
+
+.log-entry.videoHidden {
+  color: var(--danger-color);
+}
+
+.log-entry.videoWarningApplied {
+  color: var(--warning-color);
+}
+
+.log-entry.videoMarkedNotInterested {
+  color: var(--secondary-color);
+}
+
+.empty-log {
+  text-align: center;
+  color: var(--light-text);
+  padding: 20px;
+  font-style: italic;
+}
+
+/* Connection status */
+#connection-status {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  background-color: #e74c3c;
+  color: white;
+}
+
+#connection-status.connected {
+  background-color: #2ecc71;
+}

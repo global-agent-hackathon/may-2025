@@ -1,0 +1,199 @@
+/* Secure floating badge */
+.agno-badge-wrapper {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 10;
+  pointer-events: none; /* Don't block clicks on the thumbnail */
+}
+
+/* Badge styles */
+.agno-score-badge {
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  text-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
+  color: white;
+  background-color: rgba(52, 152, 219, 0.9); /* Neutral by default */
+}
+
+/* Color classes */
+.agno-score-badge.good {
+  background-color: rgba(39, 174, 96, 0.9);
+}
+
+.agno-score-badge.warning {
+  background-color: rgba(243, 156, 18, 0.9);
+}
+
+.agno-score-badge.bad {
+  background-color: rgba(231, 76, 60, 0.9);
+}
+
+.agno-score-badge.neutral {
+  background-color: rgba(52, 152, 219, 0.9);
+}
+
+.agno-score-badge.processing {
+  background-color: rgba(255, 45, 45, 1)
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.8; }
+  50% { opacity: 1; }
+  100% { opacity: 0.8; }
+}
+
+/* Score text */
+.agno-score {
+  margin-right: 4px;
+}
+
+/* Optional: icon styles if you use a custom one */
+.agno-icon {
+  display: inline-block;
+  font-size: 11px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .agno-score-badge {
+    font-size: 10px;
+    padding: 1px 4px;
+  }
+}
+
+/* Automatic actions: hide video */
+.agno-hidden-video {
+  position: relative;
+  opacity: 0.6;
+}
+
+.agno-hidden-video::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.1),
+    rgba(0, 0, 0, 0.1) 10px,
+    rgba(0, 0, 0, 0.2) 10px,
+    rgba(0, 0, 0, 0.2) 20px
+  );
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* Visual warning */
+.agno-warning-video {
+  position: relative;
+}
+
+.agno-warning-video::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background-color: rgba(243, 156, 18, 0.9);
+  z-index: 5;
+}
+
+/* Styles for the summary */
+.agno-summary-button {
+  margin-left: 6px;
+  font-size: 11px;
+  padding: 2px 4px;
+  background: #eee;
+  border: 1px solid #ccc;
+  border-color: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.agno-summary-button:hover {
+  background: #ddd;
+}
+.agno-summary-popup {
+  max-width: 320px;
+  background: #fff;
+  color: #111;
+  padding: 12px 14px;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  z-index: 10000;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: normal;
+}
+
+.agno-summary-title {
+  font-weight: bold;
+  margin-bottom: 6px;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #222;
+}
+
+.agno-summary-text {
+  margin-bottom: 10px;
+  font-style: italic;
+  color: #333;
+}
+
+.agno-category-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.agno-category-list li {
+  margin-bottom: 4px;
+  color: #333;
+}
+
+/* Categories styles */
+.agno-category-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.agno-category-list li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.agno-category-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.agno-category-indicator.red {
+  background-color: #e74c3c;
+}
+
+.agno-category-indicator.orange {
+  background-color: #f39c12;
+}
+
+.agno-category-indicator.green {
+  background-color: #2ecc71;
+}
+
+.agno-category-label {
+  font-size: 13px;
+  color: #333;
+}

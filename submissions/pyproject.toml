@@ -1,0 +1,31 @@
+[project]
+name = "youtube-agno-agent"
+version = "0.1.0"
+description = "YouTube agent built with the Agno Framework"
+authors = [
+    {name = "Megabata"}
+]
+readme = "README.md"
+requires-python = ">=3.9,<3.14"
+dependencies = [
+    "fastapi (>=0.115.12,<0.116.0)",
+    "agno (>=1.4.2,<1.5.0)",
+    "uvicorn (>=0.34.2,<0.35.0)",
+    "pydantic (>=2.11.3,<2.12.0)",
+    "websockets (>=15.0.1,<15.1.0)",
+    "nest-asyncio (>=1.6.0,<1.7.0)",
+    "youtube-transcript-api (==1.1.0)",
+    "openai (>=1.77.0,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^7.2.0"
+black = "^25.1.0"
+
+[tool.black]
+line-length = 88
