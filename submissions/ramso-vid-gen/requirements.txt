@@ -1,0 +1,9 @@
+streamlit
+openai
+pydantic
+python-dotenv
+agno
+manim
+emoji
+gtts 
+sqlalchemy
