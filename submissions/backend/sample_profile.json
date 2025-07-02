@@ -1,0 +1,27 @@
+{
+  "profile": {
+    "name": "John Smith",
+    "headline": "Software Engineer at Google",
+    "avatar": "https://cdn-icons-png.flaticon.com/512/174/174857.png",
+    "platform": "LinkedIn",
+    "profile_url": "https://www.linkedin.com/in/johnsmith/"
+  },
+  "analysis": {
+    "match_reasons": [
+      "Has 7+ years of experience in full-stack development",
+      "Currently works at a company you're interested in",
+      "Has expertise in AI and machine learning"
+    ],
+    "commonalities": [
+      "Both attended Stanford University",
+      "Both have worked on AI projects",
+      "Similar career trajectory in software engineering"
+    ],
+    "value_propositions": [
+      "Could provide insights on working at Google",
+      "Has connections in companies you're targeting",
+      "Experience with technologies you want to learn"
+    ],
+    "opening_message": "Hi John, I noticed we both attended Stanford and have worked on AI projects. I'm particularly interested in your experience at Google, as I'm exploring opportunities there. Would you be open to a quick chat about your experience?"
+  }
+} 

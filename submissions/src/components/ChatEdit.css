@@ -1,0 +1,205 @@
+/* Edit Dialog Styles */
+.edit-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+  animation: fadeIn 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.edit-dialog-content {
+  background: white;
+  border-radius: 18px;
+  padding: 30px;
+  min-width: 500px;
+  max-width: 90%;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.edit-dialog-content h3 {
+  margin: 0 0 16px 0;
+  color: #007aff;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.edit-message-textarea {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin-bottom: 20px;
+  resize: vertical;
+  transition: border-color 0.3s ease;
+  outline: none;
+}
+
+.edit-message-textarea:focus {
+  border-color: #007aff;
+  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.1);
+}
+
+.edit-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.edit-dialog-cancel {
+  background: #f5f5f7;
+  color: #6e6e73;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.edit-dialog-cancel:hover {
+  background: #e5e5ea;
+}
+
+.edit-dialog-save {
+  background: #007aff;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+}
+
+.edit-dialog-save:hover {
+  background: #0066d6;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 122, 255, 0.4);
+}
+
+/* Animation keyframes (if not already global) */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive styles for edit dialog */
+@media (max-width: 768px) {
+  .edit-dialog-content {
+    min-width: 95%;
+    padding: 25px;
+  }
+}
+
+/* New Message Container Styles */
+.new-message-container {
+  display: flex;
+  align-items: flex-end; /* Align items to the bottom for different textarea heights */
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.new-message-textarea {
+  flex-grow: 1; /* Allow textarea to take available space */
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  resize: vertical;
+  min-height: 40px; /* Minimum height for the textarea */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+}
+
+.new-message-textarea:focus {
+  border-color: #007aff;
+  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.1);
+}
+
+/* Send button is now part of edit-dialog-actions, styles will be adjusted */
+.new-message-send-button {
+  background: #28a745; /* Green color */
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3); /* Green shadow */
+  /* Remove flex-item specific properties if they conflict with parent flex container */
+  /* height: fit-content; */ 
+  /* align-self: flex-end; */
+}
+
+.new-message-send-button:hover {
+  background: #218838; /* Darker green on hover */
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4); /* Darker green shadow */
+}
+
+/* Error message styling */
+.edit-error-message {
+  color: #e53935;
+  background-color: rgba(229, 57, 53, 0.1);
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  font-size: 0.9rem;
+  animation: fadeIn 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Disabled button states */
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Loading animation for the send button */
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+.new-message-send-button:disabled {
+  animation: pulse 1.5s infinite;
+}
+
+/* Disabled textarea styles */
+textarea:disabled {
+  background-color: #f5f5f7;
+  cursor: not-allowed;
+} 
