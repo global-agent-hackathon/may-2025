@@ -1,0 +1,12 @@
+agno
+groq
+duckduckgo-search
+mcp
+mcp[cli]
+openai
+google-genai
+streamlit
+llama-index
+llama-index-llms-groq
+python-dotenv
+npx
