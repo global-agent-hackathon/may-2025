@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flux-agent"
+version = "0.1.0"
+authors = [
+    {name = "Flux Team", email = "hello@flux.dev"},
+]
+description = "Python backend for form generation using Agno"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "agno>=0.2.5",
+    "fastapi>=0.104.1",
+    "uvicorn>=0.24.0",
+    "pydantic>=2.4.2",
+    "python-dotenv>=1.0.0",
+    "groq>=0.22.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/your-org/flux-agent"
+"Bug Tracker" = "https://github.com/your-org/flux-agent/issues"
+
+[tool.setuptools]
+packages = ["app"] 
