@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intersectx - Discover and Analyze Companies</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header Navigation -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo and Brand -->
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-check text-white text-sm"></i>
+                    </div>
+                    <span class="text-xl font-semibold text-gray-900">Intersectx</span>
+                </div>
+                
+                <!-- Navigation Links -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#" class="text-blue-600 font-medium border-b-2 border-blue-600 pb-4">Home</a>
+                    <a href="#" class="text-gray-600 hover:text-gray-900 pb-4">IntersectX Chat</a>
+                    <a href="#" class="text-gray-600 hover:text-gray-900 pb-4">Research</a>
+                </nav>
+                
+                <!-- User Profile -->
+                <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                    <span class="text-white font-medium text-sm">TU</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">
+                Discover and Analyze<br>Companies
+            </h1>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto mb-8">
+                Get comprehensive insights into companies, their performance, and market trends. 
+                Make informed decisions with our advanced analysis tools.
+            </p>
+            
+            <!-- Search Bar -->
+            <div class="max-w-2xl mx-auto relative">
+                <div class="relative">
+                    <input 
+                        type="text" 
+                        placeholder="Search for a company..." 
+                        class="w-full px-4 py-3 pl-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                    >
+                    <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    <button class="absolute right-3 top-1/2 transform -translate-y-1/2 p-1">
+                        <i class="fas fa-search text-gray-400 hover:text-gray-600"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Featured Investment Opportunities -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-bold text-gray-900 mb-8">Featured Investment Opportunities</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Company Card 1 - Innovatech Solutions -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+                    <!-- Company Header with Logo -->
+                    <div class="relative h-32 bg-gradient-to-br from-teal-600 to-teal-700 flex items-center justify-center">
+                        <div class="text-white text-center">
+                            <i class="fas fa-leaf text-2xl mb-2"></i>
+                            <div class="font-bold text-lg">INOVATECH</div>
+                            <div class="text-sm opacity-90">SOLUTIONS</div>
+                        </div>
+                        <!-- Funding Stage Badge -->
+                        <div class="absolute top-3 right-3 bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
+                            Seed Stage
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <h3 class="font-semibold text-lg text-gray-900 mb-1">Innovatech Solutions</h3>
+                        <p class="text-sm text-gray-600 mb-3">AI-powered logistics optimization</p>
+                        
+                        <!-- Tags -->
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">AI</span>
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">Logistics</span>
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">SaaS</span>
+                        </div>
+                        
+                        <!-- Company Stats -->
+                        <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+                            <div>
+                                <span class="text-gray-500">Funding Ask:</span>
+                                <div class="font-medium">$500K</div>
+                            </div>
+                            <div>
+                                <span class="text-gray-500">Industry:</span>
+                                <div class="font-medium">Tech</div>
+                            </div>
+                            <div>
+                                <span class="text-gray-500">Valuation:</span>
+                                <div class="font-medium">$5M</div>
+                            </div>
+                            <div>
+                                <span class="text-gray-500">Location:</span>
+                                <div class="font-medium">San Francisco</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="flex gap-3">
+                            <button class="flex-1 px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition-colors">
+                                <i class="fas fa-link mr-2"></i>Request Connection
+                            </button>
+                            <button class="p-2 text-gray-400 hover:text-gray-600 border border-gray-300 rounded-lg">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Company Card 2 - EcoGrow Farms -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+                    <div class="relative h-32 bg-gradient-to-br from-amber-100 to-amber-200 flex items-center justify-center">
+                        <div class="text-gray-800 text-center">
+                            <i class="fas fa-seedling text-2xl mb-2 text-green-600"></i>
+                            <div class="font-bold text-lg">ECOGROW</div>
+                            <div class="text-sm opacity-90">farms</div>
+                            <div class="text-xs mt-1">NATURAL SAFE WORK</div>
+                        </div>
+                        <div class="absolute top-3 right-3 bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium">
+                            Series A
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <h3 class="font-semibold text-lg text-gray-900 mb-1">EcoGrow Farms</h3>
+                        <p class="text-sm text-gray-600 mb-3">Sustainable urban agriculture solutions</p>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">AgriTech</span>
+                            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Sustainability</span>
+                            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Food</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+                            <div>
+                                <span class="text-gray-500">Funding Ask:</span>
+                                <div class="font-medium">$2M</div>
+                            </div>
+                            <div>
+                                <span class="text-gray-500">Industry:</span>
+                                <div class="font-medium">Agriculture</div>
+                            </div>
+                            <div>
+                                <span class="text-gray-500">Valuation:</span>
+                                <div class="font-medium">$15M</div>
+                            </div>
+                            <div>
+                                <span class="text-gray-500">Location:</span>
+                                <div class="font-medium">Austin</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-3">
+                            <button class="flex-1 px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition-colors">
+                                <i class="fas fa-link mr-2"></i>Request Connection
+                            </button>
+                            <button class="p-2 text-gray-400 hover:text-gray-600 border border-gray-300 rounded-lg">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Company Card 3 - HealthWell AI -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+                    <div class="relative h-32 bg-gradient-to-br from-teal-600 to-teal-700 flex items-center justify-center">
+                        <div class="text-white text-center">
+                            <i class="fas fa-leaf text-2xl mb-2"></i>
+                            <div class="font-bold text-lg">HealthWell</div>
+                            <div class="text-sm opacity-90">NATURAL NATURAL</div>
+                        </div>
+                        <div class="absolute top-3 right-3 bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs font-medium">
+                            Growth Stage
+                        </div>
+                    </div>
+                    
+                    <div class="p-6">
+                        <h3 class="font-semibold text-lg text-gray-900 mb-1">HealthWell AI</h3>
+                        <p class="text-sm text-gray-600 mb-3">Personalized remote patient monitoring</p>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">HealthTech</span>
+                            <span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">AI</span>
+                            <span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">Remote Care</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+                            <div>
+                                <span class="text-gray-500">Funding Ask:</span>
+                                <div class="font-medium">$10M</div>
+                            </div>
+                            <div>
+                                <span class="text-gray-500">Industry:</span>
+                                <div class="font-medium">Healthcare</div>
+                            </div>
+                            <div>
+                                <span class="text-gray-500">Valuation:</span>
+                                <div class="font-medium">$75M</div>
+                            </div>
+                            <div>
+                                <span class="text-gray-500">Location:</span>
+                                <div class="font-medium">Boston</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-3">
+                            <button class="flex-1 px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition-colors">
+                                <i class="fas fa-link mr-2"></i>Request Connection
+                            </button>
+                            <button class="p-2 text-gray-400 hover:text-gray-600 border border-gray-300 rounded-lg">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trending News -->
+        <section>
+            <h2 class="text-2xl font-bold text-gray-900 mb-8">Trending News</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- News Card 1 -->
+                <article class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+                    <div class="h-48 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                        <i class="fas fa-robot text-white text-4xl opacity-50"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-semibold text-lg text-gray-900 mb-2">
+                            Market Shift: AI Startups Attract Record Funding
+                        </h3>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Investors are pouring capital into artificial intelligence, signaling a major trend for 2024.
+                        </p>
+                        <a href="#" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                            Read more <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- News Card 2 -->
+                <article class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+                    <div class="h-48 bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+                        <i class="fas fa-handshake text-white text-4xl opacity-50"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-semibold text-lg text-gray-900 mb-2">
+                            The Rise of Sustainable Tech: What VCs Are Looking For
+                        </h3>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Eco-friendly solutions are becoming a key factor in investment decisions across various sectors.
+                        </p>
+                        <a href="#" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                            Read more <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <!-- News Card 3 -->
+                <article class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+                    <div class="h-48 bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center">
+                        <i class="fas fa-chart-line text-white text-4xl opacity-50"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-semibold text-lg text-gray-900 mb-2">
+                            Navigating Early-Stage Valuations in a Dynamic Market
+                        </h3>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Experts share insights on how startups and investors can align on valuations amidst economic shifts.
+                        </p>
+                        <a href="#" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                            Read more <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-gray-400"> 2024 Intersectx. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,47 @@
+[tool.poetry]
+name = "backend"
+version = "0.1.0"
+description = ""
+authors = ["Ashish K <64360092+Ashishkumaraswamy@users.noreply.github.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "0.115.9"
+scalar-fastapi = "^1.0.3"
+fastapi-utils = "^0.8.0"
+uvicorn = "^0.34.2"
+pydantic-settings = "^2.9.1"
+pyyaml = "^6.0.2"
+structlog = "^25.3.0"
+pyjwt = "^2.10.1"
+typing-inspect = "^0.9.0"
+pymongo = "^4.12.1"
+motor = "^3.7.0"
+bcrypt = "^4.3.0"
+ruff = "^0.11.9"
+pandas = "^2.2.3"
+requests = "^2.32.3"
+fastmcp = "^2.3.4"
+phidata = "^2.7.10"
+openai = "^1.79.0"
+pypdf2 = "^3.0.1"
+pdf2image = "^1.17.0"
+pytesseract = "^0.3.13"
+pillow = "^11.2.1"
+python-pptx = "^1.0.2"
+aiohttp = "^3.11.18"
+mcp = {extras = ["cli"], version = "^1.9.0"}
+agno = "^1.5.1"
+azure-ai-inference = "^1.0.0b9"
+cloudinary = "^1.44.0"
+pypdf = "^5.5.0"
+plotly = "^6.1.1"
+aiofiles = "^24.1.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+scalar-fastapi = "^1.0.3"
+fastapi-utils = "^0.8.0"

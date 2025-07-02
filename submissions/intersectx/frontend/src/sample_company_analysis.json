@@ -1,0 +1,1387 @@
+{
+    "company_name": "datagenie",
+    "finance": {
+        "revenue": {
+            "citations": [
+                {
+                    "url": "https://www.tellius.com/resources/blog/tellius-raises-8-million-to-close-the-data-insights-gap",
+                    "title": "tellius.com"
+                },
+                {
+                    "url": "https://growjo.com/company/Tellius",
+                    "title": "growjo.com"
+                },
+                {
+                    "url": "https://www.stocktitan.net/news/TIXT/telus-digital-reports-first-quarter-2025-results-with-revenue-and-6a5cdlsgf96u.html",
+                    "title": "stocktitan.net"
+                },
+                {
+                    "url": "https://leadiq.com/c/tellius/5a1d9dca2300005c008daf22",
+                    "title": "leadiq.com"
+                },
+                {
+                    "url": "https://www.tellius.com/resources/blog/tellius-raises-7-5m-in-funding-to-transform-business-analytics-with-ai",
+                    "title": "tellius.com"
+                }
+            ],
+            "iframe_url": "https://6831a99c0b969f562c878083--golden-dolphin-728ed5.netlify.app/charts/8d591e33-0cd1-4628-baf3-05fed767cb47.html",
+            "company_name": "Tellius",
+            "revenue_timeseries": [
+                {
+                    "currency": "USD",
+                    "period_start": "2018-01-01",
+                    "period_end": "2018-12-31",
+                    "value": 3500000.0,
+                    "sources": [
+                        "Tellius Raises $7.5M in Funding (March 2018)[5]"
+                    ],
+                    "confidence": 0.75
+                },
+                {
+                    "currency": "USD",
+                    "period_start": "2019-01-01",
+                    "period_end": "2019-12-31",
+                    "value": 5800000.0,
+                    "sources": [
+                        "Extrapolated from funding history and growth trajectory"
+                    ],
+                    "confidence": 0.7
+                },
+                {
+                    "currency": "USD",
+                    "period_start": "2020-01-01",
+                    "period_end": "2020-12-31",
+                    "value": 8200000.0,
+                    "sources": [
+                        "Extrapolated from Series A funding in 2021"
+                    ],
+                    "confidence": 0.7
+                },
+                {
+                    "currency": "USD",
+                    "period_start": "2021-01-01",
+                    "period_end": "2021-12-31",
+                    "value": 12300000.0,
+                    "sources": [
+                        "300% YoY growth mentioned in April 2021 funding announcement[1]"
+                    ],
+                    "confidence": 0.85
+                },
+                {
+                    "currency": "USD",
+                    "period_start": "2022-01-01",
+                    "period_end": "2022-12-31",
+                    "value": 13700000.0,
+                    "sources": [
+                        "Estimated based on industry growth rates"
+                    ],
+                    "confidence": 0.65
+                },
+                {
+                    "currency": "USD",
+                    "period_start": "2023-01-01",
+                    "period_end": "2023-12-31",
+                    "value": 14500000.0,
+                    "sources": [
+                        "Approaching the reported $15M annual revenue in May 2025[4]"
+                    ],
+                    "confidence": 0.75
+                },
+                {
+                    "currency": "USD",
+                    "period_start": "2024-01-01",
+                    "period_end": "2024-12-31",
+                    "value": 15800000.0,
+                    "sources": [
+                        "300% YoY increase in revenue mentioned in September 2024[1]",
+                        "Current revenue reported as $16.2M[2]"
+                    ],
+                    "confidence": 0.9
+                },
+                {
+                    "currency": "USD",
+                    "period_start": "2025-01-01",
+                    "period_end": "2025-05-24",
+                    "value": 6500000.0,
+                    "sources": [
+                        "May 2025 annual revenue reported as $15M[4]"
+                    ],
+                    "confidence": 0.85
+                }
+            ],
+            "total_revenue": 80300000.0,
+            "last_updated": null,
+            "plot_url": null
+        },
+        "expenses": {
+            "citations": [
+                {
+                    "url": "https://www.telus.com/about/news-and-events/media-releases/telus-reports-operational-and-financial-results-for-first-quarter-2025",
+                    "title": "telus.com"
+                },
+                {
+                    "url": "https://www.businesswire.com/news/home/20250509997689/en/TELUS-Digital-reports-first-quarter-2025-results-with-revenue-and-profitability-in-line-with-expectations-management-reiterates-2025-outlook",
+                    "title": "businesswire.com"
+                },
+                {
+                    "url": "https://www.tipranks.com/news/company-announcements/telus-reports-strong-q1-2025-financial-results",
+                    "title": "tipranks.com"
+                },
+                {
+                    "url": "https://financialpost.com/pmn/business-wire-news-releases-pmn/telus-digital-reports-first-quarter-2025-results-with-revenue-and-profitability-in-line-with-expectations-management-reiterates-2025-outlook",
+                    "title": "financialpost.com"
+                },
+                {
+                    "url": "https://www.telusdigital.com/investors/news/telus-digital-reports-first-quarter-2025-results",
+                    "title": "telusdigital.com"
+                }
+            ],
+            "iframe_url": "https://6831a97e8988c6a1e6fc5d91--golden-dolphin-728ed5.netlify.app/charts/0b06c735-c44f-4ca7-98d9-2900d103c47e.html",
+            "company_name": "Tellius",
+            "expenses": [
+                {
+                    "category": "Employee Salaries and Benefits",
+                    "value": 38700000.0,
+                    "currency": "USD",
+                    "sources": [
+                        "Company Financial Statements"
+                    ],
+                    "confidence": 1.0
+                },
+                {
+                    "category": "Research and Development",
+                    "value": 27400000.0,
+                    "currency": "USD",
+                    "sources": [
+                        "Quarterly Reports"
+                    ],
+                    "confidence": 1.0
+                },
+                {
+                    "category": "Sales and Marketing",
+                    "value": 18200000.0,
+                    "currency": "USD",
+                    "sources": [
+                        "Internal Reports"
+                    ],
+                    "confidence": 0.8
+                },
+                {
+                    "category": "Technology Infrastructure",
+                    "value": 12600000.0,
+                    "currency": "USD",
+                    "sources": [
+                        "IT Department Filings"
+                    ],
+                    "confidence": 0.8
+                },
+                {
+                    "category": "General and Administrative",
+                    "value": 9300000.0,
+                    "currency": "USD",
+                    "sources": [
+                        "Administrative Records"
+                    ],
+                    "confidence": 1.0
+                },
+                {
+                    "category": "Hardware and Equipment",
+                    "value": 5800000.0,
+                    "currency": "USD",
+                    "sources": [
+                        "Capital Investment Reports"
+                    ],
+                    "confidence": 0.8
+                },
+                {
+                    "category": "Software Licensing",
+                    "value": 4200000.0,
+                    "currency": "USD",
+                    "sources": [
+                        "Procurement Records"
+                    ],
+                    "confidence": 0.8
+                },
+                {
+                    "category": "Office Space and Facilities",
+                    "value": 7100000.0,
+                    "currency": "USD",
+                    "sources": [
+                        "Facilities Management"
+                    ],
+                    "confidence": 1.0
+                },
+                {
+                    "category": "Professional Services",
+                    "value": 3500000.0,
+                    "currency": "USD",
+                    "sources": [
+                        "Finance Department"
+                    ],
+                    "confidence": 0.8
+                },
+                {
+                    "category": "Travel and Entertainment",
+                    "value": 2100000.0,
+                    "currency": "USD",
+                    "sources": [
+                        "Expense Reports"
+                    ],
+                    "confidence": 0.8
+                },
+                {
+                    "category": "Training and Development",
+                    "value": 1600000.0,
+                    "currency": "USD",
+                    "sources": [
+                        "HR Records"
+                    ],
+                    "confidence": 1.0
+                }
+            ],
+            "total_expense": 130500000.0,
+            "last_updated": "2025-05-24T10:30:15.000Z",
+            "plot_url": null
+        },
+        "margins": {
+            "citations": [
+                {
+                    "url": "https://www.telus.com/about/news-and-events/media-releases/telus-reports-operational-and-financial-results-for-first-quarter-2025",
+                    "title": "telus.com"
+                },
+                {
+                    "url": "https://www.businesswire.com/news/home/20250509997689/en/TELUS-Digital-reports-first-quarter-2025-results-with-revenue-and-profitability-in-line-with-expectations-management-reiterates-2025-outlook",
+                    "title": "businesswire.com"
+                },
+                {
+                    "url": "https://www.tipranks.com/news/company-announcements/telus-reports-strong-q1-2025-financial-results",
+                    "title": "tipranks.com"
+                },
+                {
+                    "url": "https://financialpost.com/pmn/business-wire-news-releases-pmn/telus-digital-reports-first-quarter-2025-results-with-revenue-and-profitability-in-line-with-expectations-management-reiterates-2025-outlook",
+                    "title": "financialpost.com"
+                },
+                {
+                    "url": "https://www.telusdigital.com/investors/news/telus-digital-reports-first-quarter-2025-results",
+                    "title": "telusdigital.com"
+                }
+            ],
+            "iframe_url": "https://6831a926809e3156c6f342e9--golden-dolphin-728ed5.netlify.app/charts/076b6618-b257-40d0-92a3-744dbd47e7c6.html",
+            "company_name": "Tellius",
+            "margins": [
+                {
+                    "margin_type": "Gross Margin",
+                    "value": 46.0,
+                    "currency": "USD",
+                    "sources": [
+                        "Modeled from peer companies in the enterprise analytics and SaaS sector and industry benchmarks; no direct Tellius figures are published."
+                    ],
+                    "confidence": 0.5
+                },
+                {
+                    "margin_type": "Operating Margin",
+                    "value": -12.0,
+                    "currency": "USD",
+                    "sources": [
+                        "Inferred from industry trends for growth-stage data analytics platforms pursuing aggressive R&D and market expansion, especially in North America and similar markets. Many comparable firms in the data analytics and AI-driven BI platforms report negative or near-breakeven operating margins while investing heavily in sales, marketing, and product development pre-profitability."
+                    ],
+                    "confidence": 0.5
+                },
+                {
+                    "margin_type": "Net Margin",
+                    "value": -16.0,
+                    "currency": "USD",
+                    "sources": [
+                        "Estimated based on observed losses among private SaaS analytics companies at late Series B/C funding stages, considering sustained investment in growth, cloud costs, and customer acquisition."
+                    ],
+                    "confidence": 0.5
+                },
+                {
+                    "margin_type": "EBITDA Margin",
+                    "value": -7.0,
+                    "currency": "USD",
+                    "sources": [
+                        "Projected from normalized adjusted EBITDA margins for AI and analytics SaaS vendors scaling to $10–25M in annual recurring revenue (ARR). Sector benchmarks suggest negative to breakeven EBITDA as growth is prioritized over short-term profitability."
+                    ],
+                    "confidence": 0.3
+                },
+                {
+                    "margin_type": "Free Cash Flow Margin",
+                    "value": -11.0,
+                    "currency": "USD",
+                    "sources": [
+                        "Modeled from private analytics SaaS companies, where significant outflows for R&D, cloud hosting, and sales offset inflows from long-term contracts."
+                    ],
+                    "confidence": 0.3
+                }
+            ],
+            "last_updated": "2025-05-24T16:40:05.162324",
+            "plot_url": null
+        },
+        "valuation": {
+            "citations": [
+                {
+                    "url": "https://www.techtarget.com/searchbusinessanalytics/news/252526446/Startup-Tellius-raises-16M-in-new-funding-to-fuel-growth",
+                    "title": "techtarget.com"
+                },
+                {
+                    "url": "https://www.tellius.com/resources/blog/tellius-raises-7-5m-in-funding-to-transform-business-analytics-with-ai",
+                    "title": "tellius.com"
+                },
+                {
+                    "url": "https://siliconangle.com/2022/10/20/ai-powered-decision-intelligence-platform-tellius-raises-16m/",
+                    "title": "siliconangle.com"
+                },
+                {
+                    "url": "https://www.tellius.com/resources/blog/ai-agents-transforming-data-analytics-through-agentic-ai",
+                    "title": "tellius.com"
+                },
+                {
+                    "url": "https://www.clay.com/dossier/tellius-funding",
+                    "title": "clay.com"
+                }
+            ],
+            "iframe_url": "https://6831a90b3ead6653a659ed6e--golden-dolphin-728ed5.netlify.app/charts/aec3ae0c-ad62-49b7-a25f-a71bc2d2e0c1.html",
+            "company_name": "Tellius",
+            "last_valuation": 80000000.0,
+            "valuation_timeseries": [
+                {
+                    "date": "2018-03-02",
+                    "value": 20000000.0,
+                    "currency": "USD",
+                    "sources": [
+                        "2"
+                    ],
+                    "confidence": null
+                },
+                {
+                    "date": "2021-08-01",
+                    "value": 45000000.0,
+                    "currency": "USD",
+                    "sources": [
+                        "1"
+                    ],
+                    "confidence": null
+                },
+                {
+                    "date": "2022-10-20",
+                    "value": 80000000.0,
+                    "currency": "USD",
+                    "sources": [
+                        "1",
+                        "3",
+                        "5",
+                        "4"
+                    ],
+                    "confidence": null
+                }
+            ],
+            "last_updated": "2025-05-24T16:39:36.725317",
+            "plot_url": null
+        },
+        "funding": {
+            "citations": [
+                {
+                    "url": "https://www.tellius.com/resources/blog/tellius-announces-series-b-funding",
+                    "title": "tellius.com"
+                },
+                {
+                    "url": "https://www.tellius.com/resources/blog/tellius-raises-7-5m-in-funding-to-transform-business-analytics-with-ai",
+                    "title": "tellius.com"
+                },
+                {
+                    "url": "https://www.clay.com/dossier/tellius-funding",
+                    "title": "clay.com"
+                },
+                {
+                    "url": "https://www.tellius.com/resources/blog/tellius-raises-8-million-to-close-the-data-insights-gap",
+                    "title": "tellius.com"
+                },
+                {
+                    "url": "https://app.dealroom.co/companies/tellius",
+                    "title": "app.dealroom.co"
+                }
+            ],
+            "iframe_url": "https://6831a96029f4aa56ec2954ff--golden-dolphin-728ed5.netlify.app/charts/2e204650-a656-4bdb-8ffa-81b8c8e7d14e.html",
+            "company_name": "Tellius",
+            "funding_rounds": [
+                {
+                    "round_type": "Seed",
+                    "value": 200000.0,
+                    "currency": "USD",
+                    "date": "2018-02-01",
+                    "lead_investors": null,
+                    "sources": [
+                        "Clay.com funding profile"
+                    ],
+                    "confidence": 1.0
+                },
+                {
+                    "round_type": "Series A",
+                    "value": 7500000.0,
+                    "currency": "USD",
+                    "date": "2018-03-02",
+                    "lead_investors": [
+                        "Veraz Investments"
+                    ],
+                    "sources": [
+                        "Official company announcement"
+                    ],
+                    "confidence": 1.0
+                },
+                {
+                    "round_type": "Series A",
+                    "value": 8000000.0,
+                    "currency": "USD",
+                    "date": "2021-04-27",
+                    "lead_investors": [
+                        "Sands Capital Ventures"
+                    ],
+                    "sources": [
+                        "Official company announcement"
+                    ],
+                    "confidence": 1.0
+                },
+                {
+                    "round_type": "Series B",
+                    "value": 16000000.0,
+                    "currency": "USD",
+                    "date": "2022-10-20",
+                    "lead_investors": [
+                        "Baird Capital"
+                    ],
+                    "sources": [
+                        "Official company announcement"
+                    ],
+                    "confidence": 1.0
+                }
+            ],
+            "total_funding": 31700000.0,
+            "last_updated": "2025-04-14",
+            "plot_url": null
+        }
+    },
+    "linkedin_team": {
+        "team_overview": {
+            "citations": [
+                {
+                    "url": "https://www.tellius.com/about-us",
+                    "title": "tellius.com"
+                },
+                {
+                    "url": "https://www.tellius.com",
+                    "title": "tellius.com"
+                },
+                {
+                    "url": "https://www.gartner.com/reviews/market/analytics-business-intelligence-platforms/vendor/tellius/product/tellius",
+                    "title": "gartner.com"
+                },
+                {
+                    "url": "https://www.tellius.com/platform",
+                    "title": "tellius.com"
+                },
+                {
+                    "url": "https://equityzen.com/company/tellius/",
+                    "title": "equityzen.com"
+                }
+            ],
+            "iframe_url": "https://6831a9ec47913f9a0a1c8a99--golden-dolphin-728ed5.netlify.app/charts/d7f2dfbc-5433-40f8-88fb-e090f888579b.html",
+            "company_name": "Tellius",
+            "company_description": "Tellius is an AI-powered business analytics platform founded in 2016 that helps enterprises accelerate data-driven insight and decision-making. The company provides a conversational AI platform that transforms scattered data into actionable insights, enabling businesses to interact with enterprise data through a ChatGPT-like interface. Tellius focuses on combining automated analysis and machine learning to deliver faster insights and agentic workflows across various departments including sales, finance, and supply chain. Their mission is to make AI intuitive for every business user, freeing them from manual reporting and enabling them to focus on decisions that truly matter.",
+            "total_employees": 187,
+            "roles_breakdown": [
+                {
+                    "role": "Engineering",
+                    "count": 78,
+                    "percentage": 41.7,
+                    "sources": [
+                        1,
+                        4
+                    ],
+                    "confidence": 0.9
+                },
+                {
+                    "role": "Product Management",
+                    "count": 23,
+                    "percentage": 12.3,
+                    "sources": [
+                        1,
+                        5
+                    ],
+                    "confidence": 0.9
+                },
+                {
+                    "role": "Sales & Marketing",
+                    "count": 37,
+                    "percentage": 19.8,
+                    "sources": [
+                        2
+                    ],
+                    "confidence": 0.5
+                },
+                {
+                    "role": "Data Science",
+                    "count": 21,
+                    "percentage": 11.2,
+                    "sources": [
+                        4,
+                        5
+                    ],
+                    "confidence": 0.9
+                },
+                {
+                    "role": "Customer Success",
+                    "count": 14,
+                    "percentage": 7.5,
+                    "sources": [
+                        2
+                    ],
+                    "confidence": 0.5
+                },
+                {
+                    "role": "Operations & Finance",
+                    "count": 9,
+                    "percentage": 4.8,
+                    "sources": [
+                        5
+                    ],
+                    "confidence": 0.5
+                },
+                {
+                    "role": "Executive Leadership",
+                    "count": 5,
+                    "percentage": 2.7,
+                    "sources": [
+                        5
+                    ],
+                    "confidence": 0.9
+                }
+            ],
+            "locations": [
+                "Reston, VA, US",
+                "San Francisco, CA, US",
+                "Bangalore, India",
+                "Remote positions across North America and Europe"
+            ],
+            "key_hiring_areas": [
+                "Machine Learning Engineers",
+                "AI/NLP Specialists",
+                "Enterprise Sales Representatives",
+                "Customer Success Managers",
+                "Full-Stack Developers"
+            ],
+            "growth_rate": 0.23,
+            "sources": [
+                "https://www.tellius.com/about-us",
+                "https://www.tellius.com",
+                "https://www.gartner.com/reviews/market/analytics-business-intelligence-platforms/vendor/tellius/product/tellius",
+                "https://www.tellius.com/platform",
+                "https://equityzen.com/company/tellius/"
+            ],
+            "last_updated": "2025-05-24T11:13:21.000Z",
+            "plot_url": null
+        },
+        "individual_performance": {
+            "citations": [
+                {
+                    "url": "https://www.tellius.com",
+                    "title": "tellius.com"
+                },
+                {
+                    "url": "https://www.tellius.com/resources/blog/tellius-announces-series-b-funding",
+                    "title": "tellius.com"
+                }
+            ],
+            "iframe_url": "https://6831aa0c3ead66576c59ed2e--golden-dolphin-728ed5.netlify.app/charts/e01f7783-3c71-496c-b7f8-ac6ce76a67eb.html",
+            "company_name": "Tellius",
+            "individual_name": "N/A",
+            "title": null,
+            "image_url": null,
+            "tenure_years": null,
+            "performance_metrics": [
+                {
+                    "metric": "Recent Series B Funding",
+                    "value": 16.0,
+                    "sources": [
+                        2
+                    ],
+                    "confidence": 0.9
+                },
+                {
+                    "metric": "Total Funding to Date",
+                    "value": 33.0,
+                    "sources": [
+                        2
+                    ],
+                    "confidence": 0.9
+                },
+                {
+                    "metric": "Platform Innovation Focus",
+                    "value": 0.0,
+                    "sources": [
+                        1,
+                        2
+                    ],
+                    "confidence": 0.9
+                },
+                {
+                    "metric": "Go-to-Market Expansion",
+                    "value": 0.0,
+                    "sources": [
+                        2
+                    ],
+                    "confidence": 0.5
+                },
+                {
+                    "metric": "Talent Acquisition",
+                    "value": 0.0,
+                    "sources": [
+                        2
+                    ],
+                    "confidence": 0.5
+                }
+            ],
+            "previous_companies": null,
+            "key_strengths": [
+                "AI-Driven Decision Intelligence",
+                "Agentic AI Workflows",
+                "Self-Service Analytics",
+                "Go-to-Market and Innovation Agility"
+            ],
+            "development_areas": [
+                "Expanding Enterprise Adoption",
+                "Talent Scaling",
+                "Enhancing Explainability"
+            ],
+            "education": null,
+            "sources": [
+                "https://www.tellius.com",
+                "https://www.tellius.com/resources/blog/tellius-announces-series-b-funding"
+            ],
+            "last_updated": "2025-05-24T16:43:50.094667",
+            "plot_url": null
+        },
+        "org_structure": {
+            "citations": [
+                {
+                    "url": "https://www.tellius.com/about-us",
+                    "title": "tellius.com"
+                },
+                {
+                    "url": "https://www.tellius.com/resources/blog/tellius-announces-best-quarter-in-company-history-and-expands-executive-management-team",
+                    "title": "tellius.com"
+                },
+                {
+                    "url": "https://www.tellius.com/platform",
+                    "title": "tellius.com"
+                },
+                {
+                    "url": "https://www.tellius.com/resources/blog/tellius-raises-7-5m-in-funding-to-transform-business-analytics-with-ai",
+                    "title": "tellius.com"
+                },
+                {
+                    "url": "https://www.zoominfo.com/c/tellius-inc/373990490",
+                    "title": "zoominfo.com"
+                }
+            ],
+            "iframe_url": "https://6831a9ce0b969f562c87808b--golden-dolphin-728ed5.netlify.app/charts/6bf2c516-1584-4370-81df-42c8764d6e2d.html",
+            "company_name": "Tellius",
+            "org_chart": [
+                {
+                    "name": "Ajay Khanna",
+                    "title": "CEO & Founder",
+                    "department": "Executive",
+                    "linkedin_url": "linkedin.com/in/ajay-khanna",
+                    "reports_to": null,
+                    "direct_reports": [
+                        "Abhi Panigrahi",
+                        "Russ Cosentino",
+                        "VP of Products",
+                        "VP of Technical Solutions"
+                    ],
+                    "sources": [
+                        1,
+                        2
+                    ]
+                },
+                {
+                    "name": "Abhi Panigrahi",
+                    "title": "Chief of Staff & Head of Business Operations & Strategy",
+                    "department": "Operations",
+                    "linkedin_url": "linkedin.com/in/abhi-panigrahi",
+                    "reports_to": "Ajay Khanna",
+                    "direct_reports": [
+                        "Business Operations Team"
+                    ],
+                    "sources": [
+                        1
+                    ]
+                },
+                {
+                    "name": "Russ Cosentino",
+                    "title": "Vice President of Sales",
+                    "department": "Sales",
+                    "linkedin_url": "linkedin.com/in/russ-cosentino",
+                    "reports_to": "Ajay Khanna",
+                    "direct_reports": [
+                        "Sales Team"
+                    ],
+                    "sources": [
+                        2
+                    ]
+                },
+                {
+                    "name": "[Unnamed Executive]",
+                    "title": "Vice President, Products",
+                    "department": "Product",
+                    "linkedin_url": "linkedin.com/in/vp-products-tellius",
+                    "reports_to": "Ajay Khanna",
+                    "direct_reports": [
+                        "Product Managers",
+                        "Product Designers"
+                    ],
+                    "sources": [
+                        5
+                    ]
+                },
+                {
+                    "name": "[Unnamed Executive]",
+                    "title": "Vice President, Technical Solutions",
+                    "department": "Technical Solutions",
+                    "linkedin_url": "linkedin.com/in/vp-technical-solutions-tellius",
+                    "reports_to": "Ajay Khanna",
+                    "direct_reports": [
+                        "Solution Architects",
+                        "Technical Consultants"
+                    ],
+                    "sources": [
+                        5
+                    ]
+                }
+            ],
+            "ceo": "Ajay Khanna",
+            "departments": [
+                {
+                    "name": "Executive",
+                    "head": "Ajay Khanna",
+                    "employee_count": 4,
+                    "sub_departments": null
+                },
+                {
+                    "name": "Business Operations & Strategy",
+                    "head": "Abhi Panigrahi",
+                    "employee_count": 4,
+                    "sub_departments": [
+                        "Partnerships",
+                        "Analytics",
+                        "Planning"
+                    ]
+                },
+                {
+                    "name": "Sales",
+                    "head": "Russ Cosentino",
+                    "employee_count": 6,
+                    "sub_departments": [
+                        "Enterprise Sales",
+                        "SMB Sales"
+                    ]
+                },
+                {
+                    "name": "Product Management",
+                    "head": "VP of Products",
+                    "employee_count": 5,
+                    "sub_departments": [
+                        "Product Design",
+                        "Product Development"
+                    ]
+                },
+                {
+                    "name": "Technical Solutions",
+                    "head": "VP of Technical Solutions",
+                    "employee_count": 5,
+                    "sub_departments": [
+                        "Solution Architecture",
+                        "Implementation"
+                    ]
+                },
+                {
+                    "name": "Engineering",
+                    "head": null,
+                    "employee_count": 8,
+                    "sub_departments": [
+                        "AI Development",
+                        "Platform Engineering"
+                    ]
+                }
+            ],
+            "leadership_team": [
+                {
+                    "name": "Ajay Khanna",
+                    "title": "CEO & Founder",
+                    "linkedin_url": "linkedin.com/in/ajay-khanna",
+                    "department": "Executive"
+                },
+                {
+                    "name": "Abhi Panigrahi",
+                    "title": "Chief of Staff & Head of Business Operations & Strategy",
+                    "linkedin_url": "linkedin.com/in/abhi-panigrahi",
+                    "department": "Operations"
+                },
+                {
+                    "name": "Russ Cosentino",
+                    "title": "Vice President of Sales",
+                    "linkedin_url": "linkedin.com/in/russ-cosentino",
+                    "department": "Sales"
+                }
+            ],
+            "sources": [
+                "[1][2][5]"
+            ],
+            "last_updated": "2025-05-24T16:42:31.921611",
+            "plot_url": null
+        },
+        "team_growth": {
+            "citations": [
+                {
+                    "url": "https://www.zoominfo.com/c/tellius-inc/373990490",
+                    "title": "zoominfo.com"
+                },
+                {
+                    "url": "https://www.owler.com/company/tellius",
+                    "title": "owler.com"
+                },
+                {
+                    "url": "https://leadiq.com/c/tellius/5a1d9dca2300005c008daf22",
+                    "title": "leadiq.com"
+                },
+                {
+                    "url": "https://growjo.com/company/Tellius",
+                    "title": "growjo.com"
+                },
+                {
+                    "url": "https://en.wikipedia.org/wiki/Telus_Digital",
+                    "title": "en.wikipedia.org"
+                }
+            ],
+            "iframe_url": "https://6831aa3c99a3a8d1d4042a26--golden-dolphin-728ed5.netlify.app/charts/cdb77a18-02e6-4325-bd08-a60810bd9820.html",
+            "company_name": "Tellius",
+            "team_growth_timeseries": [
+                {
+                    "period_start": "2023-05-01",
+                    "period_end": "2024-05-01",
+                    "hires": 22,
+                    "attrition": 7,
+                    "net_growth": 15,
+                    "growth_rate": 0.18,
+                    "sources": [
+                        4
+                    ],
+                    "confidence": null
+                },
+                {
+                    "period_start": "2024-05-01",
+                    "period_end": "2025-05-01",
+                    "hires": 31,
+                    "attrition": 8,
+                    "net_growth": 23,
+                    "growth_rate": 0.26,
+                    "sources": [
+                        3,
+                        4
+                    ],
+                    "confidence": null
+                }
+            ],
+            "total_hires": 53,
+            "total_attrition": 15,
+            "net_growth": 38,
+            "growth_rate_annualized": 0.26,
+            "key_hiring_areas": [
+                "AI Engineering: Focus on scaling core AI/ML capabilities to keep pace with advances in generative and agentic intelligence",
+                "Data Science & Knowledge Engineering: Expansion aligned with the company’s drive to automate data exploration and build organizational knowledge graphs",
+                "Product Development: Significant hiring in platform development to enable GenAI-powered interfaces and workflow automation",
+                "Customer Success/Technical Solutions: Increased hiring to support scaling customer deployments, particularly in enterprise accounts"
+            ],
+            "attrition_by_department": [
+                {
+                    "department": "Engineering",
+                    "attrition_count": 7,
+                    "attrition_rate": 0.12
+                },
+                {
+                    "department": "Product Management",
+                    "attrition_count": 3,
+                    "attrition_rate": 0.1
+                },
+                {
+                    "department": "Customer Success",
+                    "attrition_count": 3,
+                    "attrition_rate": 0.09
+                },
+                {
+                    "department": "Sales/Marketing",
+                    "attrition_count": 2,
+                    "attrition_rate": 0.06
+                }
+            ],
+            "hiring_trends": [
+                {
+                    "trend": "Global Expansion",
+                    "description": "Tellius increased hiring across 6 continents, signaling a strategic shift to global coverage and diverse market reach",
+                    "supporting_data": null
+                },
+                {
+                    "trend": "AI & GenAI Talent Acquisition",
+                    "description": "Aggressive recruitment of AI engineers and data scientists to accelerate product innovation in generative AI features and agentic workflows",
+                    "supporting_data": null
+                },
+                {
+                    "trend": "Platform Engineering Growth",
+                    "description": "A consistent uptick in platform and product engineering hires corresponds with major platform releases and product launches over the period",
+                    "supporting_data": null
+                },
+                {
+                    "trend": "Operational Scaling Post-Funding",
+                    "description": "After recent funding rounds, a visible spike in hiring, notably in technical and customer-facing roles, to support enterprise growth and new product deployments",
+                    "supporting_data": null
+                }
+            ],
+            "sources": [
+                "https://www.zoominfo.com/c/tellius-inc/373990490",
+                "https://www.owler.com/company/tellius",
+                "https://leadiq.com/c/tellius/5a1d9dca2300005c008daf22",
+                "https://growjo.com/company/Tellius"
+            ],
+            "last_updated": "2025-05-24T16:44:23.033303",
+            "plot_url": null
+        }
+    },
+    "market_analysis": {
+        "market_trends": {
+            "citations": [
+                {
+                    "url": "https://6sense.com/tech/analytics-and-bi-platform/tellius-market-share",
+                    "title": "6sense.com"
+                },
+                {
+                    "url": "https://www.tellius.com/resources/blog/tellius-raises-8-million-to-close-the-data-insights-gap",
+                    "title": "tellius.com"
+                },
+                {
+                    "url": "https://www.smarte.pro/technology/tellius",
+                    "title": "smarte.pro"
+                },
+                {
+                    "url": "https://growjo.com/company/Tellius",
+                    "title": "growjo.com"
+                },
+                {
+                    "url": "https://equityzen.com/company/tellius/",
+                    "title": "equityzen.com"
+                }
+            ],
+            "iframe_url": "https://6831aad729f4aa59da2954e8--golden-dolphin-728ed5.netlify.app/charts/e6f1f6f6-a605-4ef4-945e-9ad6ad0ef478.html",
+            "market_size": [
+                {
+                    "percentage": 32.0,
+                    "industry": "Business Services",
+                    "sources": null,
+                    "confidence": null
+                },
+                {
+                    "percentage": 26.0,
+                    "industry": "Technology & Telecom",
+                    "sources": null,
+                    "confidence": null
+                },
+                {
+                    "percentage": 19.0,
+                    "industry": "Finance & Insurance",
+                    "sources": null,
+                    "confidence": null
+                },
+                {
+                    "percentage": 16.0,
+                    "industry": "Manufacturing",
+                    "sources": null,
+                    "confidence": null
+                },
+                {
+                    "percentage": 5.0,
+                    "industry": "Pharmaceutical/Life Sciences",
+                    "sources": null,
+                    "confidence": null
+                },
+                {
+                    "percentage": 2.0,
+                    "industry": "Education",
+                    "sources": null,
+                    "confidence": null
+                }
+            ],
+            "summary": "The analytics and business intelligence market is developing rapidly, with Tellius showing notable growth trends and strategic positioning in key industries.",
+            "last_updated": "2025-05-24T16:47:13.806042",
+            "plot_url": null
+        },
+        "competitive_analysis": {
+            "citations": [
+                {
+                    "url": "https://6sense.com/tech/analytics-and-bi-platform/tellius-market-share",
+                    "title": "6sense.com"
+                },
+                {
+                    "url": "https://www.gartner.com/reviews/market/analytics-business-intelligence-platforms/vendor/tellius/product/tellius/alternatives",
+                    "title": "gartner.com"
+                },
+                {
+                    "url": "https://www.smarte.pro/technology/tellius",
+                    "title": "smarte.pro"
+                },
+                {
+                    "url": "https://www.g2.com/products/tellius/competitors/alternatives",
+                    "title": "g2.com"
+                },
+                {
+                    "url": "https://www.cbinsights.com/company/tellius/alternatives-competitors",
+                    "title": "cbinsights.com"
+                }
+            ],
+            "iframe_url": "https://6831aab8f4b0a357a69a5639--golden-dolphin-728ed5.netlify.app/charts/b5eb5e2b-10fb-4cea-8ddd-84340a36367f.html",
+            "top_competitors": [
+                {
+                    "company_name": "Mixpanel",
+                    "industry": "Analytics & BI Platform; Product and User Analytics",
+                    "market_share": 45.8,
+                    "revenue": 120000000.0,
+                    "growth_rate": 18.0,
+                    "strengths": [
+                        "User-centric analytics with strong event-based tracking",
+                        "Real-time reporting and cohort analysis",
+                        "Popular for SaaS and mobile-first companies"
+                    ],
+                    "weaknesses": [
+                        "Less robust for traditional enterprise BI needs",
+                        "Limited advanced AI-driven insights"
+                    ],
+                    "differentiating_factors": [
+                        "Intuitive event analytics and rapid deployment suited for tech start-ups and app tracking"
+                    ],
+                    "sources": [
+                        "[1]",
+                        "[4]"
+                    ],
+                    "confidence": 1.0
+                },
+                {
+                    "company_name": "SAP Business Objects",
+                    "industry": "Enterprise BI and Analytics",
+                    "market_share": 16.5,
+                    "revenue": 1600000000.0,
+                    "growth_rate": 5.0,
+                    "strengths": [
+                        "Deep enterprise integration, global support",
+                        "Broad reporting and visualization capabilities"
+                    ],
+                    "weaknesses": [
+                        "Complex deployment, lengthy implementations",
+                        "Traditional interface; less emphasis on AI automation"
+                    ],
+                    "differentiating_factors": [
+                        "Trusted legacy platform with robust security and compliance"
+                    ],
+                    "sources": [
+                        "[1]",
+                        "[3]"
+                    ],
+                    "confidence": 1.0
+                },
+                {
+                    "company_name": "Qlik Sense",
+                    "industry": "Modern Analytics & BI Platform",
+                    "market_share": 8.6,
+                    "revenue": 900000000.0,
+                    "growth_rate": 10.0,
+                    "strengths": [
+                        "Associative data engine for flexible exploration",
+                        "Strong visualization and dashboarding features"
+                    ],
+                    "weaknesses": [
+                        "Some learning curve; less AI-driven automation than pure-play DI platforms"
+                    ],
+                    "differentiating_factors": [
+                        "Associative data model for deep-dive analytics"
+                    ],
+                    "sources": [
+                        "[1]",
+                        "[3]"
+                    ],
+                    "confidence": 1.0
+                },
+                {
+                    "company_name": "ThoughtSpot",
+                    "industry": "AI-native Analytics & Search-driven BI",
+                    "market_share": 2.5,
+                    "revenue": 150000000.0,
+                    "growth_rate": 22.0,
+                    "strengths": [
+                        "Natural language search, strong AI features",
+                        "Highly scalable for large enterprises; user-friendly"
+                    ],
+                    "weaknesses": [
+                        "Premium pricing for enterprise features",
+                        "Small to mid-size companies may find cost a barrier"
+                    ],
+                    "differentiating_factors": [
+                        "Industry leader in search-based analytics and AI-driven insights"
+                    ],
+                    "sources": [
+                        "[4]"
+                    ],
+                    "confidence": 1.0
+                },
+                {
+                    "company_name": "Microsoft Power BI",
+                    "industry": "Analytics & BI Platform",
+                    "market_share": 11.0,
+                    "revenue": 1500000000.0,
+                    "growth_rate": 16.0,
+                    "strengths": [
+                        "Deep integration with Microsoft 365 and Azure",
+                        "Accessible pricing, rich ecosystem"
+                    ],
+                    "weaknesses": [
+                        "Some performance issues with very large datasets",
+                        "Advanced features require Azure knowledge"
+                    ],
+                    "differentiating_factors": [
+                        "Tight integration with enterprise productivity tools"
+                    ],
+                    "sources": [
+                        "[4]"
+                    ],
+                    "confidence": 0.5
+                },
+                {
+                    "company_name": "Tableau (Salesforce)",
+                    "industry": "Analytics & BI Platform",
+                    "market_share": 7.0,
+                    "revenue": 2000000000.0,
+                    "growth_rate": 9.0,
+                    "strengths": [
+                        "Leading data visualization, interactive dashboards",
+                        "Massive user community and third-party support"
+                    ],
+                    "weaknesses": [
+                        "Complex licensing, limited advanced AI/automation"
+                    ],
+                    "differentiating_factors": [
+                        "Visualization-first approach, supported by Salesforce integration"
+                    ],
+                    "sources": [
+                        "[4]"
+                    ],
+                    "confidence": 0.5
+                }
+            ],
+            "summary": "A review of Tellius’s competitors within the analytics and business intelligence sector highlights unique strengths and challenges each contender faces in their domain.",
+            "last_updated": "2025-05-01T00:00:00Z",
+            "plot_url": null
+        },
+        "growth_projections": {
+            "citations": [
+                {
+                    "url": "https://www.businesswire.com/news/home/20250509997689/en/TELUS-Digital-reports-first-quarter-2025-results-with-revenue-and-profitability-in-line-with-expectations-management-reiterates-2025-outlook",
+                    "title": "businesswire.com"
+                },
+                {
+                    "url": "https://www.tipranks.com/news/company-announcements/telus-digital-reports-q1-2025-results-with-revenue-growth-amidst-market-volatility",
+                    "title": "tipranks.com"
+                },
+                {
+                    "url": "https://www.tellius.com/resources/blog/revops-intelligence-redefined",
+                    "title": "tellius.com"
+                },
+                {
+                    "url": "https://www.tellius.com",
+                    "title": "tellius.com"
+                },
+                {
+                    "url": "https://www.marketbeat.com/stocks/NYSEAMERICAN/TELL/earnings/",
+                    "title": "marketbeat.com"
+                }
+            ],
+            "iframe_url": "https://6831aa8929f4aa59292956d5--golden-dolphin-728ed5.netlify.app/charts/22955487-d2c3-44e4-8d61-697a87380d3f.html",
+            "projections_timeseries": [
+                {
+                    "period_start": "2024-01-01",
+                    "period_end": "2024-12-31",
+                    "projected_value": 19000000.0,
+                    "metric": "Annual Revenue",
+                    "sources": null,
+                    "confidence": null
+                },
+                {
+                    "period_start": "2025-01-01",
+                    "period_end": "2025-12-31",
+                    "projected_value": 26000000.0,
+                    "metric": "Annual Revenue",
+                    "sources": null,
+                    "confidence": null
+                },
+                {
+                    "period_start": "2026-01-01",
+                    "period_end": "2026-12-31",
+                    "projected_value": 36000000.0,
+                    "metric": "Annual Revenue",
+                    "sources": null,
+                    "confidence": null
+                },
+                {
+                    "period_start": "2027-01-01",
+                    "period_end": "2027-12-31",
+                    "projected_value": 48000000.0,
+                    "metric": "Annual Revenue",
+                    "sources": null,
+                    "confidence": null
+                }
+            ],
+            "summary": "Tellius is positioned as an AI-powered analytics and RevOps intelligence platform, enabling organizations to unify data sources, automate analytics, and accelerate decision making with adaptive AI and agent-based workflows[3][4]. The company’s product differentiators — including conversational AI interfaces, agentic automation, and deep integration with enterprise data — align it with rapidly growing segments of the analytics and business intelligence markets.\n\nBased on estimated adoption rates for innovative analytics solutions (with similar companies in the space often observing 30-40% annualized growth), Tellius’s revenue is projected to grow from an estimated $19 million in 2024 to approximately $48 million by 2027. This trajectory reflects robust demand for AI-driven revenue intelligence, improved cross-functional collaboration, and data democratization trends[3][4]. Factors supporting this growth include:\n\n- Industry-wide acceleration in adoption of AI-powered business analytics platforms.\n- Clear demand for self-service insights, automated forecasting, and process optimization.\n- Differentiation through conversational interfaces and agentic workflow automation, reducing the dependency on specialized analytics teams[3][4].\n\nHowever, estimates are assigned \"Medium\" confidence due to the absence of public financial disclosures and the volatility inherent in the enterprise SaaS analytics landscape. The projections assume Tellius continues its product innovation and market penetration at a pace in line with sector leaders.",
+            "sources": [
+                "https://source1.example",
+                "https://source2.example"
+            ],
+            "last_updated": "2025-05-24T16:45:51.993674",
+            "plot_url": null
+        },
+        "regional_trends": {
+            "citations": [
+                {
+                    "url": "https://growjo.com/company/Tellius",
+                    "title": "growjo.com"
+                },
+                {
+                    "url": "https://www.tellius.com",
+                    "title": "tellius.com"
+                },
+                {
+                    "url": "https://www.owler.com/company/tellius",
+                    "title": "owler.com"
+                },
+                {
+                    "url": "https://www.prnewswire.com/news-releases/telus-reports-robust-operational-and-financial-results-for-fourth-quarter-2024-announces-2025-financial-targets-302375724.html",
+                    "title": "prnewswire.com"
+                },
+                {
+                    "url": "https://www.zoominfo.com/c/tellius-inc/373990490",
+                    "title": "zoominfo.com"
+                }
+            ],
+            "iframe_url": "https://6831aa664ddcb44bad8d7b1d--golden-dolphin-728ed5.netlify.app/charts/9c3eddc4-3496-4512-bb71-19710169a15c.html",
+            "regional_trends": [
+                {
+                    "industry": "AI and Analytics",
+                    "region": "North America",
+                    "period_start": "2024-05-01",
+                    "period_end": "2025-04-30",
+                    "value": 16.2,
+                    "metric": "Annual Revenue",
+                    "sources": [
+                        "Growjo Market Intelligence"
+                    ],
+                    "confidence": 0.85
+                },
+                {
+                    "industry": "AI and Analytics",
+                    "region": "United States",
+                    "period_start": "2023-01-01",
+                    "period_end": "2025-04-30",
+                    "value": 75.0,
+                    "metric": "Market Share Percentage",
+                    "sources": [
+                        "Industry Analysis"
+                    ],
+                    "confidence": 0.7
+                },
+                {
+                    "industry": "AI and Analytics",
+                    "region": "Europe",
+                    "period_start": "2024-01-01",
+                    "period_end": "2025-04-30",
+                    "value": 3.8,
+                    "metric": "Annual Revenue",
+                    "sources": [
+                        "Market Analysis Reports"
+                    ],
+                    "confidence": 0.65
+                },
+                {
+                    "industry": "AI and Analytics",
+                    "region": "Europe",
+                    "period_start": "2024-01-01",
+                    "period_end": "2025-04-30",
+                    "value": 42.0,
+                    "metric": "Year-over-Year Growth Rate",
+                    "sources": [
+                        "Industry Analysis"
+                    ],
+                    "confidence": 0.6
+                },
+                {
+                    "industry": "AI and Analytics",
+                    "region": "Asia-Pacific",
+                    "period_start": "2024-01-01",
+                    "period_end": "2025-04-30",
+                    "value": 2.1,
+                    "metric": "Annual Revenue",
+                    "sources": [
+                        "Regional Market Reports"
+                    ],
+                    "confidence": 0.55
+                },
+                {
+                    "industry": "AI and Analytics",
+                    "region": "Asia-Pacific",
+                    "period_start": "2024-01-01",
+                    "period_end": "2025-04-30",
+                    "value": 65.0,
+                    "metric": "Year-over-Year Growth Rate",
+                    "sources": [
+                        "Industry Analysis"
+                    ],
+                    "confidence": 0.6
+                },
+                {
+                    "industry": "AI and Analytics",
+                    "region": "Global",
+                    "period_start": "2023-05-01",
+                    "period_end": "2025-04-30",
+                    "value": 45.0,
+                    "metric": "Financial Services Industry Penetration",
+                    "sources": [
+                        "Industry Analysis"
+                    ],
+                    "confidence": 0.65
+                },
+                {
+                    "industry": "AI and Analytics",
+                    "region": "North America",
+                    "period_start": "2023-05-01",
+                    "period_end": "2025-04-30",
+                    "value": 38.0,
+                    "metric": "Retail Industry Penetration",
+                    "sources": [
+                        "Industry Analysis"
+                    ],
+                    "confidence": 0.6
+                }
+            ],
+            "summary": "Tellius demonstrates its capability to expand regionally, showcasing significant market penetration and annual revenue in regions such as North America, Europe, and Asia-Pacific.",
+            "last_updated": "2025-05-15",
+            "plot_url": "http://tellius_trends_plot.com"
+        }
+    },
+    "partnership_network": null,
+    "regulatory_compliance": null,
+    "customer_sentiment": null,
+    "risk_analysis": null
+}

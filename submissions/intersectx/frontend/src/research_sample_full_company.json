@@ -1,0 +1,655 @@
+{
+    "company_name": "TechInnovate AI",
+    "finance": {
+      "revenue": {
+        "company_name": "TechInnovate AI",
+        "revenue_timeseries": [
+          {
+            "currency": "USD",
+            "period_start": "2022-01-01",
+            "period_end": "2022-03-31",
+            "value": 2500000,
+            "sources": ["Annual Report 2022", "SEC Filing Q1 2022"],
+            "confidence": 0.95
+          },
+          {
+            "currency": "USD",
+            "period_start": "2022-04-01",
+            "period_end": "2022-06-30",
+            "value": 3200000,
+            "sources": ["SEC Filing Q2 2022"],
+            "confidence": 0.92
+          }
+        ],
+        "total_revenue": 5700000,
+        "last_updated": "2023-07-15T14:30:00Z",
+        "plot_url": "https://example.com/plots/revenue_timeseries.png",
+        "sources": ["Annual Report 2022", "SEC Filings", "Investor Relations"]
+      },
+      "expenses": {
+        "company_name": "TechInnovate AI",
+        "expenses": [
+          {
+            "category": "R&D",
+            "value": 1200000,
+            "currency": "USD",
+            "sources": ["Annual Report 2022"],
+            "confidence": 0.9
+          },
+          {
+            "category": "Marketing",
+            "value": 800000,
+            "currency": "USD",
+            "sources": ["Annual Report 2022"],
+            "confidence": 0.85
+          },
+          {
+            "category": "Operations",
+            "value": 1500000,
+            "currency": "USD",
+            "sources": ["Annual Report 2022"],
+            "confidence": 0.88
+          }
+        ],
+        "total_expense": 3500000,
+        "last_updated": "2023-07-15T14:30:00Z",
+        "plot_url": "https://example.com/plots/expenses_breakdown.png",
+        "sources": ["Annual Report 2022", "SEC Filings"]
+      },
+      "margins": {
+        "company_name": "TechInnovate AI",
+        "margins": [
+          {
+            "margin_type": "gross",
+            "value": 0.68,
+            "currency": "USD",
+            "sources": ["Calculated from financial statements"],
+            "confidence": 0.9
+          },
+          {
+            "margin_type": "operating",
+            "value": 0.42,
+            "currency": "USD",
+            "sources": ["Calculated from financial statements"],
+            "confidence": 0.85
+          },
+          {
+            "margin_type": "net",
+            "value": 0.32,
+            "currency": "USD",
+            "sources": ["Calculated from financial statements"],
+            "confidence": 0.82
+          }
+        ],
+        "last_updated": "2023-07-15T14:30:00Z",
+        "plot_url": "https://example.com/plots/profit_margins.png",
+        "sources": ["Annual Report 2022", "Financial Analysis"]
+      },
+      "valuation": {
+        "company_name": "TechInnovate AI",
+        "last_valuation": 280000000,
+        "valuation_timeseries": [
+          {
+            "date": "2021-06-15",
+            "value": 150000000,
+            "currency": "USD",
+            "sources": ["Series B Funding Round"],
+            "confidence": 0.95
+          },
+          {
+            "date": "2022-04-20",
+            "value": 230000000,
+            "currency": "USD",
+            "sources": ["Series C Funding Round"],
+            "confidence": 0.92
+          },
+          {
+            "date": "2023-02-10",
+            "value": 280000000,
+            "currency": "USD",
+            "sources": ["Latest Investor Update"],
+            "confidence": 0.9
+          }
+        ],
+        "last_updated": "2023-07-15T14:30:00Z",
+        "plot_url": "https://example.com/plots/valuation_timeseries.png",
+        "sources": ["Funding Announcements", "Investor Updates"]
+      },
+      "funding": {
+        "company_name": "TechInnovate AI",
+        "funding_rounds": [
+          {
+            "round_type": "Seed",
+            "value": 2000000,
+            "currency": "USD",
+            "date": "2020-03-12",
+            "lead_investors": ["TechVentures Fund", "Angel Capital Group"],
+            "sources": ["Funding Announcement Press Release"],
+            "confidence": 0.98
+          },
+          {
+            "round_type": "Series A",
+            "value": 15000000,
+            "currency": "USD",
+            "date": "2021-01-08",
+            "lead_investors": ["Innovation Capital", "Growth Equity Partners"],
+            "sources": ["SEC Filing", "Company Press Release"],
+            "confidence": 0.95
+          },
+          {
+            "round_type": "Series B",
+            "value": 40000000,
+            "currency": "USD",
+            "date": "2022-04-20",
+            "lead_investors": ["Global Tech Fund", "Venture Partners III"],
+            "sources": ["SEC Filing", "TechCrunch Article"],
+            "confidence": 0.97
+          }
+        ],
+        "total_funding": 57000000,
+        "last_updated": "2023-07-15T14:30:00Z",
+        "plot_url": "https://example.com/plots/funding_history.png",
+        "sources": ["Funding Announcements", "SEC Filings", "Press Releases"]
+      }
+    },
+    "linkedin_team": {
+      "team_overview": {
+        "company_name": "TechInnovate AI",
+        "company_description": "Leading AI solutions provider for enterprise customers",
+        "total_employees": 187,
+        "roles_breakdown": [
+          {
+            "role": "Engineering",
+            "count": 85,
+            "percentage": 0.45,
+            "sources": [0, 1],
+            "confidence": 0.92
+          },
+          {
+            "role": "Sales",
+            "count": 42,
+            "percentage": 0.22,
+            "sources": [0, 1],
+            "confidence": 0.9
+          },
+          {
+            "role": "Marketing",
+            "count": 18,
+            "percentage": 0.1,
+            "sources": [0, 1],
+            "confidence": 0.88
+          },
+          {
+            "role": "Product",
+            "count": 22,
+            "percentage": 0.12,
+            "sources": [0, 1],
+            "confidence": 0.9
+          },
+          {
+            "role": "Operations",
+            "count": 20,
+            "percentage": 0.11,
+            "sources": [0, 1],
+            "confidence": 0.87
+          }
+        ],
+        "locations": ["San Francisco, CA", "New York, NY", "Austin, TX", "Remote"],
+        "key_hiring_areas": ["Machine Learning Engineers", "Enterprise Sales", "DevOps"],
+        "growth_rate": 0.32,
+        "sources": ["LinkedIn Company Page", "Company Website Careers Page"],
+        "last_updated": "2023-08-20T10:15:00Z",
+        "plot_url": "https://example.com/plots/team_breakdown.png"
+      },
+      "individual_performance": {
+        "company_name": "TechInnovate AI",
+        "individual_name": "Sarah Johnson",
+        "title": "Chief Technology Officer",
+        "image_url": "https://example.com/images/sarah_johnson.jpg",
+        "tenure_years": 3.5,
+        "performance_metrics": [
+          {
+            "metric": "Team Growth",
+            "value": 150,
+            "sources": [0],
+            "confidence": 0.92
+          },
+          {
+            "metric": "Patents Filed",
+            "value": 8,
+            "sources": [1],
+            "confidence": 0.95
+          },
+          {
+            "metric": "Product Releases",
+            "value": 12,
+            "sources": [0, 2],
+            "confidence": 0.9
+          }
+        ],
+        "previous_companies": [
+          {
+            "name": "Google AI",
+            "title": "Senior Engineering Manager",
+            "duration": "4 years",
+            "dates": "2016-2020"
+          },
+          {
+            "name": "Stanford AI Lab",
+            "title": "Research Scientist",
+            "duration": "3 years",
+            "dates": "2013-2016"
+          }
+        ],
+        "key_strengths": ["AI System Architecture", "Team Leadership", "Product Strategy"],
+        "development_areas": ["Public Speaking", "Financial Planning"],
+        "education": [
+          {
+            "institution": "Stanford University",
+            "degree": "PhD",
+            "field_of_study": "Computer Science - AI",
+            "dates": "2008-2013"
+          },
+          {
+            "institution": "MIT",
+            "degree": "BS",
+            "field_of_study": "Computer Science",
+            "dates": "2004-2008"
+          }
+        ],
+        "sources": ["LinkedIn Profile", "Patent Database", "Company Blog"],
+        "last_updated": "2023-08-15T09:30:00Z",
+        "plot_url": "https://example.com/plots/performance_metrics.png"
+      },
+      "org_structure": {
+        "company_name": "TechInnovate AI",
+        "org_chart": [
+          {
+            "name": "Michael Chen",
+            "title": "CEO",
+            "department": "Executive",
+            "linkedin_url": "https://linkedin.com/in/michaelchen",
+            "reports_to": null,
+            "direct_reports": ["Sarah Johnson", "David Rodriguez", "Emily Wang"],
+            "sources": [0, 1]
+          },
+          {
+            "name": "Sarah Johnson",
+            "title": "CTO",
+            "department": "Engineering",
+            "linkedin_url": "https://linkedin.com/in/sarahjohnson",
+            "reports_to": "Michael Chen",
+            "direct_reports": ["Alex Kumar", "Jennifer Lee"],
+            "sources": [0, 1]
+          }
+        ],
+        "ceo": "Michael Chen",
+        "departments": [
+          {
+            "name": "Engineering",
+            "head": "Sarah Johnson",
+            "employee_count": 85,
+            "sub_departments": ["AI Research", "Product Engineering", "DevOps"]
+          },
+          {
+            "name": "Sales",
+            "head": "David Rodriguez",
+            "employee_count": 42,
+            "sub_departments": ["Enterprise", "Mid-Market", "SMB"]
+          }
+        ],
+        "leadership_team": [
+          {
+            "name": "Michael Chen",
+            "title": "CEO",
+            "linkedin_url": "https://linkedin.com/in/michaelchen",
+            "department": "Executive"
+          },
+          {
+            "name": "Sarah Johnson",
+            "title": "CTO",
+            "linkedin_url": "https://linkedin.com/in/sarahjohnson",
+            "department": "Engineering"
+          }
+        ],
+        "sources": ["LinkedIn Company Page", "Company Website"],
+        "last_updated": "2023-08-10T14:45:00Z",
+        "plot_url": "https://example.com/plots/org_structure.png"
+      },
+      "team_growth": {
+        "company_name": "TechInnovate AI",
+        "team_growth_timeseries": [
+          {
+            "period_start": "2022-01-01",
+            "period_end": "2022-03-31",
+            "hires": 15,
+            "attrition": 3,
+            "net_growth": 12,
+            "growth_rate": 0.08,
+            "sources": [0],
+            "confidence": 0.9
+          },
+          {
+            "period_start": "2022-04-01",
+            "period_end": "2022-06-30",
+            "hires": 22,
+            "attrition": 5,
+            "net_growth": 17,
+            "growth_rate": 0.11,
+            "sources": [0],
+            "confidence": 0.88
+          }
+        ],
+        "total_hires": 78,
+        "total_attrition": 23,
+        "net_growth": 55,
+        "growth_rate_annualized": 0.35,
+        "key_hiring_areas": ["Machine Learning", "Enterprise Sales", "Product Management"],
+        "attrition_by_department": [
+          {
+            "department": "Engineering",
+            "attrition_count": 10,
+            "attrition_rate": 0.12
+          },
+          {
+            "department": "Sales",
+            "attrition_count": 8,
+            "attrition_rate": 0.2
+          }
+        ],
+        "hiring_trends": [
+          {
+            "trend": "Remote Hiring Increase",
+            "description": "Significant increase in remote hires across all departments",
+            "supporting_data": {
+              "percentage": 0.45,
+              "count": 35,
+              "year_over_year_change": 0.3,
+              "previous_value": 0.15,
+              "current_value": 0.45,
+              "description": "45% of new hires are fully remote"
+            }
+          }
+        ],
+        "sources": ["LinkedIn Insights", "Internal HR Data"],
+        "last_updated": "2023-08-01T11:20:00Z",
+        "plot_url": "https://example.com/plots/team_growth.png"
+      }
+    },
+    "market_analysis": {
+      "market_trends": {
+        "market_size": [
+          {
+            "percentage": 0.25,
+            "industry": "Enterprise AI",
+            "sources": ["Market Research Report 2023"],
+            "confidence": 0.85
+          },
+          {
+            "percentage": 0.35,
+            "industry": "Cloud Services",
+            "sources": ["Industry Analysis"],
+            "confidence": 0.82
+          }
+        ],
+        "summary": "The AI market is experiencing rapid growth with a CAGR of 38% over the next five years.",
+        "last_updated": "2023-07-01T10:00:00Z",
+        "plot_url": "https://example.com/plots/market_trends.png",
+        "sources": ["Market Research Reports", "Industry Analysts"]
+      },
+      "competitive_analysis": {
+        "top_competitors": [
+          {
+            "company_name": "AI Solutions Inc",
+            "industry": "Enterprise AI",
+            "market_share": 0.18,
+            "revenue": 85000000,
+            "growth_rate": 0.42,
+            "strengths": ["Enterprise Customer Base", "Robust ML Infrastructure"],
+            "weaknesses": ["Limited Cloud Integration", "High Pricing"],
+            "differentiating_factors": ["Specialized for Financial Services"],
+            "sources": ["Annual Reports", "Industry Analysis"],
+            "confidence": 0.88
+          },
+          {
+            "company_name": "NeuralTech",
+            "industry": "Enterprise AI",
+            "market_share": 0.15,
+            "revenue": 68000000,
+            "growth_rate": 0.38,
+            "strengths": ["Advanced NLP Technology", "User-Friendly Interface"],
+            "weaknesses": ["Limited Scale", "Narrow Industry Focus"],
+            "differentiating_factors": ["Superior NLP Capabilities"],
+            "sources": ["Market Reports", "Analyst Reviews"],
+            "confidence": 0.85
+          }
+        ],
+        "summary": "TechInnovate AI competes in a rapidly growing market with established players focusing on specialized AI solutions.",
+        "last_updated": "2023-07-05T14:30:00Z",
+        "plot_url": "https://example.com/plots/competitive_analysis.png",
+        "sources": ["Competitive Intelligence Reports", "Market Research"]
+      },
+      "growth_projections": {
+        "projections_timeseries": [
+          {
+            "period_start": "2023-01-01",
+            "period_end": "2023-12-31",
+            "projected_value": 75000000,
+            "metric": "Annual Revenue",
+            "sources": ["Financial Projections", "Analyst Forecasts"],
+            "confidence": 0.8
+          },
+          {
+            "period_start": "2024-01-01",
+            "period_end": "2024-12-31",
+            "projected_value": 110000000,
+            "metric": "Annual Revenue",
+            "sources": ["Financial Projections", "Analyst Forecasts"],
+            "confidence": 0.75
+          }
+        ],
+        "summary": "TechInnovate AI is projected to grow at 45-50% annually over the next three years.",
+        "sources": ["Financial Projections", "Market Analysis"],
+        "last_updated": "2023-06-20T09:15:00Z",
+        "plot_url": "https://example.com/plots/growth_projections.png"
+      },
+      "regional_trends": {
+        "regional_trends": [
+          {
+            "industry": "Enterprise AI",
+            "region": "North America",
+            "period_start": "2023-01-01",
+            "period_end": "2023-06-30",
+            "value": 0.45,
+            "metric": "Market Share",
+            "sources": ["Regional Market Analysis"],
+            "confidence": 0.87
+          },
+          {
+            "industry": "Enterprise AI",
+            "region": "Europe",
+            "period_start": "2023-01-01",
+            "period_end": "2023-06-30",
+            "value": 0.28,
+            "metric": "Market Share",
+            "sources": ["Regional Market Analysis"],
+            "confidence": 0.85
+          }
+        ],
+        "summary": "North America continues to be the strongest market, but Asia-Pacific shows the fastest growth rate at 52% annually.",
+        "last_updated": "2023-06-25T13:45:00Z",
+        "plot_url": "https://example.com/plots/regional_trends.png",
+        "sources": ["Regional Market Reports", "Economic Analysis"]
+      }
+    },
+    "customer_sentiment": {
+      "sentiment_summary": {
+        "company_name": "TechInnovate AI",
+        "product": "Enterprise AI Platform",
+        "region": "Global",
+        "sentiment_score": 0.78,
+        "sentiment_breakdown": {
+          "positive": 820,
+          "negative": 95,
+          "neutral": 135
+        },
+        "sentiment_timeseries": [
+          {
+            "period_start": "2023-01-01",
+            "period_end": "2023-01-31",
+            "positive": 150,
+            "negative": 20,
+            "neutral": 30,
+            "sentiment_score": 0.75,
+            "sources": ["Social Media Analysis", "Customer Surveys"],
+            "confidence": 0.88
+          },
+          {
+            "period_start": "2023-02-01",
+            "period_end": "2023-02-28",
+            "positive": 185,
+            "negative": 18,
+            "neutral": 27,
+            "sentiment_score": 0.8,
+            "sources": ["Social Media Analysis", "Customer Surveys"],
+            "confidence": 0.89
+          }
+        ],
+        "summary": "Overall positive sentiment with improvements following the latest product release.",
+        "sources": ["Social Media Analysis", "Customer Surveys", "App Store Reviews"],
+        "last_updated": "2023-03-15T08:30:00Z"
+      },
+      "customer_feedback": {
+        "company_name": "TechInnovate AI",
+        "product": "Enterprise AI Platform",
+        "region": "Global",
+        "feedback_items": [
+          {
+            "date": "2023-02-15",
+            "customer": "Fortune 500 Financial Services Company",
+            "feedback": "The AI platform significantly improved our data processing efficiency by 45%.",
+            "sentiment": "positive",
+            "sources": ["Customer Interview"],
+            "confidence": 0.95
+          },
+          {
+            "date": "2023-02-10",
+            "customer": "Mid-size Healthcare Provider",
+            "feedback": "Integration with our existing systems was more complex than expected.",
+            "sentiment": "negative",
+            "sources": ["Support Ticket"],
+            "confidence": 0.9
+          }
+        ],
+        "summary": "Enterprise customers appreciate the performance gains but note integration challenges.",
+        "sources": ["Customer Interviews", "Support Tickets", "Sales Call Notes"],
+        "last_updated": "2023-03-01T14:20:00Z"
+      },
+      "brand_reputation": {
+        "company_name": "TechInnovate AI",
+        "region": "Global",
+        "reputation_score": 0.82,
+        "reputation_timeseries": [
+          {
+            "period_start": "2022-07-01",
+            "period_end": "2022-12-31",
+            "reputation_score": 0.75,
+            "sources": ["Brand Tracking Study"],
+            "confidence": 0.85
+          },
+          {
+            "period_start": "2023-01-01",
+            "period_end": "2023-06-30",
+            "reputation_score": 0.82,
+            "sources": ["Brand Tracking Study"],
+            "confidence": 0.87
+          }
+        ],
+        "summary": "Brand reputation has improved steadily over the past year, particularly in the enterprise sector.",
+        "sources": ["Brand Tracking Studies", "Industry Analyst Reports"],
+        "last_updated": "2023-07-10T11:30:00Z"
+      }
+    },
+    "partnership_network": {
+      "partner_list": {
+        "partners": [
+          {
+            "name": "Cloud Solutions Pro",
+            "partnership_type": "Technology Integration",
+            "partnership_strength": 0.85,
+            "start_date": "2021-05-10",
+            "description": "Deep integration of AI platform with cloud infrastructure"
+          },
+          {
+            "name": "Enterprise Data Systems",
+            "partnership_type": "Reseller",
+            "partnership_strength": 0.78,
+            "start_date": "2022-02-15",
+            "description": "Distribution partnership for enterprise clients"
+          }
+        ],
+        "total_partners": 15,
+        "sources": ["Partner Directory", "Press Releases"],
+        "last_updated": "2023-05-20T10:15:00Z"
+      }
+    },
+    "regulatory_compliance": {
+      "compliance_overview": {
+        "company_name": "TechInnovate AI",
+        "compliance_score": 0.92,
+        "key_regulations": ["GDPR", "CCPA", "HIPAA", "SOC 2"],
+        "last_audit_date": "2023-01-15",
+        "summary": "Strong compliance posture with all major data privacy regulations.",
+        "sources": ["Compliance Reports", "Audit Documentation"],
+        "last_updated": "2023-02-28T16:45:00Z"
+      }
+    },
+    "risk_analysis": {
+      "regulatory_risks": {
+        "company_name": "TechInnovate AI",
+        "regulatory_risk_score": 0.35,
+        "risks": [
+          {
+            "risk_type": "Data Privacy",
+            "risk_level": "Medium",
+            "description": "Evolving international data privacy regulations may require system modifications",
+            "mitigation_strategy": "Regular compliance reviews and proactive system updates",
+            "potential_impact": 0.6
+          },
+          {
+            "risk_type": "AI Ethics Regulations",
+            "risk_level": "Medium-High",
+            "description": "Emerging AI ethics regulations may impact model deployment processes",
+            "mitigation_strategy": "Implementing robust AI governance framework",
+            "potential_impact": 0.7
+          }
+        ],
+        "summary": "Moderate regulatory risk with strong mitigation strategies in place.",
+        "sources": ["Regulatory Analysis", "Legal Assessment"],
+        "last_updated": "2023-04-15T09:30:00Z"
+      },
+      "market_risks": {
+        "company_name": "TechInnovate AI",
+        "market_risk_score": 0.42,
+        "risks": [
+          {
+            "risk_type": "Competitive Pressure",
+            "risk_level": "Medium",
+            "description": "Increasing competition from well-funded startups in the AI space",
+            "mitigation_strategy": "Accelerating product roadmap and strengthening differentiators",
+            "potential_impact": 0.65
+          },
+          {
+            "risk_type": "Market Saturation",
+            "risk_level": "Low",
+            "description": "Potential saturation in enterprise AI market within 3-5 years",
+            "mitigation_strategy": "Expanding to adjacent markets and use cases",
+            "potential_impact": 0.4
+          }
+        ],
+        "summary": "Moderate market risk with effective differentiation strategy.",
+        "sources": ["Market Analysis Reports", "Competitive Intelligence"],
+        "last_updated": "2023-04-20T13:15:00Z"
+      }
+    }
+  } 
