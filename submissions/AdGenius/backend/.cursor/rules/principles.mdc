@@ -1,0 +1,10 @@
+---
+description: Architectural Principles
+globs: *.py
+alwaysApply: true
+---
+
+## Architectural Principles
+
+- **Domain-Driven Design (DDD):** The backend is organized according to DDD principles. Each domain's code should reside in its own domain package within `backend/`, ensuring clear separation of business logic by domain.
+- **Test-Driven Development (TDD):** We follow TDD practices. Test cases must be written before implementing business logic. Tests should be placed alongside the business logic file or in a `tests` folder within the relevant domain package.

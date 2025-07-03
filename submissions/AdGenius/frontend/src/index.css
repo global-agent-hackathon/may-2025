@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for MessageList scrollbar */
+.message-list-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.message-list-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.message-list-scrollbar::-webkit-scrollbar-thumb {
+  background: #3a72ff;
+  border-radius: 10px;
+}
+
+.message-list-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #1a4ff8;
+}
+
+/* Add styles for Firefox scrollbars */
+.message-list-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #3a72ff #f1f1f1;
+}

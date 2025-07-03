@@ -1,0 +1,26 @@
+FROM node:23-alpine AS frontend-build
+
+WORKDIR /app
+
+# Install curl with root privileges
+RUN apk update && \
+    apk add --no-cache curl bash
+
+RUN adduser -D -h /home/adgenius adgenius && chown -R adgenius /app
+USER adgenius
+ENV PATH="/home/adgenius/.local/bin:${PATH}"
+
+# Install bun
+RUN curl -fsSL https://bun.sh/install | bash
+ENV PATH="/home/adgenius/.bun/bin:${PATH}"
+
+COPY frontend .
+ARG VITE_API_URL=http://localhost:8000
+ENV VITE_API_URL=${VITE_API_URL}
+RUN bun install
+RUN bun run build
+
+FROM caddy:2.7.6-alpine
+
+COPY Caddyfile /etc/caddy/Caddyfile
+COPY --from=frontend-build /app/dist /srv

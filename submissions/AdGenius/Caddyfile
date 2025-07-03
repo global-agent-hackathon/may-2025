@@ -1,0 +1,18 @@
+:8080
+
+root * /srv
+
+# Proxy API requests to the backend
+@api {
+    path /api/*
+}
+reverse_proxy @api backend:8000
+
+# Rewrite all non-file, non-API requests to index.html for SPA routing
+@spa {
+    not path /api/*
+    not file
+}
+rewrite @spa /index.html
+
+file_server

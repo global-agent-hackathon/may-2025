@@ -1,0 +1,15 @@
+set dotenv-load
+set dotenv-path := ".env"
+
+
+uv *ARG:
+    uv {{ARG}}
+
+backend:
+    cd ./backend && uv sync && uv run app.py
+
+frontend:
+    cd ./frontend && bun install && bun run dev
+
+test:
+  cd ./backend && uv run run_tests.py

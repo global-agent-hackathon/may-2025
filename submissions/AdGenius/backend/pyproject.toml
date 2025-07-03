@@ -1,0 +1,77 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "AdGenius Backend API"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi==0.104.1",
+    "pydantic[email]==2.11.4",
+    "python-multipart==0.0.20",
+    "uvicorn==0.23.2",
+    "python-jose==3.4.0",
+    "passlib==1.7.4",
+    "httpx==0.27.0",
+    "itsdangerous==2.2.0",
+    "google-auth==2.40.1",
+    "python-dotenv==1.0.1",
+    "sqlalchemy==2.0.41",
+    "aiosqlite==0.21.0",
+    "greenlet>=3.2.1",
+    "agno",
+    "sse-starlette>=1.6.5",
+    "duckduckgo-search>=8.0.1",
+    "anthropic[bedrock]>=0.51.0",
+    "tavily-python>=0.7.2",
+    "gunicorn>=23.0.0",
+    "uvicorn-worker>=0.3.0",
+    "replicate>=1.0.6",
+    "requests>=2.32.3",
+]
+
+[tool.uv.sources]
+agno = { git = "https://github.com/0xRichardH/agno", branch = "fix/2025_05_17", subdirectory = "libs/agno" }
+
+[tool.pyright]
+venvPath = "."
+venv = ".venv"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.5",
+    "pytest-asyncio==0.26.0",
+    "pytest-cov>=4.1.0",
+    "pytest-xdist>=3.5.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = [
+    "chat_assistant",
+    "backend",
+    "utils",
+    "database_storage",
+    "ad_publisher",
+]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+asyncio_mode = "auto"
+markers = [
+    "unit: marks tests as unit tests",
+    "integration: marks tests as integration tests",
+    "slow: marks tests as slow running tests",
+    "api: marks tests as API tests",
+]
+xfail_strict = true
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.coverage.run]
+source = [
+    "chat_assistant",
+    "backend",
+    "utils",
+    "database_storage",
+    "agents",
+    "ad_publisher",
+]
+omit = ["*/tests/*", "*/__pycache__/*", "*/.pytest_cache/*", "*/.venv/*"]

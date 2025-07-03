@@ -1,0 +1,31 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    expose:
+      - "8000"
+    env_file:
+      - .env
+    volumes:
+      - backend_db:/app/data
+
+  caddy:
+    build:
+      context: .
+      dockerfile: Dockerfile.caddy
+      args:
+        - VITE_API_URL=https://ad-genius.feedmob.ai
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - backend
+
+volumes:
+  caddy_data:
+  caddy_config:
+  backend_db:
