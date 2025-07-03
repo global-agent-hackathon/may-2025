@@ -1,0 +1,17 @@
+agno
+manim
+google-genai
+python-dotenv
+streamlit 
+pydub 
+ffmpeg-python
+groq
+pillow
+fastapi
+uvicorn
+tenacity 
+firecrawl-py
+duckduckgo-search
+duckdb
+scikit-learn
+pytest
