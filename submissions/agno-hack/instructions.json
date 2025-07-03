@@ -1,0 +1,10 @@
+{
+    "target_url": "https://www.google.com",
+    "task_description": "The objective is to perform a Google search and capture the results.\nSteps:\n1. Navigate to google.com.\n2. In the search bar, type \"Agno AI library\".\n3. Click the Google Search button (or press Enter).\n4. After the search results page loads, verify that results are displayed.",
+    "screenshot_instructions": [
+        {
+            "step_description": "After search results for 'Agno AI library' are displayed on Google",
+            "filename": "TC_GoogleSearch_AgnoAILibrary_results.png"
+        }
+    ]
+} 

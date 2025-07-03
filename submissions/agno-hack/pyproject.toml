@@ -1,0 +1,13 @@
+[project]
+name = "agno-hack"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "agno>=1.5.3",
+    "browser-use>=0.1.48",
+    "fastapi>=0.115.12",
+    "google-genai>=1.16.1",
+    "uvicorn>=0.34.2",
+]
