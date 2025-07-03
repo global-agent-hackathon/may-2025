@@ -1,0 +1,26 @@
+[project]
+name = "superwizard-server"
+version = "0.1.0"
+requires-python = ">=3.11"
+readme = "README.md"
+authors = [{ name = "Superwizard", email = "hello@superwizard.com" }]
+
+dependencies = [
+  "agno==1.4.6",
+  "fastapi[standard]",
+  "openai",
+  "pgvector",
+  "psycopg[binary]",
+  "sqlalchemy",
+  "uvicorn",
+  "python-dotenv",
+  "pydantic",
+  "httpx"
+]
+
+[project.optional-dependencies]
+dev = ["mypy", "ruff"]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta" 

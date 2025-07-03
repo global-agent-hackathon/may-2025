@@ -1,0 +1,20 @@
+services:
+  pgvector:
+    image: agnohq/pgvector:16
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DB_USER:-superwizard}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-superwizard123}
+      POSTGRES_DB: ${DB_NAME:-superwizard_db}
+    networks:
+      - superwizard-net
+
+networks:
+  superwizard-net:
+
+volumes:
+  pgdata: 

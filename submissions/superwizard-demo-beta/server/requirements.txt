@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+agno==1.4.6
+openai
+pgvector
+psycopg[binary]
+sqlalchemy
+python-dotenv
+pydantic
+httpx
+requests 
