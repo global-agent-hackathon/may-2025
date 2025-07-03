@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+python-dotenv
+agno
+masumi
+pydantic
+python-multipart
+httpx
+openai
+requests
+replicate
