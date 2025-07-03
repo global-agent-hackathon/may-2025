@@ -1,0 +1,8 @@
+{
+    "reportMissingImports": true,
+    "reportMissingTypeStubs": false,
+    "typeCheckingMode": "basic",
+    "exclude": [
+        "azure.cognitiveservices.speech"
+    ]
+}
