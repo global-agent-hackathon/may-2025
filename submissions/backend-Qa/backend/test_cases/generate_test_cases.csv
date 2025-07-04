@@ -1,0 +1,30 @@
+Test Case ID,Description,Test Steps,Test Data Set 1,Test Data Set 2,Test Data Set 3,Test Data Set 4,Test Data Set 5,Expected Result
+TC_1,Test user registration with valid email and password,"1. Open the registration page
+2. Enter email and password
+3. Click the ""Register"" button
+4. Verify registration confirmation message",Missing concrete test data set 1,Missing concrete test data set 2,Missing concrete test data set 3,Missing concrete test data set 4,Missing concrete test data set 5,
+TC_2,Test user login with valid credentials,"1. Open the login page
+2. Enter username and password
+3. Click the ""Login"" button
+4. Verify login success",Missing concrete test data set 1,Missing concrete test data set 2,Missing concrete test data set 3,Missing concrete test data set 4,Missing concrete test data set 5,
+TC_3,Test search functionality for books,"1. Open the homepage
+2. Enter search term in the search bar
+3. Click the ""Search"" button
+4. Verify search results",Missing concrete test data set 1,Missing concrete test data set 2,Missing concrete test data set 3,Missing concrete test data set 4,Missing concrete test data set 5,
+TC_4,Test adding books to the shopping cart,"1. Search for a book
+2. Click ""Add to Cart""
+3. Verify book is added to cart
+4. Check cart contents",Missing concrete test data set 1,Missing concrete test data set 2,Missing concrete test data set 3,Missing concrete test data set 4,Missing concrete test data set 5,
+TC_5,Test checkout process,"1. Add a book to the cart
+2. Click ""Proceed to Checkout""
+3. Enter payment details
+4. Click ""Pay Now""
+5. Verify order confirmation",Missing concrete test data set 1,Missing concrete test data set 2,Missing concrete test data set 3,Missing concrete test data set 4,Missing concrete test data set 5,
+TC_6,Test viewing order history,"1. Log in to the account
+2. Navigate to ""Order History""
+3. Verify list of past orders",Missing concrete test data set 1,Missing concrete test data set 2,Missing concrete test data set 3,Missing concrete test data set 4,Missing concrete test data set 5,
+TC_7,Test leaving a book review,"1. Navigate to a purchased book
+2. Click ""Write a Review""
+3. Enter rating and review
+4. Click ""Submit""
+5. Verify review is posted",Missing concrete test data set 1,Missing concrete test data set 2,Missing concrete test data set 3,Missing concrete test data set 4,Missing concrete test data set 5,

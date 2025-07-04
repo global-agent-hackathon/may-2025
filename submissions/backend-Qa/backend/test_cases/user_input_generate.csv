@@ -1,0 +1,3 @@
+Test Case ID,Description,Test Steps,Test Data Set 1,Test Data Set 2,Test Data Set 3,Test Data Set 4,Test Data Set 5,Expected Result
+TC_001,Default test case - generation failed,"1. Check system response
+2. Verify expected behavior",Sample data 1,Sample data 2,Sample data 3,Sample data 4,Sample data 5,System behaves as expected

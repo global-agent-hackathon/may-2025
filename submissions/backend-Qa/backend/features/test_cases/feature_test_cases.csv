@@ -1,0 +1,59 @@
+Test Case ID,Description,Test Steps,Test Data Set 1,Test Data Set 2,Test Data Set 3,Test Data Set 4,Test Data Set 5,Expected Result
+TC_1_1,Verify successful login with valid email and password,"1. Navigate to the login page
+2. Click the login button to display the login form
+3. Enter email as ""user@example.com""
+4. Enter password as ""securepassword""
+5. Click the login button","- Email: user@example.com
+- Password: securepassword","- Email: user@example.com
+- Password: securepassword","- Alt_Email: user@example.com
+- Alt_Password: securepassword","- Email: user@example.comT
+- Password: securepasswordE","- Test_Email: user@example.com
+- Test_Password: securepassword",- User is redirected to the dashboard page
+TC_2_1,Verify error message for empty email field,"1. Navigate to the login page
+2. Click the login button to display the login form
+3. Enter password as ""securepassword""
+4. Click the login button","- Email: (empty)
+- Password: securepassword","- Email: (empty)
+- Password: securepassword","- Alt_Email: (empty)
+- Alt_Password: securepassword","- Email: (empty)a
+- Password: securepasswordH","- Test_Email: (empty)
+- Test_Password: securepassword","- Error message ""Email is required"" is displayed below the email field"
+TC_3_1,Verify error message for invalid email format,"1. Navigate to the login page
+2. Click the login button to display the login form
+3. Enter email as ""invalid-email""
+4. Enter password as ""securepassword""
+5. Click the login button","- Email: invalid-email
+- Password: securepassword","- Email: invalid-email
+- Password: securepassword","- Alt_Email: invalid-email
+- Alt_Password: securepassword","- Email: invalid-emailC
+- Password: securepasswordu","- Email: ininvalid-email
+- Test_Password: securepassword","- Error message ""Please enter a valid email address"" is displayed below the email field"
+TC_4_1,Verify error message for incorrect password,"1. Navigate to the login page
+2. Click the login button to display the login form
+3. Enter email as ""user@example.com""
+4. Enter password as ""wrongpassword""
+5. Click the login button","- Email: user@example.com
+- Password: wrongpassword","- Email: user@example.com
+- Password: wrongpassword","- Alt_Email: user@example.com
+- Alt_Password: wrongpassword","- Email: user@example.comv
+- Password: wrongpasswordv","- Test_Email: user@example.com
+- Test_Password: wrongpassword","- Error message ""Invalid email or password"" is displayed below the login button"
+TC_5_1,Verify error message for empty password field,"1. Navigate to the login page
+2. Click the login button to display the login form
+3. Enter email as ""user@example.com""
+4. Click the login button","- Email: user@example.com
+- Password: (empty)","- Email: user@example.com
+- Password: (empty)","- Alt_Email: user@example.com
+- Alt_Password: (empty)","- Email: user@example.comc
+- Password: (empty)W","- Test_Email: user@example.com
+- Test_Password: (empty)","- Error message ""Password is required"" is displayed below the password field"
+TC_6_1,Verify password visibility toggle functionality,"1. Navigate to the login page
+2. Click the login button to display the login form
+3. Enter email as ""user@example.com""
+4. Enter password as ""securepassword""
+5. Click the show/hide password toggle","- Email: user@example.com
+- Password: securepassword Expected Result","- Email: user@example.com
+- Password: securepassword Expected Result","- Alt_Email: user@example.com
+- Alt_Password: securepassword Expected Result","- Email: user@example.comK
+- Password: securepasswordP Expected Result","- Test_Email: user@example.com
+- Test_Password: securepassword Expected Result",

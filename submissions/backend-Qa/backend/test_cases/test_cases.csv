@@ -1,0 +1,31 @@
+Test Case ID,Description,Test Steps,Test Data Set 1,Test Data Set 2,Test Data Set 3,Test Data Set 4,Test Data Set 5,Expected Result
+TC_1,Successful login with valid email and password,"1. Open the web browser and navigate to the login page.
+2. Type a valid email address in the email field.
+3. Type the corresponding valid password in the password field.
+4. Click the ""Login"" button.
+5. Verify that the user is redirected to the personal dashboard.",,,,,,
+TC_2,Login with incorrect email address,"1. Open the web browser and navigate to the login page.
+2. Type an invalid email address in the email field.
+3. Type a valid password in the password field.
+4. Click the ""Login"" button.
+5. Verify that an error message is displayed indicating the email is incorrect.",,,,,,
+TC_3,Login with incorrect password,"1. Open the web browser and navigate to the login page.
+2. Type a valid email address in the email field.
+3. Type an incorrect password in the password field.
+4. Click the ""Login"" button.
+5. Verify that an error message is displayed indicating the password is incorrect.",,,,,,
+TC_4,Login with empty email and password fields,"1. Open the web browser and navigate to the login page.
+2. Leave the email field empty.
+3. Leave the password field empty.
+4. Click the ""Login"" button.
+5. Verify that an","- 1
+- Open
+- the","- 7
+- Open
+- the","- 1_v3
+- Alt_Open
+- The","- 2
+- Openq
+- theT","- Test_1
+- Test_Open
+- Test_the",
