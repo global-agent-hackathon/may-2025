@@ -1,0 +1,25 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = "==3.12.8"
+dependencies = [
+    "agno>=1.5.4",
+    "cryptography>=45.0.2",
+    "fastapi>=0.115.12",
+    "google-api-python-client>=2.169.0",
+    "google-auth-oauthlib>=1.2.2",
+    "groq>=0.25.0",
+    "httpx>=0.28.1",
+    "itsdangerous>=2.2.0",
+    "passlib[bcrypt]>=1.7.4",
+    "psycopg2-binary>=2.9.10",
+    "pydantic[email]>=2.11.4",
+    "python-dotenv>=1.1.0",
+    "python-jose[cryptography]>=3.4.0",
+    "python-multipart>=0.0.20",
+    "sqlmodel>=0.0.24",
+    "uvicorn[standard]>=0.34.2",
+    "weaviate-client>=4.14.4",
+]
