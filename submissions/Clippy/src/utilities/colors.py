@@ -1,0 +1,15 @@
+# Centralized color palette for the Clippy app
+
+PRIMARY_PURPLE = "#9b87f5"
+DARK_BG = "#181c2a"
+DARKER_BG = "#1a1f2c"
+DARKER_BG_ALT = "#1d1f2a"
+DARKER_BG_ALT2 = "#212436"
+DARKER_BG_ALT3 = "#1c2231"
+DARKER_BG_ALT4 = "#1c2536"
+DARKER_BG_ALT5 = "#263040"
+BORDER_GREY = "#403e43"
+TEXT_GREY = "#374151"
+BLUE = "#0ea5e9"
+BLUE_TRANSPARENT = "#0ea5e933"
+WHITE = "white"

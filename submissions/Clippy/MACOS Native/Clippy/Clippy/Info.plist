@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Supports Multiple Window</key>
+	<false/>
+	
+	<key>NSAppleEventsUsageDescription</key>
+	<string>This app uses Apple Events to communicate with other apps.</string>
+
+	<key>NSSystemAdministrationUsageDescription</key>
+	<string>We need access to system administration for functionality.</string>
+
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>We need access to your documents folder to function correctly.</string>
+
+	<key>NSDownloadsFolderUsageDescription</key>
+	<string>Access to downloads helps Clippy search files.</string>
+
+	<key>NSDesktopFolderUsageDescription</key>
+	<string>We need desktop access for searching and managing files.</string>
+
+	<key>NSFullDiskAccessUsageDescription</key>
+	<string>Clippy requires Full Disk Access to search your entire system efficiently.</string>
+
+	<key>com.apple.security.automation.apple-events</key>
+	<true/>
+
+	<key>com.apple.security.app-sandbox</key>
+	<true/>
+
+	<key>com.apple.security.network.client</key>
+	<true/>
+
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>localhost</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
+			<key>127.0.0.1</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+			</dict>
+		</dict>
+	</dict>
+
+	<key>NSJavaScriptEnabled</key>
+	<true/>
+
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>app-resource</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>com.clippy.resourcescheme</string>
+		</dict>
+	</array>
+</dict>
+</plist>

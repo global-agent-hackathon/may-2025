@@ -1,0 +1,8 @@
+{
+    "pythonVersion": "3.13",
+    "venvPath": "./clippyENV",
+    "exclude": [
+        "clippyENV",
+        "build"
+    ]
+}
