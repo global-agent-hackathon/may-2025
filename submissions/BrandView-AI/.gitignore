@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+.env
+.venv
+env/
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Project specific
+*.db
+*.sqlite3
+*.log
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+
+# Model files and large data
+*.pt
+*.pth
+*.h5
+*.bin
+data/
+# Ignore model files but keep the models directory structure
+!src/models/
+!src/models/__init__.py
+!src/models/*.py
+
+# Temporary files
+*.tmp
+*.temp
+tmp/
+.DS_Store
+
+# YouTube API Demo
+thumbnails/ 
