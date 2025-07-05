@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Deep User Researcher</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      href="https://cdn.prod.website-files.com/6796d350b8c706e4533e7e32/6796d350b8c706e4533e8019_Favicon%20small.png"
+      rel="shortcut icon"
+      type="image/x-icon"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              wiki: {
+                blue: "#36c",
+                gray: "#f6f6f6",
+                border: "#a2a9b1",
+                light: "#f8f9fa",
+              },
+            },
+            fontFamily: {
+              wiki: ["Linux Libertine", "Georgia", "Times", "serif"],
+            },
+          },
+        },
+      };
+      a;
+    </script>
+    <style>
+      body {
+        font-family: "Linux Libertine", "Georgia", "Times", serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        background-color: #f6f6f6;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .search-box {
+        background: white;
+        padding: 20px;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+      .search-box input {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      .search-box button {
+        background: #36c;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .wiki-content {
+        background: white;
+        padding: 20px;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+      .wiki-header {
+        border-bottom: 1px solid #a2a9b1;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+      }
+      .wiki-section {
+        margin-bottom: 20px;
+      }
+      .wiki-section h2 {
+        border-bottom: 1px solid #a2a9b1;
+        padding-bottom: 5px;
+      }
+      .social-profile {
+        margin: 10px 0;
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .loading {
+        text-align: center;
+        padding: 20px;
+        display: none;
+        position: relative;
+        height: 300px;
+      }
+      #loader-canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+      }
+      .loading-text {
+        position: relative;
+        z-index: 2;
+        color: #36c;
+        font-size: 1.2em;
+        margin-top: 20px;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+      }
+      .loading-text.visible {
+        opacity: 1;
+      }
+      .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+      .profile-picture {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #36c;
+      }
+      .platform-icon {
+        font-size: 24px;
+        width: 30px;
+        text-align: center;
+      }
+      .linkedin-icon {
+        color: #0077b5;
+      }
+      .twitter-icon {
+        color: #1da1f2;
+      }
+      .instagram-icon {
+        color: #e4405f;
+      }
+      .github-icon {
+        color: #181717;
+      }
+      .medium-icon {
+        color: #000000;
+      }
+      .tiktok-icon {
+        color: #000000;
+      }
+      .facebook-icon {
+        color: #1877f2;
+      }
+      .bio-content {
+        line-height: 1.8;
+      }
+      .timeline-container {
+        position: relative;
+        padding-left: 2rem;
+      }
+      .timeline-container::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: #36c;
+        opacity: 0.3;
+      }
+      .timeline-event {
+        position: relative;
+        margin-bottom: 2rem;
+      }
+      .timeline-event:last-child {
+        margin-bottom: 0;
+      }
+      .timeline-dot {
+        position: absolute;
+        left: -2.5rem;
+        top: 0.5rem;
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50%;
+        background: #36c;
+        border: 3px solid white;
+        box-shadow: 0 0 0 2px #36c;
+      }
+      .timeline-content {
+        background: #f8f9fa;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        transition: all 0.3s ease;
+      }
+      .timeline-content:hover {
+        transform: translateX(5px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      .timeline-year {
+        color: #36c;
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+      }
+      .timeline-info {
+        color: #333;
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+  <body class="bg-wiki-gray">
+    <div class="container mx-auto px-4 py-8 max-w-6xl">
+      <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <h1 class="text-3xl font-wiki text-wiki-blue mb-4">
+          Deep User Researcher
+        </h1>
+        <h2 class="flex items-center gap-4">
+          Made with ❤️ using
+          <a
+            href="https://agno.com"
+            target="_blank"
+            class="text-blue-600 hover:text-blue-800 transform transition-all duration-300 hover:-translate-y-2 hover:rotate-2"
+            ><img
+              src="https://cdn.prod.website-files.com/6796d350b8c706e4533e7e32/6796d350b8c706e4533e8019_Favicon%20small.png"
+              alt="Agno Logo"
+              class="h-4 inline-block align-middle mr-1"
+            />Agno</a
+          >
+          <a
+            href="https://firecrawl.com"
+            target="_blank"
+            class="text-blue-600 hover:text-blue-800 transform transition-all duration-300 hover:-translate-y-2 hover:-rotate-2"
+            ><img
+              src="https://www.firecrawl.dev/favicon.ico"
+              alt="Firecrawl Logo"
+              class="h-4 inline-block align-middle mr-1"
+            />Firecrawl</a
+          >
+          <a
+            href="https://exa.ai"
+            target="_blank"
+            class="text-blue-600 hover:text-blue-800 transform transition-all duration-300 hover:-translate-y-2 hover:rotate-2"
+            ><img
+              src="https://exa.ai/images/favicon-32x32.png"
+              alt="Exa Logo"
+              class="h-4 inline-block align-middle mr-1"
+            />Exa</a
+          >
+        </h2>
+        <br />
+        <form id="searchForm" class="space-y-4">
+          <div class="space-y-2">
+            <input
+              type="text"
+              id="fullName"
+              placeholder="Enter Full Name"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-wiki-blue focus:border-transparent transition-all"
+            />
+            <input
+              type="text"
+              id="handle"
+              placeholder="Enter Handle"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-wiki-blue focus:border-transparent transition-all"
+            />
+          </div>
+          <button
+            type="submit"
+            class="bg-wiki-blue text-white px-6 py-2 rounded-md hover:bg-opacity-90 transition-all transform hover:scale-105"
+          >
+            Search
+          </button>
+        </form>
+      </div>
+
+      <div class="loading" id="loading">
+        <canvas id="loader-canvas"></canvas>
+        <div class="loading-text" id="loadingText"></div>
+      </div>
+
+      <div
+        class="wiki-content bg-white rounded-lg shadow-md p-6"
+        id="wikiContent"
+        style="display: none"
+      >
+        <div class="wiki-header border-b border-wiki-border pb-4 mb-6">
+          <div class="profile-header flex items-center gap-6">
+            <img
+              id="profilePicture"
+              class="w-32 h-32 rounded-full object-cover border-4 border-wiki-blue"
+              src=""
+              alt="Profile Picture"
+              style="display: none"
+            />
+            <h1 id="userName" class="text-4xl font-wiki text-wiki-blue"></h1>
+          </div>
+        </div>
+
+        <div class="wiki-section mb-8">
+          <h2 class="text-2xl font-wiki border-b border-wiki-border pb-2 mb-4">
+            Biography
+          </h2>
+          <div id="bio" class="bio-content prose max-w-none"></div>
+          <div class="mt-4 space-y-2">
+            <p class="flex items-center gap-2">
+              <strong class="text-wiki-blue">Citizenship:</strong>
+              <span id="citizenship" class="text-gray-700"></span>
+            </p>
+            <p class="flex items-center gap-2">
+              <strong class="text-wiki-blue">Birth Year:</strong>
+              <span id="birthYear" class="text-gray-700"></span>
+            </p>
+            <p class="flex items-center gap-2">
+              <strong class="text-wiki-blue">Current Location:</strong>
+              <span id="currentLocation" class="text-gray-700"></span>
+            </p>
+          </div>
+        </div>
+
+        <div class="wiki-section mb-8">
+          <h2 class="text-2xl font-wiki border-b border-wiki-border pb-2 mb-4">
+            Social Profiles
+          </h2>
+          <div id="socialProfiles" class="space-y-3"></div>
+        </div>
+
+        <div class="wiki-section">
+          <h2 class="text-2xl font-wiki border-b border-wiki-border pb-2 mb-4">
+            Timeline
+          </h2>
+          <div id="timeline" class="timeline-container">
+            <!-- Timeline events will be inserted here -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <audio id="loadingAudio" style="display: none">
+      <source src="/static/mi-theme-song.mp3" type="audio/mpeg" />
+    </audio>
+
+    <script>
+      // Loading animation setup
+      const loadingTexts = [
+        "Stalking social media profiles...",
+        "Teaching AI to be nosy...",
+        "Bribing the internet with cookies...",
+        "Convincing algorithms to gossip...",
+        "Downloading the entire internet...",
+        "Asking Siri's cousin for help...",
+        "Borrowing Sherlock Holmes' magnifying glass...",
+        "Teaching robots to be detectives...",
+        "Bribing the Matrix with cat videos...",
+        "Asking Alexa's secret twin...",
+        "Teaching AI to be a digital stalker...",
+        "Borrowing Google's crystal ball...",
+        "Convincing the internet to spill the tea...",
+        "Teaching robots to read minds...",
+        "Bribing the cloud with memes...",
+        "Asking ChatGPT's gossipy cousin...",
+        "Teaching AI to be a digital Sherlock...",
+        "Borrowing Facebook's secret files...",
+        "Convincing the internet to be a snitch...",
+      ];
+
+      let currentTextIndex = 0;
+      let scene, camera, renderer, particles;
+      let loadingTextElement;
+      let animationFrameId;
+      let particleSystems = [];
+
+      function initLoader() {
+        // Start playing the audio from 23 seconds with fade in
+        const audio = document.getElementById("loadingAudio");
+        audio.currentTime = 23;
+        audio.volume = 0;
+        audio
+          .play()
+          .catch((error) => console.log("Audio playback failed:", error));
+
+        // Fade in the audio
+        const fadeInInterval = setInterval(() => {
+          if (audio.volume < 1) {
+            audio.volume = Math.min(audio.volume + 0.1, 1);
+          } else {
+            clearInterval(fadeInInterval);
+          }
+        }, 50);
+
+        // Clean up any existing animation
+        if (animationFrameId) {
+          cancelAnimationFrame(animationFrameId);
+        }
+        if (renderer) {
+          renderer.dispose();
+        }
+
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(
+          75,
+          window.innerWidth / window.innerHeight,
+          0.1,
+          2000
+        );
+        renderer = new THREE.WebGLRenderer({
+          canvas: document.getElementById("loader-canvas"),
+          alpha: true,
+          antialias: true,
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        // Create multiple particle systems for a more complex effect
+        createHelixSystem();
+        createOrbitalSystem();
+        createDataStreamSystem();
+
+        camera.position.z = 1000;
+
+        // Add ambient light
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        // Add point lights for more dynamic lighting
+        const pointLight1 = new THREE.PointLight(0x4a90e2, 1);
+        pointLight1.position.set(500, 500, 500);
+        scene.add(pointLight1);
+
+        const pointLight2 = new THREE.PointLight(0xe24a90, 1);
+        pointLight2.position.set(-500, -500, 500);
+        scene.add(pointLight2);
+
+        // Start animation
+        animate();
+      }
+
+      function createHelixSystem() {
+        const geometry = new THREE.BufferGeometry();
+        const vertices = [];
+        const colors = [];
+        const particleCount = 2000;
+
+        for (let i = 0; i < particleCount; i++) {
+          const t = (i / particleCount) * Math.PI * 8;
+          const radius = 300;
+          const height = 800;
+
+          const strand = i % 2;
+          const offset = strand * Math.PI;
+
+          const x = radius * Math.cos(t + offset);
+          const y = (i / particleCount) * height - height / 2;
+          const z = radius * Math.sin(t + offset);
+
+          vertices.push(x, y, z);
+
+          const hue = strand === 0 ? 0.6 : 0.8;
+          const saturation = 0.8;
+          const lightness = 0.5;
+
+          const color = new THREE.Color().setHSL(hue, saturation, lightness);
+          colors.push(color.r, color.g, color.b);
+        }
+
+        geometry.setAttribute(
+          "position",
+          new THREE.Float32BufferAttribute(vertices, 3)
+        );
+        geometry.setAttribute(
+          "color",
+          new THREE.Float32BufferAttribute(colors, 3)
+        );
+
+        const material = new THREE.PointsMaterial({
+          size: 4,
+          vertexColors: true,
+          transparent: true,
+          opacity: 0.8,
+          blending: THREE.AdditiveBlending,
+          sizeAttenuation: true,
+        });
+
+        const particles = new THREE.Points(geometry, material);
+        scene.add(particles);
+        particleSystems.push({ particles, type: "helix" });
+      }
+
+      function createOrbitalSystem() {
+        const geometry = new THREE.BufferGeometry();
+        const vertices = [];
+        const colors = [];
+        const particleCount = 1500;
+
+        for (let i = 0; i < particleCount; i++) {
+          const angle = (i / particleCount) * Math.PI * 2;
+          const radius = 400 + Math.random() * 100;
+
+          const x = radius * Math.cos(angle);
+          const y = radius * Math.sin(angle);
+          const z = (Math.random() - 0.5) * 200;
+
+          vertices.push(x, y, z);
+
+          const hue = 0.4 + Math.random() * 0.4; // Green to blue range
+          const color = new THREE.Color().setHSL(hue, 0.8, 0.6);
+          colors.push(color.r, color.g, color.b);
+        }
+
+        geometry.setAttribute(
+          "position",
+          new THREE.Float32BufferAttribute(vertices, 3)
+        );
+        geometry.setAttribute(
+          "color",
+          new THREE.Float32BufferAttribute(colors, 3)
+        );
+
+        const material = new THREE.PointsMaterial({
+          size: 3,
+          vertexColors: true,
+          transparent: true,
+          opacity: 0.6,
+          blending: THREE.AdditiveBlending,
+          sizeAttenuation: true,
+        });
+
+        const particles = new THREE.Points(geometry, material);
+        scene.add(particles);
+        particleSystems.push({ particles, type: "orbital" });
+      }
+
+      function createDataStreamSystem() {
+        const geometry = new THREE.BufferGeometry();
+        const vertices = [];
+        const colors = [];
+        const particleCount = 1000;
+
+        for (let i = 0; i < particleCount; i++) {
+          const x = (Math.random() - 0.5) * 1000;
+          const y = (Math.random() - 0.5) * 1000;
+          const z = (Math.random() - 0.5) * 1000;
+
+          vertices.push(x, y, z);
+
+          const hue = 0.8 + Math.random() * 0.2; // Purple to pink range
+          const color = new THREE.Color().setHSL(hue, 0.8, 0.6);
+          colors.push(color.r, color.g, color.b);
+        }
+
+        geometry.setAttribute(
+          "position",
+          new THREE.Float32BufferAttribute(vertices, 3)
+        );
+        geometry.setAttribute(
+          "color",
+          new THREE.Float32BufferAttribute(colors, 3)
+        );
+
+        const material = new THREE.PointsMaterial({
+          size: 2,
+          vertexColors: true,
+          transparent: true,
+          opacity: 0.4,
+          blending: THREE.AdditiveBlending,
+          sizeAttenuation: true,
+        });
+
+        const particles = new THREE.Points(geometry, material);
+        scene.add(particles);
+        particleSystems.push({ particles, type: "dataStream" });
+      }
+
+      function animate() {
+        animationFrameId = requestAnimationFrame(animate);
+
+        const time = Date.now() * 0.001;
+
+        // Animate each particle system
+        particleSystems.forEach((system) => {
+          const positions = system.particles.geometry.attributes.position.array;
+          const colors = system.particles.geometry.attributes.color.array;
+
+          switch (system.type) {
+            case "helix":
+              system.particles.rotation.y = time * 0.2;
+              for (let i = 0; i < positions.length; i += 3) {
+                positions[i] += Math.sin(time + positions[i + 1] * 0.01) * 0.5;
+                positions[i + 2] +=
+                  Math.cos(time + positions[i + 1] * 0.01) * 0.5;
+              }
+              break;
+
+            case "orbital":
+              system.particles.rotation.y = time * 0.1;
+              system.particles.rotation.x = Math.sin(time * 0.2) * 0.2;
+              for (let i = 0; i < positions.length; i += 3) {
+                const angle = time + i * 0.01;
+                positions[i] += Math.sin(angle) * 0.5;
+                positions[i + 1] += Math.cos(angle) * 0.5;
+              }
+              break;
+
+            case "dataStream":
+              for (let i = 0; i < positions.length; i += 3) {
+                positions[i] += Math.sin(time + i * 0.01) * 2;
+                positions[i + 1] += Math.cos(time + i * 0.01) * 2;
+                positions[i + 2] += Math.sin(time * 0.5 + i * 0.01) * 2;
+              }
+              break;
+          }
+
+          system.particles.geometry.attributes.position.needsUpdate = true;
+        });
+
+        // Dynamic camera movement
+        camera.position.x = Math.sin(time * 0.2) * 300;
+        camera.position.y = Math.cos(time * 0.2) * 300;
+        camera.lookAt(scene.position);
+
+        renderer.render(scene, camera);
+      }
+
+      function cleanupLoader() {
+        // Fade out and stop the audio
+        const audio = document.getElementById("loadingAudio");
+
+        // Fade out the audio
+        const fadeOutInterval = setInterval(() => {
+          if (audio.volume > 0) {
+            audio.volume = Math.max(audio.volume - 0.1, 0);
+          } else {
+            clearInterval(fadeOutInterval);
+            audio.pause();
+            audio.currentTime = 23; // Reset to 23 seconds for next play
+          }
+        }, 50);
+
+        if (animationFrameId) {
+          cancelAnimationFrame(animationFrameId);
+        }
+        if (renderer) {
+          renderer.dispose();
+        }
+        if (scene) {
+          scene.clear();
+        }
+        particleSystems = [];
+        scene = null;
+        camera = null;
+        renderer = null;
+      }
+
+      function updateLoadingText() {
+        if (!loadingTextElement) return;
+
+        loadingTextElement.style.opacity = 0;
+        setTimeout(() => {
+          loadingTextElement.textContent = loadingTexts[currentTextIndex];
+          loadingTextElement.style.opacity = 1;
+          currentTextIndex = (currentTextIndex + 1) % loadingTexts.length;
+        }, 500);
+      }
+
+      function getSocialUrl(platform, handle) {
+        // Remove all @ symbols and spaces from handle
+        handle = handle.replace(/[@\s]/g, "");
+
+        switch (platform.toLowerCase()) {
+          case "linkedin":
+            return `https://linkedin.com/in/${handle}`;
+          case "twitter":
+          case "x":
+            return `https://twitter.com/${handle}`;
+          case "instagram":
+            return `https://instagram.com/${handle}`;
+          case "github":
+            return `https://github.com/${handle}`;
+          case "medium":
+            return `https://medium.com/@${handle}`;
+          case "tiktok":
+            return `https://tiktok.com/@${handle}`;
+          case "facebook":
+            return `https://facebook.com/${handle}`;
+          default:
+            return "#";
+        }
+      }
+
+      // Format number with K, M, B suffixes
+      function formatNumber(num) {
+        if (!num) return "";
+        if (num >= 1000000000) {
+          return (num / 1000000000).toFixed(1) + "B";
+        }
+        if (num >= 1000000) {
+          return (num / 1000000).toFixed(1) + "M";
+        }
+        if (num >= 1000) {
+          return (num / 1000).toFixed(1) + "K";
+        }
+        return num.toString();
+      }
+
+      // Initialize loader when the page loads
+      window.addEventListener("load", () => {
+        loadingTextElement = document.getElementById("loadingText");
+      });
+
+      // Update the search form event listener
+      document
+        .getElementById("searchForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const fullName = document.getElementById("fullName").value;
+          const handle = document.getElementById("handle").value;
+
+          const loadingDiv = document.getElementById("loading");
+          loadingDiv.style.display = "block";
+          document.getElementById("wikiContent").style.display = "none";
+
+          // Initialize Three.js animation immediately when loading starts
+          if (!scene) {
+            initLoader();
+          }
+
+          // Start the loading text animation
+          currentTextIndex = 0;
+          updateLoadingText();
+          const textInterval = setInterval(updateLoadingText, 3000);
+
+          try {
+            const response = await fetch("/search", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ full_name: fullName, handle: handle }),
+            });
+
+            const data = await response.json();
+            clearInterval(textInterval);
+            loadingDiv.style.display = "none";
+            cleanupLoader(); // Clean up the animation when loading is complete
+
+            // Update the page with the received data
+            document.getElementById("userName").textContent = fullName;
+
+            // Handle profile picture
+            const profilePicture = document.getElementById("profilePicture");
+            if (data.profile_picture_url) {
+              profilePicture.src = data.profile_picture_url;
+              profilePicture.style.display = "block";
+            } else {
+              profilePicture.style.display = "none";
+            }
+
+            // Render bio with markdown
+            document.getElementById("bio").innerHTML = marked.parse(data.bio);
+
+            document.getElementById("citizenship").textContent =
+              data.citizenship;
+            document.getElementById("birthYear").textContent = data.birth_year;
+            document.getElementById("currentLocation").textContent =
+              data.current_location;
+
+            // Update social profiles with icons
+            const socialProfilesDiv = document.getElementById("socialProfiles");
+            socialProfilesDiv.innerHTML = "";
+            data.social_profiles.forEach((profile) => {
+              if (!profile.handle) return; // Skip if handle is empty
+
+              const profileDiv = document.createElement("div");
+              profileDiv.className = "social-profile";
+
+              // Get platform icon class
+              let iconClass = "";
+              switch (profile.platform.toLowerCase()) {
+                case "linkedin":
+                  iconClass = "fab fa-linkedin linkedin-icon";
+                  break;
+                case "twitter":
+                case "x":
+                  iconClass = "fab fa-twitter twitter-icon";
+                  break;
+                case "instagram":
+                  iconClass = "fab fa-instagram instagram-icon";
+                  break;
+                case "github":
+                  iconClass = "fab fa-github github-icon";
+                  break;
+                case "medium":
+                  iconClass = "fab fa-medium medium-icon";
+                  break;
+                case "tiktok":
+                  iconClass = "fab fa-tiktok tiktok-icon";
+                  break;
+                case "facebook":
+                  iconClass = "fab fa-facebook facebook-icon";
+                  break;
+                default:
+                  iconClass = "fas fa-link";
+              }
+
+              const socialUrl = getSocialUrl(profile.platform, profile.handle);
+              const formattedFollowers = formatNumber(profile.followers);
+
+              profileDiv.innerHTML = `
+                <a href="${socialUrl}" target="_blank" class="block">
+                  <div class="flex items-center gap-3 p-3 bg-wiki-light rounded-lg hover:bg-gray-100 transition-all transform hover:-translate-y-1 hover:shadow-md">
+                    <i class="${iconClass} platform-icon text-2xl"></i>
+                    <div class="flex-1">
+                      <strong class="text-wiki-blue">${
+                        profile.platform
+                      }:</strong> 
+                      <span class="text-gray-700">
+                        ${profile.handle}
+                      </span>
+                      ${
+                        formattedFollowers
+                          ? `<span class="text-gray-500">(${formattedFollowers} followers)</span>`
+                          : ""
+                      }
+                    </div>
+                  </div>
+                </a>
+              `;
+              socialProfilesDiv.appendChild(profileDiv);
+            });
+
+            // Update timeline
+            const timelineDiv = document.getElementById("timeline");
+            timelineDiv.innerHTML = "";
+
+            // Check if timeline data exists
+            if (data.timeline && Array.isArray(data.timeline)) {
+              data.timeline.forEach((event) => {
+                const eventDiv = document.createElement("div");
+                eventDiv.className = "timeline-event";
+
+                eventDiv.innerHTML = `
+                  <div class="timeline-dot"></div>
+                  <div class="timeline-content">
+                    <div class="timeline-year">${event.year}</div>
+                    <div class="timeline-info">${event.information}</div>
+                  </div>
+                `;
+
+                timelineDiv.appendChild(eventDiv);
+              });
+            } else {
+              // Display a message if no timeline data is available
+              timelineDiv.innerHTML = `
+                <div class="timeline-event">
+                  <div class="timeline-dot"></div>
+                  <div class="timeline-content">
+                    <div class="timeline-info text-gray-500">No timeline information available</div>
+                  </div>
+                </div>
+              `;
+            }
+
+            document.getElementById("wikiContent").style.display = "block";
+          } catch (error) {
+            console.error("Error:", error);
+            clearInterval(textInterval);
+            loadingDiv.style.display = "none";
+          }
+        });
+
+      // Handle window resize
+      window.addEventListener("resize", () => {
+        if (camera && renderer) {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, 300);
+        }
+      });
+    </script>
+  </body>
+</html>
