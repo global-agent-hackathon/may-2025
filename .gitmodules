@@ -1,0 +1,6 @@
+[submodule "submissions/taskflow-backend"]
+	path = submissions/taskflow-backend
+	url = git@github.com:IMPHNEN/taskflow-backend.git
+[submodule "submissions/taskflow-frontend"]
+	path = submissions/taskflow-frontend
+	url = git@github.com:IMPHNEN/taskflow-frontend.git
