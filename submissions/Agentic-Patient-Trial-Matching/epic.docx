@@ -1,0 +1,68 @@
+Okay, here is a detailed user story for the clinician interacting with the front-end interface powered by the agentic Gen AI clinical trial matching workflow.
+User Story: Clinician Accesses AI-Suggested Clinical Trials for Patient
+ID: CTM-001
+Title: View AI-Generated Clinical Trial Matches for a Specific Patient
+As a: Clinician (e.g., Oncologist, Primary Care Physician, Research Nurse)
+I want to: Initiate an automated search within my patient's record or a connected dashboard, and view a clear, concise list of potentially suitable, actively recruiting clinical trials identified by an AI agentic system
+So that I can:
+Efficiently identify relevant clinical trial opportunities for my patient without extensive manual searching.
+Quickly understand why specific trials are suggested based on key patient data points and trial criteria.
+Easily access further details about promising trials (e.g., full protocol, contact info).
+Save significant time and effort compared to manual review of EHRs and trial databases.
+Facilitate timely and informed discussions with my patient about potential participation in research.
+Increase the likelihood of connecting eligible patients with beneficial trial opportunities.
+Acceptance Criteria:
+Initiation:
+Given I am viewing a specific patient's chart/dashboard in the system,
+When I click a dedicated "Find Clinical Trials" button or trigger the function,
+Then the system should initiate an asynchronous request to the backend Python/Langchain service, passing necessary (anonymized or permissioned) patient identifiers or relevant clinical data summary.
+Processing Indication (React):
+Given the request has been sent,
+While the backend agents are processing (fetching data, querying databases, analyzing protocols, matching criteria via Langchain),
+Then the React frontend should display a clear loading indicator (e.g., spinner, "Searching for trials...") to inform me that the process is running.
+Successful Results Display (React):
+Given the backend successfully identifies potential trial matches,
+When the processing completes,
+Then the React component should display a ranked or sorted list of potential clinical trials.
+And each trial listed must clearly show:
+Trial Identifier (e.g., NCT number) & Title.
+Current Recruitment Status (must indicate "Recruiting").
+Study Phase.
+Brief Summary/Condition(s) Treated.
+Location(s) (relevant to patient/configured search radius).
+Key reasons for the match (e.g., "Matches diagnosis: Stage III NSCLC", "Meets age criteria", "Acceptable prior treatment history").
+Any potential flags or uncertainties identified by the AI (e.g., "Requires confirmation of specific lab value date", "Potential exclusion based on ambiguous note").
+A clear, clickable link to the full trial details (e.g., ClinicalTrials.gov page or internal protocol document).
+Contact information for the trial site/coordinator, if available.
+No Results Found (React):
+Given the backend processing completes but no suitable, actively recruiting trials are found matching the criteria,
+When the processing completes,
+Then the React component should display a clear message indicating that no matching trials were found (e.g., "No suitable recruiting trials found based on current criteria.").
+Error Handling (React):
+Given an error occurs during the backend processing (e.g., API timeout, data access issue, Langchain agent failure),
+When the frontend receives an error status from the API,
+Then the React component should display a user-friendly error message (e.g., "Could not complete trial search at this time. Please try again later or contact support.") without exposing technical details.
+Responsiveness & Performance:
+Given the results are displayed,
+Then the UI should be responsive and render clearly on standard clinic workstations/devices.
+And the results should ideally be returned within an acceptable timeframe (e.g., under 30-60 seconds, acknowledging the complexity of backend processing).
+Data Privacy:
+Given the feature involves patient data and trial information,
+Then all data handling, transmission (between React frontend and Python backend), and processing must adhere strictly to HIPAA regulations and institutional data privacy policies.
+Technical Notes/Implementation Considerations:
+Frontend (React):
+A dedicated React component (e.g., <ClinicalTrialMatcher />) will manage the state (idle, loading, success, error).
+Use axios or fetch for asynchronous API calls to the backend.
+Consider using a state management library (like Redux Toolkit, Zustand, or Context API) if the component's state becomes complex or needs sharing.
+Utilize a UI component library (like Material UI, Ant Design) for consistent styling and pre-built elements (lists, cards, spinners, links, messages).
+Implement clear visual cues for matched criteria and potential flags.
+Backend (Python/Langchain):
+An API endpoint (e.g., using FastAPI or Flask) will receive the request from the React frontend.
+This endpoint orchestrates the Langchain agents:
+Agent 1: Securely fetches/receives relevant patient data.
+Agent 2: Queries trial databases (e.g., ClinicalTrials.gov API, internal DBs).
+Agent 3: Uses Langchain's capabilities (LLMs, document loaders, chains, potentially vector stores for criteria embedding) to parse protocols and perform the complex matching logic against patient data.
+Return a structured JSON response containing the list of trials, match reasons, flags, links, etc., or appropriate status/error codes.
+Ensure robust error handling and logging.
+Implement caching strategies where appropriate (e.g., for trial protocol data).
+API Contract: Define a clear API contract between the React frontend and the Python backend specifying request parameters and expected response formats for success, no results, and error states.

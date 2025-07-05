@@ -1,0 +1,20 @@
+/* frontend/src/index.css */
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* Ensures padding and border don't add to the width/height */
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+#root {
+  width: 100%;
+  min-height: 100%; /* Use min-height to allow content to grow taller */
+  display: flex; /* Make #root a flex container */
+  flex-direction: column; /* Its direct child (App's root Box) will stack vertically */
+}
