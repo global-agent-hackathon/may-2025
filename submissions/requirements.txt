@@ -1,0 +1,12 @@
+agno
+groq
+sqlalchemy
+google-genai
+crawl4ai
+pyaudio
+keyboard
+uiautomation
+pyautogui
+PyQt6
+pypdf
+chromadb
