@@ -1,0 +1,19 @@
+gcloud run deploy slack-bot \
+        --image europe-west1-docker.pkg.dev/agno-agents/slackbot-container-repo/slack-bot:latest       \
+        --service-account=cloud-run-sa@agno-agents.iam.gserviceaccount.com \
+        --region europe-west1 \
+        --memory=4G \
+        --cpu=2 \
+        --update-secrets=OPENAI_API_KEY=OPENAI_API_KEY:1 \
+        --update-secrets=QDRANT_API_KEY=QDRANT_API_KEY:1 \
+        --update-secrets=QDRANT_URL=QDRANT_URL:1 \
+        --update-secrets=TRELLO_API_KEY=TRELLO_API_KEY:1 \
+        --update-secrets=TRELLO_API_SECRET=TRELLO_API_SECRET:1 \
+        --update-secrets=TRELLO_TOKEN=TRELLO_TOKEN:1 \
+        --update-secrets=SLACK_TOKEN=SLACK_TOKEN:1 \
+        --update-secrets=SLACK_BOT_USER_ID=SLACK_BOT_USER_ID:1 \
+        --update-secrets=SLACK_SIGNING_SECRET=SLACK_SIGNING_SECRET:1 \
+        --set-env-vars QDRANT_COLLECTION_NAME=meetings-hackathon \
+        --set-env-vars BUCKET_NAME=team-meeting-hackathon \
+        --allow-unauthenticated  \
+        --platform managed

@@ -1,0 +1,31 @@
+[project]
+name = "agno-agent"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "agno>=1.4.5",
+    "fastapi>=0.115.12",
+    "functions-framework>=3.8.2",
+    "google-cloud-storage>=3.1.0",
+    "google-api-python-client>=2.169.0",
+    "google-auth-httplib2>=0.2.0",
+    "google-auth-oauthlib>=1.2.2",
+    "gunicorn>=23.0.0",
+    "openai>=1.78.0",
+    "py-trello>=0.20.1",
+    "pydantic-settings>=2.9.1",
+    "pypdf>=5.4.0",
+    "python-docx>=1.1.2",
+    "qdrant-client>=1.14.2",
+    "slack-bolt>=1.23.0",
+    "slack-sdk>=3.35.0",
+    "uvicorn>=0.34.2",
+]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.29.5",
+    "pre-commit>=4.2.0",
+]

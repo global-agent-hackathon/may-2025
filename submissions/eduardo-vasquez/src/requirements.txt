@@ -1,0 +1,15 @@
+functions-framework==3.8.2
+google-auth==2.38.0
+google-cloud-storage==3.1.0
+python-docx==1.1.2
+qdrant-client==1.14.2
+openai==1.78.0
+pydantic-settings==2.9.1
+agno==1.4.5
+py-trello==0.20.1
+pypdf==5.4.0
+google-api-python-client>=2.169.0
+google-auth-httplib2>=0.2.0
+google-auth-oauthlib>=1.2.2
+slack-bolt>=1.23.0
+slack-sdk>=3.35.0
