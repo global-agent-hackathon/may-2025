@@ -1,0 +1,10 @@
+streamlit
+agno
+browser-use
+linkedin-api
+langchain-community
+langchain-core
+langchain
+fitz
+langchain-aws
+dotenv

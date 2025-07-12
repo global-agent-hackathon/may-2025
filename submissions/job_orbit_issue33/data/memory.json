@@ -1,0 +1,56 @@
+{
+  "job_searches": [
+    {
+      "timestamp": "2025-05-30T22:54:18.545680",
+      "keywords": "Software Engineer",
+      "companies": [],
+      "location": "India",
+      "jobs_count": 1
+    }
+  ],
+  "jobs_found": [
+    {
+      "job_id": "4237617893",
+      "title": "ServiceNow Lead Developer SPM (Japanese & English Speaking) - 100% remote - Freelance",
+      "company": "ConSol Partners",
+      "location": "APAC",
+      "description": "ServiceNow Lead Developer SPM with proficiency in Japanese & EnglishWorking hours: Japan Standard Time (JST)Work Setting: 100% RemoteType of contract: Freelance, initial contract until the end of 2025 + extensions afterDaily Rate: 180 \u20ac\nOverview: We are seeking a ServiceNow Lead Developer to take ownership of the implementation and continuous enhancement of Strategic Portfolio Management (SPM), Application Portfolio Management (APM), and the Common Service Data Model (CSDM), along with their related applications and system integrations.\nKey Responsibilities:Lead and coordinate technical solution design, development, unit testing, and production deployment for SPM, APM, and CSDM.Ensure solutions are aligned with business process design, functional requirements, and ServiceNow best practices.Work directly with stakeholders to clarify business requirements and implement necessary system configurations and development changes.Collaborate with cross-functional teams to identify, prioritize, and implement integration requirements with other systems.Provide accurate time and effort estimates for tasks and proactively communicate progress or changes.Deliver technical support for issue resolution, including UAT and post-Go-Live support, and assist with data maintenance.Ensure all required system documentation is completed and delivered before Go-Live.Support user training preparation and delivery as required.Update and manage assigned tasks in a timely manner, ensuring resolution within agreed SLAs and release schedules.\nExperience and Skills Required:Languages:Fluency in both written and spoken Japanese and English is required.\nExperience:6+ years of hands-on experience with ServiceNow, including:At least 5 years in SPM development and supportExperience in leading projects and managing small teamsExperience in de-customizing ServiceNow instances is a plus\nTechnical Skills:Expert-level ServiceNow development skillsStrong understanding of key IT processes; knowledge of ITIL or similar frameworksExperience working in Agile development environmentsDeep knowledge of ServiceNow platform architecture, including awareness of the latest capabilities and trendsStrong technical writing and documentation skills\nSoft Skills:Ability to independently lead meetings and customer discussionsExcellent interpersonal and communication skillsStrong sense of ownership, responsibility, and initiativeAbility to deliver work on time and manage issues or risks effectively\nEducation & Certifications:Bachelor\u2019s Degree in Information Technology or a closely related fieldServiceNow certifications are highly desirable",
+      "easy_apply": true,
+      "url": "https://www.linkedin.com/jobs/view/4237617893",
+      "posted_date": "2025-05-30T22:54:18.041471",
+      "company_apply_url": null
+    }
+  ],
+  "resume_customizations": [
+    {
+      "base_resume_path": "./data/base_resume.pdf",
+      "output_path": "./data/customized_resumes/resume_4237617893_ConSol Partners_ServiceNow Lead Developer SPM Japanese  English Speaking.pdf",
+      "filename": "resume_4237617893_ConSol Partners_ServiceNow Lead Developer SPM Japanese  English Speaking.pdf",
+      "job_title": "",
+      "company": "",
+      "customization_level": "moderate",
+      "job_description_preview": "ServiceNow Lead Developer SPM with proficiency in Japanese & EnglishWorking hours: Japan Standard Time (JST)Work Setting: 100% RemoteType of contract: Freelance, initial contract until the end of 2025...",
+      "timestamp": "2025-05-30T22:55:29.952966",
+      "file_size": 42890,
+      "model_provider": "aws"
+    },
+    {
+      "job_id": "4237617893",
+      "job_title": "ServiceNow Lead Developer SPM (Japanese & English Speaking)",
+      "company": "ConSol Partners",
+      "file_path": "./data/customized_resumes/resume_4237617893_ConSol Partners_ServiceNow Lead Developer SPM Japanese  English Speaking.pdf",
+      "timestamp": "2025-05-30T22:59:43.452329",
+      "filename": "resume_4237617893_ConSol Partners_ServiceNow Lead Developer SPM Japanese  English Speaking.pdf"
+    }
+  ],
+  "referral_contacts": [],
+  "referral_requests": [
+    {
+      "company": "ConSol Partners",
+      "job_title": "ServiceNow Lead Developer SPM (Japanese & English Speaking) - 100% remote - Freelance",
+      "request_date": "2025-05-30T23:44:35.893886",
+      "status": "success",
+      "method": "browser_automation"
+    }
+  ]
+}
