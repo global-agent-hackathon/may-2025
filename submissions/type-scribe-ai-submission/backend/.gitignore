@@ -1,0 +1,7 @@
+.env
+# Dockerfile 
+#temp dockerfile
+
+*.pyc
+V2ipynb_to_py_converter.py
+project_structure.txt

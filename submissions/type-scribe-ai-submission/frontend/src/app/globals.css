@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add any custom global styles here */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #1a202c; /* A dark background similar to the console output */
+  color: #e2e8f0; /* Light text color */
+}
+
+/* Basic styling for error messages */
+.error-message {
+  color: #c53030; /* Red for errors */
+  background-color: #fed7d7; /* Light red background */
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  margin-bottom: 1rem;
+}
+
+/* Basic styling for success messages */
+.success-message {
+  color: #2f855a; /* Green for success */
+  background-color: #c6f6d5; /* Light green background */
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  margin-bottom: 1rem;
+}
