@@ -1,0 +1,64 @@
+/* Use Inter for a professional corporate font */
+@import url('https://fonts.googleapis.com/css?family=Inter:400,500,700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body { font-family: 'Inter', system-ui, sans-serif; }
+
+/* Custom Animations */
+@keyframes fadeInSlow {
+  0% { opacity: 0; transform: translateY(30px); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(35px); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes fadeInDown {
+  0% { opacity: 0; transform: translateY(-30px); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes bounceSlow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-32px); }
+}
+@keyframes pulseSlow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+@keyframes spinSlow {
+  100% { transform: rotate(360deg); }
+}
+@keyframes confettiFade {
+  0% { opacity: 0.2; }
+  50% { opacity: 1; }
+  100% { opacity: 0.2; }
+}
+
+.animate-fadeInSlow { animation: fadeInSlow 1.2s ease-out both; }
+.animate-fadeInUp { animation: fadeInUp 1.1s cubic-bezier(.16,.92,.43,1.29) both; }
+.animate-fadeInDown { animation: fadeInDown 0.9s cubic-bezier(.16,.92,.43,1.29) both; }
+.animate-bounceSlow { animation: bounceSlow 3.5s infinite cubic-bezier(.6,0,.6,1); }
+.animate-pulseSlow { animation: pulseSlow 2.7s infinite alternate; }
+.animate-spinSlow { animation: spinSlow 13s linear infinite; }
+.animate-confettiFade { animation: confettiFade 6s infinite; }
+.animate-fadeIn { animation: fadeInSlow 2.2s; }
+
+.fancy-underline {
+  position: relative;
+}
+.fancy-underline::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 6px;
+  left: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, #f9a8d4, #fcd34d, #93c5fd);
+  border-radius: 99px;
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: -1;
+}

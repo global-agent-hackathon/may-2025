@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vilcos AI Website Builder & Manager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <script type="module" src="./src/main.js"></script>
+  <style>
+    .subtle-glow {
+      background-image: radial-gradient(circle at 50% 0%, rgba(40, 40, 40, 0.3) 0%, rgba(20, 20, 20, 0) 60%);
+    }
+  </style>
+</head>
+<body class="bg-neutral-950 text-white font-sans min-h-screen flex flex-col">
+  <!-- Header/Navbar -->
+  <header class="w-full border-b border-neutral-800 bg-neutral-950/80 backdrop-blur sticky top-0 z-50 subtle-glow">
+    <nav class="container max-w-7xl mx-auto flex items-center h-16 px-4 justify-between">
+      <a href="#" class="flex items-center text-white space-x-2">
+        <!-- Simple, elegant SVG V logo -->
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 7L16 25L26 7" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="text-xl font-bold tracking-tight hidden sm:inline-block">Vilcos</span>
+      </a>
+      <div class="flex gap-5 text-sm font-medium">
+        <a href="https://github.com/level09/vilcos" target="_blank" rel="noopener" class="hover:text-neutral-400 transition flex items-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github mr-1"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+          GitHub
+        </a>
+        <a href="#about" class="hover:text-neutral-400 transition">About</a>
+        <a href="#features" class="hover:text-neutral-400 transition">Features</a>
+        <a href="#how-it-works" class="hover:text-neutral-400 transition">How It Works</a>
+        <a href="#contact" class="hover:text-neutral-400 transition">Contact</a>
+      </div>
+    </nav>
+  </header>
+  <main class="flex-1">
+    <section class="container max-w-7xl mx-auto pt-24 pb-10 px-4 text-center subtle-glow">
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
+        Build Smarter. <br class="hidden sm:block">Manage Easier.<br>
+        <span class="text-neutral-300 text-3xl md:text-4xl block mt-3">AI-powered Website Creation & Management</span>
+      </h1>
+      <p class="text-lg md:text-xl text-neutral-300 max-w-2xl mx-auto mb-8 font-normal">
+        Vilcos gives your website its own dedicated, self-hosted AI developer. Chat with it to build, update, and manage your entire web presence with natural language commands—no code required.
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4 mt-7">
+        <a href="#features" class="inline-block rounded-lg bg-white text-neutral-950 font-semibold px-8 py-3 text-base shadow hover:bg-neutral-200 transition">Explore Features</a>
+        <a href="#contact" class="inline-block rounded-lg border border-white px-8 py-3 text-white font-semibold hover:bg-neutral-900/80 transition">Request Early Access</a>
+      </div>
+    </section>
+    <!-- About -->
+    <section id="about" class="container max-w-6xl mx-auto px-4 py-16 border-b border-neutral-900">
+      <div class="grid md:grid-cols-2 gap-10 items-center">
+        <div>
+          <h2 class="text-2xl font-bold mb-4">What is Vilcos AI?</h2>
+          <p class="text-neutral-300 mb-4 text-lg leading-relaxed">
+            Vilcos AI is your self-hosted website builder and manager with its own dedicated AI agent that understands your requests and applies changes directly to your project files.
+          </p>
+          <ul class="text-neutral-400 text-base space-y-2">
+            <li>• Create & build pages through natural language</li>
+            <li>• Edit & update content with conversational AI</li>
+            <li>• Live preview changes in real-time</li>
+            <li>• Generate optimized static sites for production</li>
+          </ul>
+        </div>
+        <div class="flex justify-center md:justify-end">
+          <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80" alt="AI website builder interface" class="rounded-2xl shadow-2xl border-4 border-cyan-400/20 bg-neutral-950/70 w-full max-w-lg md:max-w-xl xl:max-w-2xl transition-transform duration-500 hover:scale-105">
+        </div>
+      </div>
+    </section>
+    <!-- Features -->
+    <section id="features" class="container max-w-6xl mx-auto px-4 py-20">
+      <h2 class="text-2xl font-bold mb-10 text-center">AI Website Builder & Manager Features</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-7">
+        <div class="bg-neutral-900 border border-neutral-800 rounded-xl p-7 text-left hover:shadow-md transition shadow-sm">
+          <h3 class="font-semibold text-lg mb-2">Conversational Website Building</h3>
+          <p class="text-neutral-400">Chat with your AI agent to create, edit, and manage your entire website through natural language.</p>
+        </div>
+        <div class="bg-neutral-900 border border-neutral-800 rounded-xl p-7 text-left hover:shadow-md transition shadow-sm">
+          <h3 class="font-semibold text-lg mb-2">Live Preview & File Watching</h3>
+          <p class="text-neutral-400">See changes in real-time with automatic synchronization for instant development feedback.</p>
+        </div>
+        <div class="bg-neutral-900 border border-neutral-800 rounded-xl p-7 text-left hover:shadow-md transition shadow-sm">
+          <h3 class="font-semibold text-lg mb-2">Static Publishing</h3>
+          <p class="text-neutral-400">Generate optimized static sites ready for production and deploy anywhere with Docker support.</p>
+        </div>
+        <div class="bg-neutral-900 border border-neutral-800 rounded-xl p-7 text-left hover:shadow-md transition shadow-sm">
+          <h3 class="font-semibold text-lg mb-2">Self-Hosted Control</h3>
+          <p class="text-neutral-400">You own and control the core AI agent framework, ensuring privacy and customization potential.</p>
+        </div>
+      </div>
+    </section>
+    <!-- How It Works -->
+    <section id="how-it-works" class="container max-w-6xl mx-auto px-4 py-20 border-t border-neutral-900">
+      <h2 class="text-2xl font-bold mb-10 text-center">How It Works</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div class="flex flex-col items-center">
+          <div class="w-14 h-14 flex items-center justify-center bg-white/10 border border-neutral-800 rounded-full mb-4">
+            <span class="text-2xl font-bold text-white">1</span>
+          </div>
+          <h3 class="font-semibold mb-2">Chat & Create</h3>
+          <p class="text-neutral-400 text-center">Tell your AI agent what you want—"Create a contact page with a form"—and watch it build exactly what you need.</p>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="w-14 h-14 flex items-center justify-center bg-white/10 border border-neutral-800 rounded-full mb-4">
+            <span class="text-2xl font-bold text-white">2</span>
+          </div>
+          <h3 class="font-semibold mb-2">Preview & Refine</h3>
+          <p class="text-neutral-400 text-center">See changes instantly in the live preview and continue refining with natural language requests.</p>
+        </div>
+        <div class="flex flex-col items-center">
+          <div class="w-14 h-14 flex items-center justify-center bg-white/10 border border-neutral-800 rounded-full mb-4">
+            <span class="text-2xl font-bold text-white">3</span>
+          </div>
+          <h3 class="font-semibold mb-2">Publish & Deploy</h3>
+          <p class="text-neutral-400 text-center">Generate optimized static files and deploy to any hosting provider or with the built-in Docker support.</p>
+        </div>
+      </div>
+    </section>
+    <!-- Contact CTA -->
+    <section id="contact" class="container max-w-4xl mx-auto px-4 py-20 text-center">
+      <h2 class="text-2xl font-bold mb-4">Ready to transform your website experience?</h2>
+      <p class="text-neutral-300 max-w-xl mx-auto mb-8">Join the Vilcos community and contribute your ideas to help shape the future of AI-powered website management.</p>
+      <a href="https://github.com/level09/vilcos/discussions/categories/ideas" class="inline-block bg-white text-neutral-950 font-semibold px-10 py-4 rounded-lg hover:bg-neutral-200 transition">Share Your Ideas</a>
+    </section>
+  </main>
+  <footer class="w-full border-t border-neutral-900 bg-neutral-950 py-5 text-center mt-10">
+    <span class="text-neutral-500 text-sm">&copy; 2025 Vilcos AI. All rights reserved.</span>
+  </footer>
+</body>
+</html>

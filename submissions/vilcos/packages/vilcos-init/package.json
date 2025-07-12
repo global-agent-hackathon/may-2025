@@ -1,0 +1,32 @@
+{
+  "name": "create-vilcos-app",
+  "version": "0.1.0",
+  "description": "Initialize a new Vilcos website builder project",
+  "main": "index.js",
+  "bin": {
+    "create-vilcos-app": "bin/vilcos-init.js"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "files": [
+    "bin"
+  ],
+  "keywords": [
+    "vilcos",
+    "ai",
+    "website-builder",
+    "template-manager",
+    "generator"
+  ],
+  "author": "level09",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/level09/vilcos/issues"
+  },
+  "homepage": "https://github.com/level09/vilcos#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/level09/vilcos.git"
+  }
+} 

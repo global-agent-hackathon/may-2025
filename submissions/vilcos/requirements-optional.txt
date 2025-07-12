@@ -1,0 +1,10 @@
+# Optional Enhanced Features for Vilcos
+# Install with: pip install -r requirements-optional.txt
+
+# 🧠 Persistent Memory with Mem0
+# Remembers user preferences and project history across sessions
+mem0ai>=0.1.0
+
+# 🌐 Web Research with Firecrawl
+# Analyze websites for design inspiration and content ideas
+firecrawl-py>=0.0.5

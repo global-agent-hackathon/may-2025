@@ -1,0 +1,45 @@
+:80 {
+  root * /srv
+  file_server
+
+  # Set content types properly based on extensions
+  @js {
+    path *.js
+  }
+  header @js Content-Type "application/javascript"
+  
+  @css {
+    path *.css
+  }
+  header @css Content-Type "text/css"
+  
+  @html {
+    path *.html
+  }
+  header @html Content-Type "text/html; charset=utf-8"
+  
+  # Try index.html for path fallback
+  try_files {path} /index.html
+  
+  # Enable compression
+  encode gzip zstd
+  
+  # Security headers
+  header {
+    # Enable strict transport security
+    Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    # Enable cross-site filter protection
+    X-XSS-Protection "1; mode=block"
+    # Prevent MIME sniffing - disabled to help with debugging
+    # X-Content-Type-Options "nosniff"
+    # Restrict embedding
+    X-Frame-Options "SAMEORIGIN"
+  }
+  
+  # Log requests for debugging
+  log {
+    output stdout
+    format console
+    level info
+  }
+} 

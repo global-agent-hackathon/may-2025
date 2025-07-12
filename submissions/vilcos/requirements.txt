@@ -1,0 +1,13 @@
+chainlit>=2.5.5
+python-dotenv>=1.1.0
+agno>=1.4.5
+openai>=1.77.0
+pydantic>=2.11.4
+langchain
+langchain-openai
+langchain-community
+chromadb
+beautifulsoup4
+unstructured
+fastapi
+uvicorn
