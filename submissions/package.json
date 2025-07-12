@@ -1,0 +1,12 @@
+{
+    "name": "cron-worker",
+    "version": "1.0.0",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "dependencies": {
+        "dotenv": "^16.5.0",
+        "node-cron": "^3.0.3",
+        "node-fetch": "^3.3.2"
+    }
+}
