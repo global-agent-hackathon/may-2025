@@ -1,0 +1,22 @@
+hooks:
+  beforeEach:
+    Go to https://www.saucedemo.com/v1/. Login with username and password. Verify successful signin or not, it will redirect to https://www.saucedemo.com/inventory.html on successful signin.
+  afterEach:
+    Click on menu button on top left. Click on 'Logout'. Verify successful logout or not, it will redirect to https://www.saucedemo.com/v1/index.html on successful logout.
+
+tests:
+  - name: Sort by Name (A to Z)
+    id: 'tc_1'
+    instructions: Go to https://www.saucedemo.com/v1/inventory.html. On the inventory page, select the sorting option "Name (A to Z)". Verify that all items are displayed in ascending alphabetical order by their product names. 
+
+  - name: Sort by Name (Z to A)
+    id: 'tc_2'
+    instructions: Go to https://www.saucedemo.com/v1/inventory.html. On the inventory page, select the sorting option "Name (Z to A)". Verify that all items are displayed in descending alphabetical order by their product names. 
+
+  - name: Sort by Price (Low to High)
+    id: 'tc_3'
+    instructions: Go to https://www.saucedemo.com/v1/inventory.html. On the inventory page, select the sorting option "Price (low to high)". Verify that all items are displayed in ascending order based on their prices.
+
+  - name: Sort by Price (High to Low)
+    id: 'tc_4'
+    instructions: Go to https://www.saucedemo.com/v1/inventory.html. On the inventory page, select the sorting option "Price (high to low)". Verify that all items are displayed in descending order based on their prices.

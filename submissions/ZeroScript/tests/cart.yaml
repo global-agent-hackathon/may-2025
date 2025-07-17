@@ -1,0 +1,14 @@
+hooks:
+  beforeEach:
+    Go to https://www.saucedemo.com/v1/. Login with username and password. Verify successful signin or not, it will redirect to https://www.saucedemo.com/inventory.html on successful signin.
+  afterEach:
+    Click on menu button on top left. Click on 'Logout'. Verify successful logout or not, it will redirect to https://www.saucedemo.com/v1/index.html on successful logout.
+
+tests:
+  - name: Add Items to Cart
+    id: 'tc_1'
+    instructions: Go to https://www.saucedemo.com/v1/inventory.html. On the inventory page, add 'Sauce Labs Backpack', 'Sauce Labs Onesie', and 'Sauce Labs Fleece Jacket' to the cart. Navigate to the cart and verify that all selected items are present.
+
+  - name: Remove Item from Cart
+    id: 'tc_2'
+    instructions: Go to https://www.saucedemo.com/v1/inventory.html. On the inventory page, add 'Sauce Labs Bike Light' and 'Sauce Labs Bolt T-Shirt' to the cart. Go to the cart, remove 'Sauce Labs Bike Light', and verify only 'Sauce Labs Bolt T-Shirt' remains.
