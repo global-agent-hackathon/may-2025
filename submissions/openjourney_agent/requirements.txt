@@ -1,0 +1,9 @@
+fastapi
+agno
+pgvector
+pypdf
+psycopg[binary]
+sqlalchemy
+uvicorn
+python-dotenv
+requests
