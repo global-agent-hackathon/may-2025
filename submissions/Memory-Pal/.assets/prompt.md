@@ -1,0 +1,1 @@
+Based on our pitch_deck.pdf and financials.pdf, what are the major risks an investor might flag?
