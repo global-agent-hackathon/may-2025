@@ -1,0 +1,9 @@
+pipecat-ai[cartesia,openai,silero,deepgram]
+fastapi
+python-dotenv
+loguru
+aioboto3
+agno=1.5.1
+pymongo
+twilio
+modal
