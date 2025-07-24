@@ -1,0 +1,9 @@
+agno
+browser-use
+google-genai
+numpy
+streamlit
+langchain-google-genai
+langchain-openai
+langchain-anthropic
+langchain-groq
