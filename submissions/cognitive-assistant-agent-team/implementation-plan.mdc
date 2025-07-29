@@ -1,0 +1,17 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Implementation Plan
+
+## 1. Enhance Mental Model Coverage in Agents
+
+- **Goal:** Ensure all 100 mental models from `data.md` are assigned to relevant specialist agents, either existing or new.
+- **Tasks:**
+    - Assign 28 unassigned models to existing agents based on proposed mapping.
+    - Create a new `MotivationHumanFactorsAgent` for models #15, #33, #89, #94.
+    - Update prompts in existing agent files.
+    - Create the new agent file (`motivation_human_factors.py`).
+    - Update `README.md` with the new agent and structure.
+- **Status:** Pending
