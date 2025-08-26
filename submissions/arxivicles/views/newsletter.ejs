@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arxivicles</title>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body class="bg-base-200 min-h-screen flex flex-col">
+  <main class="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 flex-grow">
+    <div class="max-w-4xl mx-auto space-y-6 sm:space-y-8 lg:space-y-10">
+      <!-- Flash Message -->
+      <% if (typeof message !== 'undefined' && message) { %>
+        <div class="alert <%= messageType === 'success' ? 'alert-success' : 'alert-error' %> shadow-lg">
+          <span><%= message %></span>
+        </div>
+      <% } %>
+
+      <!-- Header -->
+      <div class="text-center px-4">
+        <h1 class="text-4xl sm:text-5xl font-bold text-primary mb-2">Arxivicles</h1>
+        <p class="text-base sm:text-lg text-gray-600 mb-2">Your Daily Research Papers Newsletter</p>
+        <p class="italic text-xs sm:text-sm text-gray-500">Last updated: <%= lastUpdated %></p>
+        <a href="/?refresh=true" class="btn btn-success mt-4">
+          <i class="fas fa-sync-alt mr-2"></i> Refresh Papers
+        </a>
+      </div>
+
+      <!-- Papers List -->
+      <section class="space-y-4 sm:space-y-6">
+        <% papers.forEach((paper, index) => { %>
+          <div class="card bg-base-100 shadow-md hover:shadow-xl transition">
+            <div class="card-body p-4 sm:p-6">
+              <h2 class="card-title text-lg sm:text-xl text-primary break-words">
+                <%= index + 1 %>. <%= paper.title.replace(/[<>]/g, '') %>
+              </h2>
+              <div class="prose max-w-none mt-2 text-sm sm:text-base">
+                <%= paper.summary %>
+              </div>
+              <div class="mt-4">
+                <a href="<%= paper.url %>" target="_blank" class="btn btn-primary btn-sm sm:btn-md">
+                  <i class="fas fa-external-link-alt mr-2"></i> Read Paper
+                </a>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+      </section>
+
+      <!-- Subscribe / Unsubscribe -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+        <!-- Subscribe -->
+        <div class="card bg-base-100 shadow-md">
+          <div class="card-body p-4 sm:p-6">
+            <h3 class="card-title text-primary text-lg sm:text-xl">Subscribe</h3>
+            <form action="/subscribe" method="POST" class="form-control space-y-3 sm:space-y-4 mt-2">
+              <input 
+                type="email" 
+                name="email" 
+                placeholder="Enter your email" 
+                required 
+                class="input input-bordered w-full text-sm sm:text-base" 
+              />
+              <button type="submit" class="btn btn-primary w-full bg-black text-white py-2 px-4 text-sm sm:text-base">
+                <i class="fas fa-paper-plane mr-2"></i> Subscribe
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Unsubscribe -->
+        <div class="card bg-base-100 shadow-md">
+          <div class="card-body p-4 sm:p-6">
+            <h3 class="card-title text-error text-lg sm:text-xl">Unsubscribe</h3>
+            <form action="/unsubscribe" method="POST" class="form-control space-y-3 sm:space-y-4 mt-2">
+              <input 
+                type="email" 
+                name="email" 
+                placeholder="Enter your email" 
+                required 
+                class="input input-bordered w-full text-sm sm:text-base" 
+              />
+              <button type="submit" class="btn btn-error w-full text-white py-2 px-4 text-sm sm:text-base">
+                <i class="fas fa-user-slash mr-2"></i> Unsubscribe
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- Admin Panel -->
+      <section>
+        <div class="card bg-base-100 shadow-md">
+          <div class="card-body p-4 sm:p-6">
+            <h3 class="card-title text-secondary text-lg sm:text-xl">Admin Panel</h3>
+            <form action="/send-newsletter" method="POST" class="mt-4">
+              <button type="submit" class="btn btn-secondary w-full text-sm sm:text-base">
+                <i class="fas fa-envelope mr-2"></i> Send Newsletter to All Subscribers
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer footer-center p-6 sm:p-10 bg-base-300 text-base-content">
+    <div class="grid grid-flow-col gap-4 sm:gap-6">
+      <a href="https://github.com/yourusername/arxivicles" target="_blank" class="link link-hover">
+        <i class="fab fa-github text-xl sm:text-2xl"></i>
+      </a>
+      <a href="https://linkedin.com/in/yourusername" target="_blank" class="link link-hover">
+        <i class="fab fa-linkedin text-xl sm:text-2xl"></i>
+      </a>
+    </div>
+    <div>
+      <p class="text-sm sm:text-base">&copy; <%= new Date().getFullYear() %> Arxivicles — All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>
