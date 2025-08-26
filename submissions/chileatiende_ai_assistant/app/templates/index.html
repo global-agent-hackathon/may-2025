@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asistente ChileAtiende</title>
+    <!-- La ruta a style.css debe ser relativa a la carpeta 'static' -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- marked.js para renderizar Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- DOMPurify para sanitizar HTML -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.3/dist/purify.min.js"></script>
+</head>
+<body>
+    <main class="chat-container">
+        <header class="chat-header">
+            <img src="{{ url_for('static', filename='images/logo_chileatiende.png') }}" alt="Logo de ChileAtiende" id="header-logo">
+            <h1>Asistente ChileAtiende</h1>
+        </header>
+        <div id="chat-window" class="chat-window" role="log" aria-live="polite">
+            <article class="chat-message bot">
+                <div class="message">
+                    ¡Hola! Soy Tomas, su asistente de ChileAtiende. ¿Con quién tengo el gusto de hablar?
+                </div>
+                <button class="audio-button" aria-label="Reproducir mensaje en voz alta">
+                    <svg class="speaker-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                        <path class="sound-waves" d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    </svg>
+                </button>
+            </article>
+        </div>
+        <div id="loading-indicator" class="loading-indicator" style="display: none;">
+            <div class="loading-content-wrapper">
+                <div class="spinner"></div>
+                <p>Estoy escribiendo su respuesta, por favor espere...</p>
+            </div>
+        </div>
+        <footer class="input-container">
+            <textarea id="user-input" placeholder="Escribe tu pregunta aquí..." aria-label="Escribe tu pregunta aquí" rows="1"></textarea>
+            <button id="send-btn" aria-label="Enviar pregunta">Enviar</button>
+        </footer>
+    </main>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html> 

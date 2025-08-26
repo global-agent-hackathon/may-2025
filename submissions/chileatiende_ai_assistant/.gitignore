@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+ENV/
+
+# Environment variables
+.env
+
+# Databases - comment if you want to version control the dev database
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+
+# IDE / Editor specific
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Testing & Coverage
+.coverage
+coverage.xml # If you generate XML reports
+htmlcov/
+.pytest_cache/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+build/
+dist/
+*.egg-info/ 
