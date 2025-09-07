@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVE PoC Query Tool</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 800px;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            display: flex;
+            margin-bottom: 30px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        button {
+            padding: 12px 20px;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #3367d6;
+        }
+
+        .result-container {
+            margin-top: 20px;
+        }
+
+        .result-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .result-content {
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-height: 150px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        .error {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>PoCky: CVE PoC Query Tool</h1>
+
+        <div class="input-group">
+            <input type="text" id="cve-input" placeholder="Enter CVE ID (e.g., CVE-2023-4450)" autofocus>
+            <button id="search-button">Search</button>
+        </div>
+
+        <div class="result-container">
+            <div class="result-title">PoC:</div>
+            <div class="result-content" id="poc-result">Awaiting CVE ID input...</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const cveInput = document.getElementById('cve-input');
+            const searchButton = document.getElementById('search-button');
+            const pocResult = document.getElementById('poc-result');
+
+            // Handle Enter key submission
+            cveInput.addEventListener('keyup', function (event) {
+                if (event.key === 'Enter') {
+                    searchButton.click();
+                }
+            });
+
+            // Handle button click
+            searchButton.addEventListener('click', function () {
+                const cveId = cveInput.value.trim();
+
+                if (!cveId) {
+                    pocResult.innerHTML = '<span class="error">Please enter a CVE ID</span>';
+                    return;
+                }
+
+                // Show loading state
+                pocResult.innerHTML = '<div class="loading">Loading...</div>';
+
+                // Send request to backend
+                fetch('/get_poc', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ cve_id: cveId }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            pocResult.innerHTML = `<span class="error">${data.error}</span>`;
+                        } else {
+                            pocResult.textContent = data.content;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        pocResult.innerHTML = `<span class="error">Request error: ${error.message}</span>`;
+                    });
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,6 @@
+agno
+exa-py
+flask==2.3.3
+python-dotenv
+requests
+beautifulsoup4
