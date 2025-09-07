@@ -1,0 +1,77 @@
+/* src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 40 100% 98%; /* Light Creamy White */
+    --foreground: 220 10% 25%; /* Dark Gray for text */
+
+    --card: 0 0% 100%; /* White */
+    --card-foreground: 220 10% 25%; /* Dark Gray */
+
+    --popover: 0 0% 100%; /* White */
+    --popover-foreground: 220 10% 25%; /* Dark Gray */
+
+    --primary: 221 83% 53%; /* Strong Blue */
+    --primary-foreground: 0 0% 100%; /* White */
+
+    --secondary: 220 15% 90%; /* Light Gray */
+    --secondary-foreground: 220 10% 25%; /* Dark Gray */
+
+    --muted: 220 15% 93%; /* Lighter Gray for muted backgrounds */
+    --muted-foreground: 220 10% 45%; /* Softer Gray for muted text */
+
+    --accent: 221 83% 53%; /* Blue as accent */
+    --accent-foreground: 0 0% 100%; /* White */
+
+    --destructive: 0 72% 51%; /* Standard Red for errors */
+    --destructive-foreground: 0 0% 100%; /* White */
+
+    --border: 220 15% 88%; /* Subtle Gray Border */
+    --input: 0 0% 100%; /* White input background */
+    --ring: 221 83% 63%; /* Slightly lighter blue for focus rings */
+
+    --radius: 0.5rem; /* shadcn default, looks good */
+  }
+
+  /* Optional: If you still want a dark mode, redefine .dark vars here for the new aesthetic */
+  /* For now, we'll focus on the light theme based on the example */
+  /*
+  .dark {
+    --background: 220 15% 10%; 
+    --foreground: 220 10% 85%;
+    --card: 220 15% 15%;
+    --card-foreground: 220 10% 85%;
+    --popover: 220 15% 10%;
+    --popover-foreground: 220 10% 85%;
+    --primary: 221 83% 60%;
+    --primary-foreground: 220 15% 5%;
+    --secondary: 220 15% 25%;
+    --secondary-foreground: 220 10% 85%;
+    --muted: 220 15% 20%;
+    --muted-foreground: 220 10% 65%;
+    --accent: 221 83% 60%;
+    --accent-foreground: 220 15% 5%;
+    --destructive: 0 63% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 15% 25%;
+    --input: 220 15% 18%;
+    --ring: 221 83% 70%;
+  }
+  */
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased; /* Smoother fonts on WebKit */
+    -moz-osx-font-smoothing: grayscale; /* Smoother fonts on Firefox */
+  }
+}
