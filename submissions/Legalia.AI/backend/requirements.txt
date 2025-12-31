@@ -1,0 +1,9 @@
+agno==1.5.6
+groq
+duckduckgo-search
+openai
+google-genai
+streamlit
+python-dotenv
+langchain
+ddgs
